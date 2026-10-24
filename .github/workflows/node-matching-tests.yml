@@ -42,5 +42,9 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f db/001_foundation.sql
       - name: Apply matching migration
         run: psql -v ON_ERROR_STOP=1 -f db/002_matching.sql
+      - name: Apply cancellation authorization migration
+        run: psql -v ON_ERROR_STOP=1 -f db/003_cancel_authorization.sql
+      - name: Run cancellation authorization tests
+        run: psql -v ON_ERROR_STOP=1 -f tests/cancellation_authorization.sql
       - name: Run matching regression tests
         run: psql -v ON_ERROR_STOP=1 -f tests/matching_regression.sql
