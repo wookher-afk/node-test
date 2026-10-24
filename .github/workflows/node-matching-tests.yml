@@ -48,3 +48,6 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f tests/cancellation_authorization.sql
       - name: Run matching regression tests
         run: psql -v ON_ERROR_STOP=1 -f tests/matching_regression.sql
+
+      - name: Run two-session concurrency test
+        run: bash tests/matching_concurrency.sh
