@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NODE 0.1 통합 체험실</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#172333;background:#f3f6fa}*{box-sizing:border-box}body{margin:0}header{background:#142a44;color:white;padding:20px max(18px,calc((100vw - 1000px)/2))}header h1{margin:0;font-size:25px}header p{margin:6px 0;color:#c9d7e8}main{max-width:1000px;margin:20px auto;padding:0 14px}.notice{background:#fff3db;border:1px solid #e6bc67;padding:13px;border-radius:9px;font-size:14px}nav{display:flex;gap:6px;overflow:auto;margin:15px 0}nav button{white-space:nowrap}button,select,input{font:inherit}button{background:white;border:1px solid #c7d1df;border-radius:8px;padding:10px 13px;cursor:pointer}button.primary,.active{background:#1559a0!important;color:white!important;border-color:#1559a0!important}button:disabled{opacity:.5;cursor:not-allowed}input,select{border:1px solid #bac7d7;border-radius:7px;padding:9px;max-width:100%;background:white}section{background:white;border:1px solid #dfe5ed;border-radius:12px;padding:18px;margin-bottom:12px}h2{font-size:19px;margin:0 0 12px}h3{font-size:16px;margin:12px 0 8px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:8px 0}.muted{color:#607084;font-size:13px}.pill{display:inline-block;border-radius:20px;background:#eaf1f8;padding:4px 9px;font-size:12px;margin:3px}.ok{color:#087548}.bad{color:#b43629}.card{border:1px solid #e1e7ef;padding:12px;border-radius:9px;margin:9px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.hidden{display:none}label{display:block;font-size:13px;color:#48576b;margin:5px 0}.result{padding:12px;background:#edf4fb;border-radius:8px;white-space:pre-wrap;line-height:1.6}small{font-size:12px}table{border-collapse:collapse;width:100%}td,th{padding:8px;border-bottom:1px solid #eee;text-align:left;font-size:13px}
+</style></head><body><header><h1>NODE 0.1 · 통합 체험실</h1><p>작업자 · 업체 · 장비 · 운송 · 신뢰 기록을 한 화면에서 시험</p></header>
+<main><div class="notice"><b>시뮬레이션 전용</b> — 실제 회원가입, 본인인증, 계약, 결제, 알림, 서버 매칭이 아닙니다. 모든 입력은 이 브라우저에만 저장됩니다. 실명·연락처·계좌번호 등 개인정보를 입력하지 마세요.</div>
+<div class="row"><label for="actor">현재 역할</label><select id="actor"><option value="worker">작업자 A</option><option value="workerB">작업자 B</option><option value="company">현장 업체</option><option value="hauler">운송 업체</option><option value="admin">NODE 관리자(열람)</option></select><button id="reset">초기화</button><button class="primary" id="selftest">자동 시나리오 검사</button></div>
+<nav id="tabs"><button data-tab="jobs" class="active">구인·매칭</button><button data-tab="schedule">일정</button><button data-tab="equipment">장비·운송</button><button data-tab="records">작업·지급</button><button data-tab="trust">신뢰·신고</button><button data-tab="tests">테스트 결과</button></nav>
+<div id="flash" role="status" aria-live="polite"></div>
+<section id="jobs"><h2>구인 · 지원 · 양측 승인</h2><div class="grid"><div><label>작업일</label><input id="jobDate" type="date"><label>모집 직종</label><select id="trade"><option>굴착기 기사</option><option>배관공</option><option>신호수</option><option>보조 인력</option></select></div><div><label>모집 정원</label><input id="capacity" type="number" min="0" max="50" value="1"><label>일당 (원)</label><input id="rate" type="number" min="0" value="250000"></div></div><div class="row"><button id="updateJob">공고 조건 변경 (업체)</button><span class="muted">조건 변경 시 기존 승인은 초기화</span></div><div id="jobInfo" class="result"></div><div id="matchCards"></div></section>
+<section id="schedule" class="hidden"><h2>작업자 일정</h2><p class="muted">NODE 확정 매칭 및 직접 입력한 불가 일정을 비교합니다. 날짜는 일 단위입니다.</p><div class="row"><input id="blockDate" type="date"><select id="blockWho"><option value="worker">작업자 A</option><option value="workerB">작업자 B</option></select><button id="block">해당 날짜 불가 등록</button><button id="unblock">불가 일정 해제</button></div><div id="scheduleInfo"></div></section>
+<section id="equipment" class="hidden"><h2>장비 · 운송</h2><p class="muted">장비와 기사, 운송차량의 상태를 별도로 기록합니다. 실제 제원·도로거리 계산은 미구현입니다.</p><div class="grid"><div class="card"><h3>굴착기 20급 · 장비 E-001</h3><div id="eqInfo"></div><button id="breakdown">고장 신고 / 복귀 전환</button><button id="replace">대체 장비 요청</button></div><div class="card"><h3>운송차량 T-001</h3><div id="haulInfo"></div><button id="transport">운송 예약</button><button id="delivered">인도 신고 (운송 업체)</button><button id="received">인수 확인 (현장 업체)</button></div></div></section>
+<section id="records" class="hidden"><h2>작업 · 지급 기록</h2><div id="recordInfo"></div><div class="row"><button id="finish">작업 완료 신고 (작업자)</button><button id="confirmWork">작업 확인 (업체)</button><button id="pay">지급 신고 (업체)</button><button id="confirmPay">입금 확인 (작업자)</button></div><p class="muted">시뮬레이션은 지급 여부만 기록합니다. 실제 송금은 발생하지 않습니다.</p></section>
+<section id="trust" class="hidden"><h2>신뢰 · 신고</h2><div id="trustInfo"></div><div class="row"><select id="reportTarget"><option value="worker">작업자 A</option><option value="company">현장 업체</option></select><select id="reportReason"><option>무단결근</option><option>지급 지연</option><option>허위 정보</option><option>기타</option></select><button id="report">신고 접수</button></div><div id="reports"></div><p class="muted">신고 접수만으로 자동 감점되지 않습니다. 실제 관리자 조사·소명·이의신청은 구현 전입니다.</p></section>
+<section id="tests" class="hidden"><h2>자동 시나리오 검사</h2><p>상단의 <b>자동 시나리오 검사</b> 버튼을 누르면 별도 임시 상태에서 핵심 규칙을 점검합니다. 저장된 체험 데이터는 변경하지 않습니다.</p><div id="testInfo" class="result">아직 실행하지 않았습니다.</div></section>
+<footer class="muted">NODE 0.1 · 로컬 브라우저 시뮬레이터 · 실서비스 아님</footer></main>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const key='node-demo-01-v1';
+const today=()=>{const d=new Date();d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)};
+const initial=()=>({date:today(),trade:'굴착기 기사',capacity:1,rate:250000,termsVersion:1,matches:{worker:{status:'none',worker:false,company:false,version:1},workerB:{status:'none',worker:false,company:false,version:1}},blocks:{worker:[],workerB:[]},equipment:'available',replacement:false,transport:'none',work:{worker:false,company:false},payment:{company:false,worker:false},reports:[]});
+let s;try{s=JSON.parse(localStorage.getItem(key))||initial()}catch(e){s=initial()}
+let tab='jobs';let results='';
+const save=()=>{localStorage.setItem(key,JSON.stringify(s));render()};
+const notify=t=>{$('flash').textContent=t;setTimeout(()=>{if($('flash').textContent===t)$('flash').textContent=''},5000)};
+const who=()=> $('actor').value;
+const matches=()=>Object.entries(s.matches).filter(([k,v])=>v.status==='confirmed');
+const taken=()=>matches().length;
+function confirm(state,id){
+const m=state.matches[id];
+if(m.status!=='applied' || !m.worker || !m.company || m.version!==state.termsVersion)return '양측 최신 조건 승인 필요';
+if(state.blocks[id].includes(state.date))return '작업자 일정 불가';
+if(Object.values(state.matches).filter(x=>x.status==='confirmed').length>=state.capacity)return '모집 정원 초과';
+m.status='confirmed';return 'confirmed';
+}
+function act(id,type){
+const m=s.matches[id],actor=who();
+if(type==='apply'){if(actor!==id)return notify('해당 작업자 역할로 전환하세요');if(m.status!=='none'&&m.status!=='cancelled')return notify('이미 지원 중');s.matches[id]={status:'applied',worker:false,company:false,version:s.termsVersion};}
+if(type==='worker'){if(actor!==id)return notify('본인만 승인할 수 있습니다');if(m.status!=='applied')return notify('먼저 지원하세요');m.worker=true;}
+if(type==='company'){if(actor!=='company')return notify('업체 역할로 전환하세요');if(m.status!=='applied')return notify('먼저 지원하세요');m.company=true;}
+if(type==='confirm'){if(actor!=='company')return notify('업체 역할로 전환하세요');const r=confirm(s,id);if(r!=='confirmed')return notify(r);}
+if(type==='cancel'){if(actor!==id&&actor!=='company')return notify('당사자만 취소할 수 있습니다');if(!['applied','confirmed'].includes(m.status))return notify('취소할 매칭이 없습니다');m.status='cancelled';}
+save();notify('처리 완료');
+}
+function render(){
+$('jobDate').value=s.date;$('trade').value=s.trade;$('capacity').value=s.capacity;$('rate').value=s.rate;
+$('jobInfo').textContent='현장: NODE 시험 현장 / '+s.trade+' / '+s.date+'\n모집 '+s.capacity+'명 · 확정 '+taken()+'명 · 잔여 '+Math.max(0,s.capacity-taken())+'명\n일당 '+Number(s.rate).toLocaleString()+'원 · 조건 버전 '+s.termsVersion;
+$('matchCards').innerHTML=Object.entries(s.matches).map(([id,m])=>'<div class="card"><b>'+ (id==='worker'?'작업자 A':'작업자 B')+'</b> <span class="pill">'+({none:'미지원',applied:'지원·승인 중',confirmed:'확정',cancelled:'취소'})[m.status]+'</span><div class="muted">작업자 승인 '+(m.worker?'완료':'대기')+' / 업체 승인 '+(m.company?'완료':'대기')+'</div><div class="row">'+[['apply','지원'],['worker','작업자 승인'],['company','업체 승인'],['confirm','매칭 확정'],['cancel','취소']].map(([a,label])=>'<button data-id="'+id+'" data-act="'+a+'">'+label+'</button>').join('')+'</div></div>').join('');
+$('scheduleInfo').innerHTML=['worker','workerB'].map(id=>'<div class="card"><b>'+(id==='worker'?'작업자 A':'작업자 B')+'</b> · '+s.date+' : '+(s.blocks[id].includes(s.date)?'불가 일정':s.matches[id].status==='confirmed'?'NODE 확정 작업':'별도 일정 없음 (자동 가용 판정 아님)')+'</div>').join('');
+$('eqInfo').innerHTML='상태: <b>'+ (s.equipment==='available'?'사용 가능':'고장·사용 불가')+'</b><p>대체 요청: '+(s.replacement?'등록됨':'없음')+'</p>';
+$('haulInfo').innerHTML='운송 상태: <b>'+({none:'미예약',reserved:'예약',delivered:'인도 신고',received:'인수 확인'})[s.transport]+'</b>';
+$('recordInfo').innerHTML='<div class="result">작업자 완료 신고: '+(s.work.worker?'완료':'미완료')+' / 업체 확인: '+(s.work.company?'완료':'미완료')+'\n업체 지급 신고: '+(s.payment.company?'완료':'미완료')+' / 작업자 입금 확인: '+(s.payment.worker?'완료':'미완료')+'</div>';
+$('trustInfo').innerHTML='<div class="result">확정 매칭: '+taken()+'건 / 신고 접수: '+s.reports.length+'건\n신고만으로 자동 신뢰점수 감점 없음\n실제 신뢰지수 계산 및 상대방별 공개 범위: 미구현</div>';
+$('reports').innerHTML=s.reports.map(r=>'<div class="card">'+escapeText(r.target)+' · '+escapeText(r.reason)+' <span class="pill">검토 대기</span></div>').join('');
+document.querySelectorAll('section[id]').forEach(el=>el.classList.toggle('hidden',el.id!==tab));
+document.querySelectorAll('#tabs button').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
+$('testInfo').textContent=results||'아직 실행하지 않았습니다.';
+}
+function escapeText(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(b)act(b.dataset.id,b.dataset.act)});
+$('tabs').onclick=e=>{const b=e.target.closest('button[data-tab]');if(b){tab=b.dataset.tab;render()}};
+$('updateJob').onclick=()=>{if(who()!=='company')return notify('업체 역할로 전환하세요');const d=$('jobDate').value,c=Number($('capacity').value),r=Number($('rate').value);if(!d||!Number.isInteger(c)||c<0||!Number.isFinite(r)||r<0)return notify('입력값을 확인하세요');if(d!==s.date&&taken())return notify('확정 매칭이 있으면 날짜를 바로 바꿀 수 없습니다');s.date=d;s.capacity=c;s.rate=r;s.trade=$('trade').value;s.termsVersion++;Object.values(s.matches).forEach(m=>{if(m.status==='applied'){m.worker=false;m.company=false;m.version=s.termsVersion}});save();notify('조건 변경: 미확정 지원의 승인 초기화. 확정 건은 별도 재합의 필요');};
+$('blockDate').value=today();$('block').onclick=()=>{const d=$('blockDate').value,id=$('blockWho').value;if(!d)return notify('날짜를 입력하세요');if(s.matches[id].status==='confirmed'&&d===s.date)return notify('이미 확정된 매칭은 먼저 취소해야 합니다');if(!s.blocks[id].includes(d))s.blocks[id].push(d);save()};$('unblock').onclick=()=>{const id=$('blockWho').value;s.blocks[id]=s.blocks[id].filter(x=>x!==$('blockDate').value);save()};
+$('breakdown').onclick=()=>{s.equipment=s.equipment==='available'?'broken':'available';save()};$('replace').onclick=()=>{if(s.equipment!=='broken')return notify('고장 상태에서 대체 요청 가능');s.replacement=true;save()};
+$('transport').onclick=()=>{if(who()!=='company')return notify('업체 역할로 전환하세요');if(s.transport!=='none')return notify('이미 운송 요청이 있습니다');s.transport='reserved';save()};$('delivered').onclick=()=>{if(who()!=='hauler')return notify('운송 업체 역할로 전환하세요');if(s.transport!=='reserved')return notify('먼저 예약하세요');s.transport='delivered';save()};$('received').onclick=()=>{if(who()!=='company')return notify('업체 역할로 전환하세요');if(s.transport!=='delivered')return notify('인도 신고가 필요합니다');s.transport='received';save()};
+$('finish').onclick=()=>{if(who()!=='worker'&&who()!=='workerB')return notify('작업자 역할로 전환하세요');if(!taken())return notify('확정 매칭이 없습니다');s.work.worker=true;save()};$('confirmWork').onclick=()=>{if(who()!=='company')return notify('업체 역할로 전환하세요');if(!s.work.worker)return notify('작업자 완료 신고를 기다리세요');s.work.company=true;save()};
+$('pay').onclick=()=>{if(who()!=='company')return notify('업체 역할로 전환하세요');s.payment.company=true;save()};$('confirmPay').onclick=()=>{if(who()!=='worker'&&who()!=='workerB')return notify('작업자 역할로 전환하세요');if(!s.payment.company)return notify('업체 지급 신고가 없습니다');s.payment.worker=true;save()};
+$('report').onclick=()=>{s.reports.push({target:$('reportTarget').value,reason:$('reportReason').value});save()};
+$('reset').onclick=()=>{if(!confirm('이 브라우저의 NODE 체험 기록을 초기화할까요?'))return;s=initial();save();notify('초기화 완료')};
+$('selftest').onclick=()=>{const lines=[];let pass=0;function check(name,ok){lines.push((ok?'PASS':'FAIL')+' · '+name);if(ok)pass++}
+const a=initial();a.date='2030-08-10';a.matches.worker.status='applied';a.matches.workerB.status='applied';
+check('한쪽만 승인 시 확정 차단',confirm(a,'worker')!=='confirmed');
+a.matches.worker.worker=true;a.matches.worker.company=true;
+check('양측 승인 후 확정',confirm(a,'worker')==='confirmed');
+a.matches.workerB.worker=true;a.matches.workerB.company=true;
+check('정원 1명 초과 차단',confirm(a,'workerB')==='모집 정원 초과');
+a.matches.worker.status='cancelled';
+check('취소 후 정원 복구',confirm(a,'workerB')==='confirmed');
+const b=initial();b.matches.worker.status='applied';b.matches.worker.worker=true;b.matches.worker.company=true;b.termsVersion=2;
+check('조건 변경 시 구버전 승인 차단',confirm(b,'worker')!=='confirmed');
+const c=initial();c.matches.worker.status='applied';c.matches.worker.worker=true;c.matches.worker.company=true;c.blocks.worker.push(c.date);
+check('불가 일정 매칭 차단',confirm(c,'worker')==='작업자 일정 불가');
+results=lines.join('\n')+'\n\n'+pass+'/'+lines.length+'개 통과\n※ 브라우저 로직 검사이며 서버·PostgreSQL 동시성 검사는 아닙니다.';
+tab='tests';render()};
+render();
+})();
+</script></body></html>
