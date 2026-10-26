@@ -10,6 +10,7 @@ INSERT INTO job_posts(worksite_id) VALUES(1);
 INSERT INTO job_lines(job_post_id,occupation_id,resource_mode,daily_pay_krw) VALUES(1,1,'worker',250000);
 INSERT INTO job_line_dates(job_line_id,work_date,capacity) VALUES(1,'2026-11-01',1);
 INSERT INTO match_terms(job_line_id,worker_id,version,terms,terms_hash) VALUES(1,1,1,'{"date":"2026-11-01"}','v1');
+INSERT INTO match_dates(terms_id,work_date) VALUES(1,'2026-11-01');
 INSERT INTO matches(terms_id) VALUES(1);
 DO $$ BEGIN
  BEGIN UPDATE matches SET status='confirmed' WHERE id=1; RAISE EXCEPTION 'approval guard failed'; EXCEPTION WHEN raise_exception THEN
