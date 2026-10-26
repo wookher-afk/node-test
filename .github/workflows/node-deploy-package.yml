@@ -1,0 +1,40 @@
+name: NODE deploy package
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'render.yaml'
+      - 'server/**'
+      - 'web/**'
+      - 'package.json'
+      - '.github/workflows/node-deploy-package.yml'
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'render.yaml'
+      - 'server/**'
+      - 'web/**'
+      - 'package.json'
+      - '.github/workflows/node-deploy-package.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build production web image
+        run: docker build -t node-app:test .
+      - name: Check packaged server starts
+        run: |
+          docker run -d --name node-app-test -p 3000:3000 -e DATABASE_URL=postgresql://unused:unused@localhost:5432/unused node-app:test
+          trap 'docker rm -f node-app-test || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:3000/api/health; then
+              curl -fsS http://localhost:3000/ | grep -q 'NODE'
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs node-app-test
+          exit 1
