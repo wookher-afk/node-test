@@ -79,7 +79,7 @@ FOR EACH ROW EXECUTE FUNCTION protect_confirmed_terms();
 CREATE OR REPLACE FUNCTION protect_confirmed_children() RETURNS trigger LANGUAGE plpgsql AS $
 DECLARE target_id bigint;
 BEGIN
- target_id := CASE WHEN TG_OP='DELETE' THEN OLD.terms_id ELSE NEW.terms_id END;
+ target_id := CASE WHEN TG_OP='INSERT' THEN NEW.terms_id ELSE OLD.terms_id END;
  IF EXISTS (SELECT 1 FROM matches WHERE terms_id=target_id AND status IN ('confirmed','completed')) THEN
    RAISE EXCEPTION 'Confirmed match details are immutable';
  END IF;
