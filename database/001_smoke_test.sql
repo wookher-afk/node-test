@@ -83,5 +83,22 @@ DO $ BEGIN
    IF SQLERRM NOT LIKE 'Confirmed match details are immutable%' THEN RAISE; END IF;
  END;
 END $;
+-- Reassigning a date or approval from a confirmed match is also forbidden.
+DO $ BEGIN
+ BEGIN
+   UPDATE match_dates SET terms_id=2 WHERE terms_id=1;
+   RAISE EXCEPTION 'date reassignment guard failed';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM='date reassignment guard failed' THEN RAISE; END IF;
+   IF SQLERRM NOT LIKE 'Confirmed match details are immutable%' THEN RAISE; END IF;
+ END;
+ BEGIN
+   UPDATE match_approvals SET terms_id=2 WHERE terms_id=1 AND party='worker';
+   RAISE EXCEPTION 'approval reassignment guard failed';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM='approval reassignment guard failed' THEN RAISE; END IF;
+   IF SQLERRM NOT LIKE 'Confirmed match details are immutable%' THEN RAISE; END IF;
+ END;
+END $;
 ROLLBACK;
 SELECT 'DB-BASE-01 smoke tests passed' AS result;
