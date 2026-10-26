@@ -29,9 +29,9 @@ SELECT m1.id::text||' '||m2.id::text FROM m1,m2,q,d1,d2,a1,a2,a3,a4;
 SQL
 read -r m1 m2 < "$tmp/ids"
 test -n "$m1" && test -n "$m2"
-(psql -X -v ON_ERROR_STOP=1 -At -c "SELECT node_confirm_match('$m1'::uuid)" >"$tmp/one.out" 2>"$tmp/one.err"; echo $? >"$tmp/one.rc") &
+(if psql -X -v ON_ERROR_STOP=1 -At -c "SELECT node_confirm_match('$m1'::uuid)" >"$tmp/one.out" 2>"$tmp/one.err"; then echo 0 >"$tmp/one.rc"; else echo 1 >"$tmp/one.rc"; fi) &
 p1=$!
-(psql -X -v ON_ERROR_STOP=1 -At -c "SELECT node_confirm_match('$m2'::uuid)" >"$tmp/two.out" 2>"$tmp/two.err"; echo $? >"$tmp/two.rc") &
+(if psql -X -v ON_ERROR_STOP=1 -At -c "SELECT node_confirm_match('$m2'::uuid)" >"$tmp/two.out" 2>"$tmp/two.err"; then echo 0 >"$tmp/two.rc"; else echo 1 >"$tmp/two.rc"; fi) &
 p2=$!
 wait "$p1"; wait "$p2"
 one=$(cat "$tmp/one.rc"); two=$(cat "$tmp/two.rc")
