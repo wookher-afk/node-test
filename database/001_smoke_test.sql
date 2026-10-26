@@ -38,7 +38,7 @@ VALUES(1,3,1,'{"date":"2026-11-01"}','v1-other');
 INSERT INTO match_dates(terms_id,work_date) VALUES(2,'2026-11-01');
 INSERT INTO matches(terms_id) VALUES(2);
 INSERT INTO match_approvals(terms_id,party,approved_by) VALUES(2,'worker',3),(2,'company',2);
-DO $ BEGIN
+DO $test$ BEGIN
  BEGIN
    UPDATE matches SET status='confirmed' WHERE id=2;
    RAISE EXCEPTION 'capacity guard failed';
@@ -46,11 +46,11 @@ DO $ BEGIN
    IF SQLERRM='capacity guard failed' THEN RAISE; END IF;
    IF SQLERRM NOT LIKE 'Job capacity exceeded%' THEN RAISE; END IF;
  END;
-END $;
+END $test$;
 -- An older terms version cannot be confirmed after renegotiation.
 INSERT INTO match_terms(job_line_id,worker_id,version,terms,terms_hash)
 VALUES(1,3,2,'{"date":"2026-11-01","pay":260000}','v2-other');
-DO $ BEGIN
+DO $test$ BEGIN
  BEGIN
    UPDATE matches SET status='confirmed' WHERE id=2;
    RAISE EXCEPTION 'version guard failed';
@@ -58,9 +58,9 @@ DO $ BEGIN
    IF SQLERRM='version guard failed' THEN RAISE; END IF;
    IF SQLERRM NOT LIKE 'Outdated terms version%' THEN RAISE; END IF;
  END;
-END $;
+END $test$;
 -- Confirmed contracts cannot be edited or have approvals silently removed.
-DO $ BEGIN
+DO $test$ BEGIN
  BEGIN
    UPDATE match_terms SET terms='{"pay":1}' WHERE id=1;
    RAISE EXCEPTION 'terms immutability guard failed';
@@ -82,9 +82,9 @@ DO $ BEGIN
    IF SQLERRM='date immutability guard failed' THEN RAISE; END IF;
    IF SQLERRM NOT LIKE 'Confirmed match details are immutable%' THEN RAISE; END IF;
  END;
-END $;
+END $test$;
 -- Reassigning a date or approval from a confirmed match is also forbidden.
-DO $ BEGIN
+DO $test$ BEGIN
  BEGIN
    UPDATE match_dates SET terms_id=2 WHERE terms_id=1;
    RAISE EXCEPTION 'date reassignment guard failed';
@@ -99,6 +99,6 @@ DO $ BEGIN
    IF SQLERRM='approval reassignment guard failed' THEN RAISE; END IF;
    IF SQLERRM NOT LIKE 'Confirmed match details are immutable%' THEN RAISE; END IF;
  END;
-END $;
+END $test$;
 ROLLBACK;
 SELECT 'DB-BASE-01 smoke tests passed' AS result;
