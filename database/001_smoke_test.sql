@@ -59,5 +59,29 @@ DO $ BEGIN
    IF SQLERRM NOT LIKE 'Outdated terms version%' THEN RAISE; END IF;
  END;
 END $;
+-- Confirmed contracts cannot be edited or have approvals silently removed.
+DO $ BEGIN
+ BEGIN
+   UPDATE match_terms SET terms='{"pay":1}' WHERE id=1;
+   RAISE EXCEPTION 'terms immutability guard failed';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM='terms immutability guard failed' THEN RAISE; END IF;
+   IF SQLERRM NOT LIKE 'Confirmed terms are immutable%' THEN RAISE; END IF;
+ END;
+ BEGIN
+   DELETE FROM match_approvals WHERE terms_id=1 AND party='worker';
+   RAISE EXCEPTION 'approval immutability guard failed';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM='approval immutability guard failed' THEN RAISE; END IF;
+   IF SQLERRM NOT LIKE 'Confirmed match details are immutable%' THEN RAISE; END IF;
+ END;
+ BEGIN
+   DELETE FROM match_dates WHERE terms_id=1;
+   RAISE EXCEPTION 'date immutability guard failed';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM='date immutability guard failed' THEN RAISE; END IF;
+   IF SQLERRM NOT LIKE 'Confirmed match details are immutable%' THEN RAISE; END IF;
+ END;
+END $;
 ROLLBACK;
 SELECT 'DB-BASE-01 smoke tests passed' AS result;
