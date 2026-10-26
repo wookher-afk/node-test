@@ -107,3 +107,7 @@
 DB 기반은 `004_work_records_and_matching_data.sql`, 상세 정책은
 [work-records-and-trust.md](work-records-and-trust.md)를 따른다.
 출퇴근·지급·평가 수집 API/UI, 자동 점수·학습·추천 순위·개인정보 보존 기간 집행은 미구현이다.
+
+독립 검토 P1/P2 보강은 `005_review_integrity_fixes.sql`과
+[수정 및 운영 전 조건](pr-2-review-fixes.md)을 따른다. 기존 24개 테스트를 유지하고
+귀속·정정/재심·추천 시점·최소 권한의 회귀/동시성 검증을 추가한다.
