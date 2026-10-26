@@ -18,6 +18,7 @@ CREATE TABLE job_lines(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,job_po
 CREATE TABLE job_line_dates(job_line_id bigint NOT NULL REFERENCES job_lines(id),work_date date NOT NULL,capacity int NOT NULL CHECK(capacity>0),PRIMARY KEY(job_line_id,work_date));
 CREATE TABLE applications(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,job_line_id bigint NOT NULL REFERENCES job_lines(id),worker_id bigint NOT NULL REFERENCES accounts(id),status text NOT NULL DEFAULT 'applied' CHECK(status IN ('applied','waitlisted','selected','rejected','withdrawn')),created_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE match_terms(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,job_line_id bigint NOT NULL REFERENCES job_lines(id),worker_id bigint NOT NULL REFERENCES accounts(id),equipment_id bigint REFERENCES equipment(id),version int NOT NULL CHECK(version>0),terms jsonb NOT NULL,terms_hash text NOT NULL,created_at timestamptz NOT NULL DEFAULT now(),UNIQUE(job_line_id,worker_id,version),UNIQUE(id,terms_hash));
+CREATE TABLE match_dates(terms_id bigint NOT NULL REFERENCES match_terms(id),work_date date NOT NULL,PRIMARY KEY(terms_id,work_date));
 CREATE TABLE match_approvals(terms_id bigint NOT NULL REFERENCES match_terms(id),party text NOT NULL CHECK(party IN ('worker','company')),approved_by bigint NOT NULL REFERENCES accounts(id),approved_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(terms_id,party));
 CREATE TABLE matches(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,terms_id bigint NOT NULL UNIQUE REFERENCES match_terms(id),status text NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','confirmed','completed','cancelled')),created_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE calendar_events(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,account_id bigint REFERENCES accounts(id),equipment_id bigint REFERENCES equipment(id),period tstzrange NOT NULL,type text NOT NULL CHECK(type IN ('personal','external_work','leave','maintenance','unavailable')),CHECK(num_nonnulls(account_id,equipment_id)=1),CHECK(NOT isempty(period)));
@@ -34,27 +35,32 @@ CREATE TABLE payment_obligations(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY 
 CREATE TABLE payment_claims(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,obligation_id bigint NOT NULL REFERENCES payment_obligations(id),amount_krw bigint NOT NULL CHECK(amount_krw>0),paid_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE receipt_confirmations(claim_id bigint PRIMARY KEY REFERENCES payment_claims(id),confirmed_by bigint NOT NULL REFERENCES accounts(id),confirmed_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE audit_events(id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,actor_id bigint REFERENCES accounts(id),entity_type text NOT NULL,entity_id bigint NOT NULL,action text NOT NULL,payload jsonb NOT NULL DEFAULT '{}'::jsonb,created_at timestamptz NOT NULL DEFAULT now());
-CREATE OR REPLACE FUNCTION require_match_approvals() RETURNS trigger LANGUAGE plpgsql AS $$
-BEGIN
- IF NEW.status='confirmed' AND OLD.status IS DISTINCT FROM 'confirmed' THEN
-   IF (SELECT count(*) FROM match_approvals WHERE terms_id=NEW.terms_id)!=2 THEN
-     RAISE EXCEPTION 'Both parties must approve the same terms version';
-   END IF;
- END IF;
- RETURN NEW;
-END $$;
-CREATE TRIGGER check_match_approvals BEFORE UPDATE OF status ON matches FOR EACH ROW EXECUTE FUNCTION require_match_approvals();
-CREATE OR REPLACE FUNCTION require_job_capacity() RETURNS trigger LANGUAGE plpgsql AS $$
-DECLARE line_id bigint; max_count int; booked int; d date;
+-- Confirmations are guarded against stale terms, incomplete approvals, and capacity races.
+CREATE OR REPLACE FUNCTION require_match_confirmation() RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE v_line_id bigint; v_worker_id bigint; ver int; max_ver int; requested_dates int; booked int; capacity_limit int; d date;
 BEGIN
  IF NEW.status!='confirmed' OR OLD.status='confirmed' THEN RETURN NEW; END IF;
- SELECT job_line_id INTO line_id FROM match_terms WHERE id=NEW.terms_id;
- FOR d IN SELECT work_date FROM job_line_dates WHERE job_line_id=line_id ORDER BY work_date LOOP
-   SELECT capacity INTO max_count FROM job_line_dates WHERE job_line_id=line_id AND work_date=d FOR UPDATE;
-   SELECT count(*) INTO booked FROM matches m JOIN match_terms t ON t.id=m.terms_id WHERE t.job_line_id=line_id AND m.status='confirmed' AND m.id<>NEW.id;
-   IF booked>=max_count THEN RAISE EXCEPTION 'Job capacity exceeded for %',d; END IF;
+ SELECT job_line_id,worker_id,version INTO v_line_id,v_worker_id,ver FROM match_terms WHERE id=NEW.terms_id;
+ SELECT max(version) INTO max_ver FROM match_terms WHERE job_line_id=v_line_id AND worker_id=v_worker_id;
+ IF ver<>max_ver THEN RAISE EXCEPTION 'Outdated terms version'; END IF;
+ IF (SELECT count(*) FROM match_approvals WHERE terms_id=NEW.terms_id)!=2 THEN
+   RAISE EXCEPTION 'Both parties must approve the same terms version';
+ END IF;
+ SELECT count(*) INTO requested_dates FROM match_dates WHERE terms_id=NEW.terms_id;
+ IF requested_dates=0 THEN RAISE EXCEPTION 'At least one work date required'; END IF;
+ -- Lock the line to serialize competing confirmations across dates.
+ PERFORM 1 FROM job_lines WHERE id=v_line_id FOR UPDATE;
+ FOR d IN SELECT work_date FROM match_dates WHERE terms_id=NEW.terms_id ORDER BY work_date LOOP
+   SELECT capacity INTO capacity_limit FROM job_line_dates WHERE job_line_id=v_line_id AND work_date=d;
+   IF capacity_limit IS NULL THEN RAISE EXCEPTION 'Date not offered: %',d; END IF;
+   SELECT count(*) INTO booked FROM matches m
+     JOIN match_terms t ON t.id=m.terms_id
+     JOIN match_dates md ON md.terms_id=t.id
+     WHERE t.job_line_id=v_line_id AND md.work_date=d AND m.status='confirmed' AND m.id<>NEW.id;
+   IF booked>=capacity_limit THEN RAISE EXCEPTION 'Job capacity exceeded for %',d; END IF;
  END LOOP;
  RETURN NEW;
 END $$;
-CREATE TRIGGER check_job_capacity BEFORE UPDATE OF status ON matches FOR EACH ROW EXECUTE FUNCTION require_job_capacity();
+CREATE TRIGGER check_match_confirmation BEFORE UPDATE OF status ON matches
+FOR EACH ROW EXECUTE FUNCTION require_match_confirmation();
 COMMIT;
