@@ -31,5 +31,33 @@ DO $$ BEGIN
  IF (SELECT count(*) FROM match_approvals WHERE terms_id=1)<>2 THEN RAISE EXCEPTION 'approval count'; END IF;
  IF (SELECT count(*) FROM receipt_confirmations)<>1 THEN RAISE EXCEPTION 'receipt count'; END IF;
 END $$;
+-- A second worker cannot take the already-filled date.
+INSERT INTO accounts DEFAULT VALUES;
+INSERT INTO match_terms(job_line_id,worker_id,version,terms,terms_hash)
+VALUES(1,3,1,'{"date":"2026-11-01"}','v1-other');
+INSERT INTO match_dates(terms_id,work_date) VALUES(2,'2026-11-01');
+INSERT INTO matches(terms_id) VALUES(2);
+INSERT INTO match_approvals(terms_id,party,approved_by) VALUES(2,'worker',3),(2,'company',2);
+DO $ BEGIN
+ BEGIN
+   UPDATE matches SET status='confirmed' WHERE id=2;
+   RAISE EXCEPTION 'capacity guard failed';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM='capacity guard failed' THEN RAISE; END IF;
+   IF SQLERRM NOT LIKE 'Job capacity exceeded%' THEN RAISE; END IF;
+ END;
+END $;
+-- An older terms version cannot be confirmed after renegotiation.
+INSERT INTO match_terms(job_line_id,worker_id,version,terms,terms_hash)
+VALUES(1,3,2,'{"date":"2026-11-01","pay":260000}','v2-other');
+DO $ BEGIN
+ BEGIN
+   UPDATE matches SET status='confirmed' WHERE id=2;
+   RAISE EXCEPTION 'version guard failed';
+ EXCEPTION WHEN raise_exception THEN
+   IF SQLERRM='version guard failed' THEN RAISE; END IF;
+   IF SQLERRM NOT LIKE 'Outdated terms version%' THEN RAISE; END IF;
+ END;
+END $;
 ROLLBACK;
 SELECT 'DB-BASE-01 smoke tests passed' AS result;
