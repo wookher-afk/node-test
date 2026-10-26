@@ -63,4 +63,30 @@ BEGIN
 END $$;
 CREATE TRIGGER check_match_confirmation BEFORE UPDATE OF status ON matches
 FOR EACH ROW EXECUTE FUNCTION require_match_confirmation();
+-- Once a match is confirmed, approved terms and dates are immutable.
+CREATE OR REPLACE FUNCTION protect_confirmed_terms() RETURNS trigger LANGUAGE plpgsql AS $
+DECLARE target_id bigint;
+BEGIN
+ target_id := CASE WHEN TG_OP='DELETE' THEN OLD.id ELSE NEW.id END;
+ IF EXISTS (SELECT 1 FROM matches WHERE terms_id=target_id AND status IN ('confirmed','completed')) THEN
+   RAISE EXCEPTION 'Confirmed terms are immutable';
+ END IF;
+ RETURN CASE WHEN TG_OP='DELETE' THEN OLD ELSE NEW END;
+END $;
+CREATE TRIGGER protect_terms BEFORE UPDATE OR DELETE ON match_terms
+FOR EACH ROW EXECUTE FUNCTION protect_confirmed_terms();
+
+CREATE OR REPLACE FUNCTION protect_confirmed_children() RETURNS trigger LANGUAGE plpgsql AS $
+DECLARE target_id bigint;
+BEGIN
+ target_id := CASE WHEN TG_OP='DELETE' THEN OLD.terms_id ELSE NEW.terms_id END;
+ IF EXISTS (SELECT 1 FROM matches WHERE terms_id=target_id AND status IN ('confirmed','completed')) THEN
+   RAISE EXCEPTION 'Confirmed match details are immutable';
+ END IF;
+ RETURN CASE WHEN TG_OP='DELETE' THEN OLD ELSE NEW END;
+END $;
+CREATE TRIGGER protect_dates BEFORE INSERT OR UPDATE OR DELETE ON match_dates
+FOR EACH ROW EXECUTE FUNCTION protect_confirmed_children();
+CREATE TRIGGER protect_approvals BEFORE INSERT OR UPDATE OR DELETE ON match_approvals
+FOR EACH ROW EXECUTE FUNCTION protect_confirmed_children();
 COMMIT;
