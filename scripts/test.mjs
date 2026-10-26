@@ -5,10 +5,11 @@ import {spawnSync} from 'node:child_process';
 import {scryptSync,createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {pool} from '../tests/helpers/database.js';
+import {fixture,match,approve,confirm,cancel} from '../tests/helpers/matching.js';
 try {
  // Also verify a completely fresh install, without pre-existing account rows.
  await pool.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public');
- for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql']) {
+ for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql']) {
    await pool.query(await readFile('database/'+name,'utf8'));
  }
  assert.equal((await pool.query("SELECT count(*)::int AS n FROM accounts")).rows[0].n,0);
@@ -73,6 +74,34 @@ try {
  assert.deepEqual(await snapshot(),before,'upgrade must preserve existing account/profile/company/session rows byte for byte');
  assert.equal((await pool.query("SELECT to_regclass('public.users') AS name")).rows[0].name,null);
  console.log('PASS: original SQL smoke + additive migration + existing data preservation + failed-migration rollback');
+ // Upgrade 004 with actual pre-existing 003 transactions; preserve every original row.
+ const legacy=await fixture(),legacyMatch=await match(legacy);
+ await approve(legacy,legacyMatch);await confirm(legacyMatch);await cancel(legacyMatch,legacy.w);
+ const oldObligation=(await pool.query("INSERT INTO payment_obligations(match_id,amount_krw,due_date,payer_organization_id) VALUES($1,250000,'2030-06-15',$2) RETURNING id",[legacyMatch.m,legacy.org])).rows[0].id;
+ const oldClaim=(await pool.query('INSERT INTO payment_claims(obligation_id,amount_krw) VALUES($1,100000) RETURNING id',[oldObligation])).rows[0].id;
+ await pool.query('INSERT INTO receipt_confirmations(claim_id,confirmed_by) VALUES($1,$2)',[oldClaim,legacy.w]);
+
+ const oldTables=[...tables,'matches','match_terms','match_dates','match_approvals','match_events',
+   'resource_reservations','applications','payment_obligations','payment_claims','receipt_confirmations'];
+ async function originalRows(){const out={};for(const t of oldTables)out[t]=(await pool.query(`SELECT * FROM ${t} ORDER BY 1,2`)).rows;return out;}
+ const original=await originalRows();
+ const fourth=await readFile('database/004_work_records_and_matching_data.sql','utf8');
+ const failedFourth=await pool.connect();
+ try {
+   await failedFourth.query('CREATE VIEW trust_evidence_coverage AS SELECT 1 AS stub');
+   await assert.rejects(failedFourth.query(fourth),/already exists/);
+   await failedFourth.query('ROLLBACK');
+   assert.equal((await failedFourth.query("SELECT to_regclass('public.activity_records') AS name")).rows[0].name,null);
+   await failedFourth.query('DROP VIEW trust_evidence_coverage');
+ } finally {failedFourth.release();}
+ assert.deepEqual(await originalRows(),original,'004 failure must roll back triggers and backfills');
+ await pool.query(fourth);
+ assert.deepEqual(await originalRows(),original,'004 must preserve existing membership, matching and payment data');
+ const captured=(await pool.query('SELECT r.occurred_at=e.created_at AS exact FROM activity_records r JOIN match_events e ON e.id=r.source_match_event_id WHERE r.match_id=$1',[legacyMatch.m])).rows;
+ assert.equal(captured.length,2);assert.ok(captured.every(r=>r.exact));
+ assert.equal((await pool.query("SELECT count(*)::int AS n FROM activity_records WHERE kind IN ('check_in','payment_receipt')")).rows[0].n,0,'never invent historical attendance or payment');
+ console.log('PASS: 004 preserves existing transactions and backfills only exact lifecycle events');
+
 } finally {await pool.end();}
-const result=spawnSync(process.execPath,['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js'],{stdio:'inherit',env:process.env});
+const result=spawnSync(process.execPath,['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js'],{stdio:'inherit',env:process.env});
 process.exit(result.status??1);
