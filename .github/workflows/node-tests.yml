@@ -1,0 +1,36 @@
+name: NODE unified database and accounts
+on:
+  push:
+    paths: ['database/**', 'server/**', 'web/**', 'scripts/**', 'tests/**', 'package*.json', '.nvmrc', '.github/workflows/node-tests.yml']
+  pull_request:
+    paths: ['database/**', 'server/**', 'web/**', 'scripts/**', 'tests/**', 'package*.json', '.nvmrc', '.github/workflows/node-tests.yml']
+  workflow_dispatch:
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: node
+          POSTGRES_PASSWORD: node_test_only
+          POSTGRES_DB: node_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U node -d node_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://node:node_test_only@127.0.0.1:5432/node_test
+      NODE_TEST_DATABASE: '1'
+      PORT: '3000'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
