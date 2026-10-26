@@ -7,3 +7,5 @@ db
 docs
 *.log
 .env
+.env.*
+scripts
