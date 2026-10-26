@@ -1,3 +1,4 @@
+import {readFile} from 'node:fs/promises';
 import http from 'node:http';
 import {randomBytes, scrypt as scryptCallback, timingSafeEqual, createHash} from 'node:crypto';
 import {promisify} from 'node:util';
@@ -16,6 +17,7 @@ async function loginToken(client,id){const token=randomBytes(32).toString('hex')
 const server=http.createServer(async(req,res)=>{
 try{
 const path=new URL(req.url,'http://localhost').pathname;
+if(req.method==='GET'&&(path==='/'||path==='/index.html')){const html=await readFile(new URL('../web/index.html',import.meta.url));res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(html);return;}
 if(req.method==='GET'&&path==='/api/health')return json(res,200,{ok:true});
 if(req.method==='POST'&&path==='/api/register'){
 const b=await body(req);const email=String(b.email||'').trim().toLowerCase(),password=String(b.password||''),name=String(b.name||'').trim();
