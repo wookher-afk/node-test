@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node server/index.js",
     "check": "node --check server/index.js",
-    "test": "node scripts/test.mjs"
+    "test": "node scripts/test.mjs",
+    "dev:local": "node scripts/dev-server.mjs"
   },
   "dependencies": {
     "pg": "^8.13.1"

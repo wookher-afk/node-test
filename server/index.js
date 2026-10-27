@@ -11,7 +11,12 @@ const json=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application
 const digest=v=>createHash('sha256').update(v).digest('hex');
 const hashPassword=async p=>{const salt=randomBytes(16).toString('hex');return salt+':'+(await scrypt(p,salt,64)).toString('hex');};
 const verifyPassword=async(p,h)=>{if(!h||!h.includes(':'))return false;const [salt,stored]=h.split(':');const candidate=await scrypt(p,salt,64);const original=Buffer.from(stored,'hex');return candidate.length===original.length&&timingSafeEqual(candidate,original);};
-async function body(req){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>32768)throw Object.assign(new Error('Request too large'),{status:413});}try{return JSON.parse(raw||'{}');}catch{throw Object.assign(new Error('Invalid JSON'),{status:400});}}
+async function body(req){
+let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>32768)throw Object.assign(new Error('Request too large'),{status:413});}
+let parsed;try{parsed=JSON.parse(raw||'{}');}catch{throw Object.assign(new Error('Invalid JSON'),{status:400});}
+if(parsed===null||typeof parsed!=='object'||Array.isArray(parsed))throw Object.assign(new Error('JSON object required'),{status:400});
+return parsed;
+}
 async function session(req){const token=/^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization||'')?.[1];if(!token)return null;const {rows}=await pool.query('SELECT a.id,a.email,a.display_name FROM account_sessions s JOIN accounts a ON a.id=s.account_id WHERE s.token_hash=$1 AND s.expires_at>now()',[digest(token)]);return rows[0]||null;}
 async function loginToken(client,id){const token=randomBytes(32).toString('hex');await client.query("INSERT INTO account_sessions(account_id,token_hash,expires_at) VALUES($1,$2,now()+interval '30 days')",[id,digest(token)]);return token;}
 const server=http.createServer(async(req,res)=>{
@@ -39,7 +44,10 @@ const companies=await pool.query('SELECT o.id,o.name,m.role FROM organization_me
 return json(res,200,{account:user,roles:roles.rows.map(r=>r.role),worker:profile.rows[0]||null,companies:companies.rows});
 }
 if(req.method==='PUT'&&path==='/api/me/worker'){
-const b=await body(req),months=Number(b.experience_months);
+const b=await body(req),value=b.experience_months;
+// Keep decimal integer strings compatible with existing callers, without
+// coercing null, booleans, blank strings, arrays or objects into zero.
+const months=typeof value==='number'?value:typeof value==='string'&&/^\d+$/.test(value.trim())?Number(value.trim()):NaN;
 if(!Number.isInteger(months)||months<0||months>900)return json(res,400,{error:'경력 개월 수를 확인하세요.'});
 const c=await pool.connect();try{await c.query('BEGIN');await c.query("INSERT INTO account_roles(account_id,role) VALUES($1,'worker') ON CONFLICT DO NOTHING",[user.id]);await c.query('INSERT INTO worker_profiles(account_id,experience_months) VALUES($1,$2) ON CONFLICT(account_id) DO UPDATE SET experience_months=EXCLUDED.experience_months',[user.id,months]);await c.query('COMMIT');return json(res,200,{experience_months:months});}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}
 }

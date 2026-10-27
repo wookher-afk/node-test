@@ -1,10 +1,10 @@
 // Deliberately no production migration command. This runner resets ONLY an
 // explicitly acknowledged local disposable database, then launches Node tests.
 import {readFile} from 'node:fs/promises';
-import {spawnSync} from 'node:child_process';
 import {scryptSync,createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {pool} from '../tests/helpers/database.js';
+import {provisionTestRuntime} from './lib/test-runtime-role.mjs';
 import {fixture,match,approve,confirm,cancel} from '../tests/helpers/matching.js';
 try {
  // Also verify a completely fresh install, without pre-existing account rows.
@@ -174,6 +174,24 @@ try {
  console.log('PASS: 005 reviewed historical attribution, all original rows preserved and late-failure rollback');
 
 
-} finally {await pool.end();}
-const result=spawnSync(process.execPath,['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js'],{stdio:'inherit',env:process.env});
-process.exit(result.status??1);
+} catch(error) {await pool.end();throw error;}
+// Only migration/fixture setup uses the administrator. Every HTTP server below
+// connects using the restricted role, while direct DB regression fixtures retain
+// their explicit administrator pool.
+let runtime;
+try {
+ const tables=['accounts','account_roles','worker_profiles','organizations','organization_memberships','account_sessions'];
+ async function preserved(){const data={};for(const table of tables)data[table]=(await pool.query(`SELECT to_jsonb(t) AS row FROM ${table} t ORDER BY 1`)).rows;return data;}
+ const before=await preserved();
+ runtime=await provisionTestRuntime(pool);
+ assert.deepEqual(await preserved(),before,'role provisioning cannot change existing onboarding data');
+ const args=['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js'];
+ // Asynchronous spawn keeps the administrator pool responsive to keepalives while
+ // the test processes use independent real connections to the same local DB.
+ const {spawn}=await import('node:child_process');
+ const child=spawn(process.execPath,args,{stdio:'inherit',env:{...process.env,TEST_RUNTIME_DATABASE_URL:runtime.url}});
+ const code=await new Promise((resolve,reject)=>{child.once('exit',code=>resolve(code??1));child.once('error',reject);});
+ process.exitCode=code;
+} finally {try{
+ if(runtime){await runtime.dispose();assert.equal((await pool.query('SELECT count(*)::int AS n FROM pg_roles WHERE rolname=$1',[runtime.role])).rows[0].n,0);console.log('PASS: temporary runtime role and policies removed');}
+ }finally{await pool.end();}}
