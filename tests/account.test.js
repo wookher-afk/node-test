@@ -1,5 +1,5 @@
 import test, {after} from 'node:test';
-import {pool,testDatabaseUrl} from './helpers/database.js';
+import {pool,testDatabaseUrl,runtimeDatabaseUrl} from './helpers/database.js';
 testDatabaseUrl();
 after(()=>pool.end());
 import assert from 'node:assert/strict';
@@ -12,7 +12,7 @@ async function request(path,method='GET',data,token){
  return {status:response.status,data:await response.json()};
 }
 test('signup, login, worker and company profile persist after re-login',async()=>{
- const child=spawn(process.execPath,['server/index.js'],{env:process.env,stdio:['ignore','pipe','pipe']});
+ const child=spawn(process.execPath,['server/index.js'],{env:{...process.env,DATABASE_URL:runtimeDatabaseUrl()},stdio:['ignore','pipe','pipe']});
  let logs='';child.stdout.on('data',d=>logs+=d);child.stderr.on('data',d=>logs+=d);
  try{
  let ready=false;for(let i=0;i<60;i++){try{const r=await request('/api/health');if(r.status===200){ready=true;break;}}catch{}await delay(250);}
