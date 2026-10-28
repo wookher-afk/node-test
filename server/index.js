@@ -5,14 +5,16 @@ import {promisify} from 'node:util';
 import {Pool} from 'pg';
 import {digest,requireSession,listOwnCompanies} from './access.js';
 import {worksiteRequest} from './worksites.js';
+import {jobPostRequest} from './job-posts.js';
 
 const scrypt=promisify(scryptCallback);
 const pool=new Pool({connectionString:process.env.DATABASE_URL});
-if(process.env.WORKSITE_DATABASE_URL){
- const primary=new URL(process.env.DATABASE_URL),site=new URL(process.env.WORKSITE_DATABASE_URL);
- if(['hostname','port','pathname','search'].some(key=>primary[key]!==site[key]))throw Error('Worksite and account connections must use the same database');
+for(const key of ['WORKSITE_DATABASE_URL','JOB_POST_DATABASE_URL'])if(process.env[key]){
+ const primary=new URL(process.env.DATABASE_URL),other=new URL(process.env[key]);
+ if(['hostname','port','pathname','search'].some(field=>primary[field]!==other[field]))throw Error('Service and account connections must use the same database');
 }
 const worksitePool=process.env.WORKSITE_DATABASE_URL?new Pool({connectionString:process.env.WORKSITE_DATABASE_URL,application_name:'node-worksites-api'}):pool;
+const jobPostPool=process.env.JOB_POST_DATABASE_URL?new Pool({connectionString:process.env.JOB_POST_DATABASE_URL,application_name:'node-job-posts-api'}):pool;
 const port=Number(process.env.PORT||3000);
 const json=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
 const hashPassword=async p=>{const salt=randomBytes(16).toString('hex');return salt+':'+(await scrypt(p,salt,64)).toString('hex');};
@@ -46,6 +48,8 @@ const token=await loginToken(pool,rows[0].id);return json(res,200,{account:{id:r
 }
 if(path.startsWith('/api/')){
 const user=await requireSession(pool,req);
+const jobResponse=await jobPostRequest({pool:jobPostPool,req,path,body});
+if(jobResponse)return json(res,jobResponse.status,jobResponse.data);
 const siteResponse=await worksiteRequest({pool:worksitePool,req,path,body});
 if(siteResponse)return json(res,siteResponse.status,siteResponse.data);
 if(req.method==='GET'&&path==='/api/me'){

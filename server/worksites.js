@@ -37,12 +37,12 @@ function input(value,section,method){
  }
  return b;
 }
-async function companyRole(client,company,user){
+export async function companyRole(client,company,user){
  const {rows}=await client.query('SELECT role FROM organization_memberships WHERE organization_id=$1 AND account_id=$2',[company,user.id]);
  if(!rows.length)fail(404,'대상을 찾을 수 없습니다.');
  return rows[0].role;
 }
-function manager(role){return role==='owner'||role==='manager';}
+export function manager(role){return role==='owner'||role==='manager';}
 async function siteAccess(client,id,user,action='view'){
  const result=await client.query(`SELECT ${fields} FROM worksites WHERE id=$1`,[id]);
  if(!result.rows.length)fail(404,'대상을 찾을 수 없습니다.');
@@ -53,7 +53,7 @@ async function siteAccess(client,id,user,action='view'){
  if(action==='manage'||!assignment['can_'+action])fail(403,'해당 현장 업무 권한이 없습니다.');
  return site;
 }
-async function transaction(pool,req,operation){
+export async function transaction(pool,req,operation){
  const client=await pool.connect();
  try{
   await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');

@@ -6,11 +6,12 @@ import assert from 'node:assert/strict';
 import {pool} from '../tests/helpers/database.js';
 import {provisionTestRuntime} from './lib/test-runtime-role.mjs';
 import {provisionWorksiteRuntime} from './lib/test-worksite-role.mjs';
+import {provisionJobPostRuntime} from './lib/test-job-post-role.mjs';
 import {fixture,match,approve,confirm,cancel} from '../tests/helpers/matching.js';
 try {
  // Also verify a completely fresh install, without pre-existing account rows.
  await pool.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public');
- for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql','006_worksite_management.sql']) {
+ for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql','006_worksite_management.sql','007_internal_job_posts.sql']) {
    await pool.query(await readFile('database/'+name,'utf8'));
  }
  assert.equal((await pool.query("SELECT count(*)::int AS n FROM accounts")).rows[0].n,0);
@@ -194,27 +195,48 @@ try {
  assert.ok(afterSixth.worksites.every(({row})=>row.address===null&&row.created_by===null&&row.created_at===null&&row.is_active&&row.version===1));
  console.log('PASS: 006 legacy worksites and all transaction data preserved; late failure fully rolls back');
 
+ const seventh=await readFile('database/007_internal_job_posts.sql','utf8');
+ const beforeSeventh=await fullState(),beforeSeventhTriggers=await triggerDefinitions(),failedSeventh=await pool.connect();
+ try{
+  await assert.rejects(failedSeventh.query(seventh.replace('COMMIT;','SELECT 1/0;\nCOMMIT;')),/division by zero/);
+  await failedSeventh.query('ROLLBACK');
+ }finally{failedSeventh.release();}
+ assert.deepEqual(await fullState(),beforeSeventh,'007 failure must roll back columns, version tables, functions and grants');
+ assert.deepEqual(await triggerDefinitions(),beforeSeventhTriggers,'007 failure restores original triggers');
+ assert.equal((await pool.query("SELECT to_regclass('public.job_post_versions') AS versions")).rows[0].versions,null);
+ assert.equal((await pool.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema='public' AND table_name='job_posts' AND column_name='version'")).rows[0].n,0);
+ await pool.query(seventh);
+ const afterSeventh=await fullState();
+ for(const [name,rows] of Object.entries(beforeSeventh))if(!['functions','security','job_posts'].includes(name))assert.deepEqual(afterSeventh[name],rows,`007 preserves ${name}`);
+ const oldPostKeys=Object.keys(beforeSeventh.job_posts[0].row);
+ assert.deepEqual(afterSeventh.job_posts.map(({row})=>({row:Object.fromEntries(oldPostKeys.map(k=>[k,row[k]]))})),beforeSeventh.job_posts);
+ assert.ok(afterSeventh.job_posts.every(({row})=>row.version===1&&row.created_by===null&&row.updated_by===null&&row.updated_at===null));
+ for(const name of ['job_post_versions','job_post_version_lines','job_post_version_dates','job_post_events'])assert.deepEqual(afterSeventh[name],[],'007 never invents old conditions or payment promises');
+ console.log('PASS: 007 preserves original IDs, recruitment and transaction data; no historical promise inference; failure rollback');
+
 
 } catch(error) {await pool.end();throw error;}
 // Only migration/fixture setup uses the administrator. Every HTTP server below
 // connects using the restricted role, while direct DB regression fixtures retain
 // their explicit administrator pool.
-let runtime,worksiteRuntime;
+let runtime,worksiteRuntime,jobRuntime;
 try {
  const tables=['accounts','account_roles','worker_profiles','organizations','organization_memberships','account_sessions'];
  async function preserved(){const data={};for(const table of tables)data[table]=(await pool.query(`SELECT to_jsonb(t) AS row FROM ${table} t ORDER BY 1`)).rows;return data;}
  const before=await preserved();
  runtime=await provisionTestRuntime(pool);
  worksiteRuntime=await provisionWorksiteRuntime(pool);
+ jobRuntime=await provisionJobPostRuntime(pool);
  assert.deepEqual(await preserved(),before,'role provisioning cannot change existing onboarding data');
- const args=['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js','tests/worksites.test.js'];
+ const args=['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js','tests/worksites.test.js','tests/job-posts.test.js'];
  // Asynchronous spawn keeps the administrator pool responsive to keepalives while
  // the test processes use independent real connections to the same local DB.
  const {spawn}=await import('node:child_process');
- const child=spawn(process.execPath,args,{stdio:'inherit',env:{...process.env,TEST_RUNTIME_DATABASE_URL:runtime.url,TEST_WORKSITE_DATABASE_URL:worksiteRuntime.url}});
+ const child=spawn(process.execPath,args,{stdio:'inherit',env:{...process.env,TEST_RUNTIME_DATABASE_URL:runtime.url,TEST_WORKSITE_DATABASE_URL:worksiteRuntime.url,TEST_JOB_POST_DATABASE_URL:jobRuntime.url}});
  const code=await new Promise((resolve,reject)=>{child.once('exit',code=>resolve(code??1));child.once('error',reject);});
  process.exitCode=code;
 } finally {try{
+ if(jobRuntime){await jobRuntime.dispose();assert.equal((await pool.query('SELECT count(*)::int AS n FROM pg_roles WHERE rolname=$1',[jobRuntime.role])).rows[0].n,0);}
  if(worksiteRuntime){await worksiteRuntime.dispose();assert.equal((await pool.query('SELECT count(*)::int AS n FROM pg_roles WHERE rolname=$1',[worksiteRuntime.role])).rows[0].n,0);}
  if(runtime){await runtime.dispose();assert.equal((await pool.query('SELECT count(*)::int AS n FROM pg_roles WHERE rolname=$1',[runtime.role])).rows[0].n,0);console.log('PASS: temporary runtime role and policies removed');}
  }finally{await pool.end();}}

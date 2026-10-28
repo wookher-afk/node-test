@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "check": "node --check server/index.js && node --check server/access.js && node --check server/worksites.js && node --check scripts/lib/test-worksite-role.mjs",
+    "check": "node --check server/index.js && node --check server/access.js && node --check server/worksites.js && node --check server/job-posts.js && node --check scripts/lib/test-worksite-role.mjs && node --check scripts/lib/test-job-post-role.mjs",
     "test": "node scripts/test.mjs",
     "dev:local": "node scripts/dev-server.mjs"
   },

@@ -16,3 +16,5 @@
 - 1차 안정화: [로컬 최소 권한 역할과 입력 검증](docs/stabilization-1.md)
 
 - 현장 관리 API·담당자 권한·마이그레이션 006: [구현 및 운영 전 조건](docs/worksite-management.md)
+
+- 업체 내부 구인공고 등록·조회·지급 약속 보존·마이그레이션 007: [API와 범위](docs/internal-job-posts.md)
