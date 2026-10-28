@@ -5,11 +5,12 @@ import {scryptSync,createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {pool} from '../tests/helpers/database.js';
 import {provisionTestRuntime} from './lib/test-runtime-role.mjs';
+import {provisionWorksiteRuntime} from './lib/test-worksite-role.mjs';
 import {fixture,match,approve,confirm,cancel} from '../tests/helpers/matching.js';
 try {
  // Also verify a completely fresh install, without pre-existing account rows.
  await pool.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public');
- for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql']) {
+ for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql','006_worksite_management.sql']) {
    await pool.query(await readFile('database/'+name,'utf8'));
  }
  assert.equal((await pool.query("SELECT count(*)::int AS n FROM accounts")).rows[0].n,0);
@@ -173,25 +174,47 @@ try {
  assert.equal((await pool.query('SELECT node_valid_record_correction($1,$2,NULL) AS valid',[oldApproval,oldActivity])).rows[0].valid,false);
  console.log('PASS: 005 reviewed historical attribution, all original rows preserved and late-failure rollback');
 
+ const sixth=await readFile('database/006_worksite_management.sql','utf8');
+ const triggerDefinitions=async()=>(await pool.query("SELECT c.relname,t.tgname,pg_get_triggerdef(t.oid) AS definition FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND NOT t.tgisinternal ORDER BY 1,2")).rows;
+ const beforeSixthTriggers=await triggerDefinitions();
+ const beforeSixth=await fullState(),failedSixth=await pool.connect();
+ try{
+  await assert.rejects(failedSixth.query(sixth.replace('COMMIT;','SELECT 1/0;\nCOMMIT;')),/division by zero/);
+  await failedSixth.query('ROLLBACK');
+ }finally{failedSixth.release();}
+ assert.deepEqual(await fullState(),beforeSixth,'006 failure rolls back columns, tables, functions, triggers and grants');
+ assert.deepEqual(await triggerDefinitions(),beforeSixthTriggers,'006 failure restores every original trigger');
+ assert.equal((await pool.query("SELECT to_regclass('public.worksite_assignments') AS assignments,to_regclass('public.worksite_events') AS events")).rows[0].assignments,null);
+ assert.equal((await pool.query("SELECT count(*)::int AS n FROM information_schema.columns WHERE table_schema='public' AND table_name='worksites' AND column_name='address'")).rows[0].n,0);
+ await pool.query(sixth);
+ const afterSixth=await fullState();
+ for(const [name,rows] of Object.entries(beforeSixth))if(!['functions','security','worksites'].includes(name))assert.deepEqual(afterSixth[name],rows,`006 preserves ${name}`);
+ const oldKeys=Object.keys(beforeSixth.worksites[0].row);
+ assert.deepEqual(afterSixth.worksites.map(({row})=>({row:Object.fromEntries(oldKeys.map(k=>[k,row[k]]))})),beforeSixth.worksites);
+ assert.ok(afterSixth.worksites.every(({row})=>row.address===null&&row.created_by===null&&row.created_at===null&&row.is_active&&row.version===1));
+ console.log('PASS: 006 legacy worksites and all transaction data preserved; late failure fully rolls back');
+
 
 } catch(error) {await pool.end();throw error;}
 // Only migration/fixture setup uses the administrator. Every HTTP server below
 // connects using the restricted role, while direct DB regression fixtures retain
 // their explicit administrator pool.
-let runtime;
+let runtime,worksiteRuntime;
 try {
  const tables=['accounts','account_roles','worker_profiles','organizations','organization_memberships','account_sessions'];
  async function preserved(){const data={};for(const table of tables)data[table]=(await pool.query(`SELECT to_jsonb(t) AS row FROM ${table} t ORDER BY 1`)).rows;return data;}
  const before=await preserved();
  runtime=await provisionTestRuntime(pool);
+ worksiteRuntime=await provisionWorksiteRuntime(pool);
  assert.deepEqual(await preserved(),before,'role provisioning cannot change existing onboarding data');
- const args=['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js'];
+ const args=['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js','tests/worksites.test.js'];
  // Asynchronous spawn keeps the administrator pool responsive to keepalives while
  // the test processes use independent real connections to the same local DB.
  const {spawn}=await import('node:child_process');
- const child=spawn(process.execPath,args,{stdio:'inherit',env:{...process.env,TEST_RUNTIME_DATABASE_URL:runtime.url}});
+ const child=spawn(process.execPath,args,{stdio:'inherit',env:{...process.env,TEST_RUNTIME_DATABASE_URL:runtime.url,TEST_WORKSITE_DATABASE_URL:worksiteRuntime.url}});
  const code=await new Promise((resolve,reject)=>{child.once('exit',code=>resolve(code??1));child.once('error',reject);});
  process.exitCode=code;
 } finally {try{
+ if(worksiteRuntime){await worksiteRuntime.dispose();assert.equal((await pool.query('SELECT count(*)::int AS n FROM pg_roles WHERE rolname=$1',[worksiteRuntime.role])).rows[0].n,0);}
  if(runtime){await runtime.dispose();assert.equal((await pool.query('SELECT count(*)::int AS n FROM pg_roles WHERE rolname=$1',[runtime.role])).rows[0].n,0);console.log('PASS: temporary runtime role and policies removed');}
  }finally{await pool.end();}}

@@ -3,14 +3,16 @@ import {Pool} from 'pg';
 import {spawn} from 'node:child_process';
 import {testDatabaseUrl} from './lib/test-database.mjs';
 import {provisionTestRuntime} from './lib/test-runtime-role.mjs';
+import {provisionWorksiteRuntime} from './lib/test-worksite-role.mjs';
 const pool=new Pool({connectionString:testDatabaseUrl()});
-let runtime;
+let runtime,worksiteRuntime;
 try {
  runtime=await provisionTestRuntime(pool);
- const child=spawn(process.execPath,['server/index.js'],{env:{...process.env,DATABASE_URL:runtime.url},stdio:'inherit'});
+ worksiteRuntime=await provisionWorksiteRuntime(pool);
+ const child=spawn(process.execPath,['server/index.js'],{env:{...process.env,DATABASE_URL:runtime.url,WORKSITE_DATABASE_URL:worksiteRuntime.url},stdio:'inherit'});
  const stop=()=>child.kill('SIGTERM');
  process.once('SIGINT',stop);process.once('SIGTERM',stop);
  const code=await new Promise((resolve,reject)=>{child.once('exit',code=>resolve(code??0));child.once('error',reject);});
  process.removeListener('SIGINT',stop);process.removeListener('SIGTERM',stop);
  process.exitCode=code;
-} finally {try{await runtime?.dispose();}finally{await pool.end();}}
+} finally {try{await worksiteRuntime?.dispose();}finally{try{await runtime?.dispose();}finally{await pool.end();}}}
