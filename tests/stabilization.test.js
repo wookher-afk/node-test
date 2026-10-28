@@ -93,6 +93,59 @@ test('malformed JSON is HTTP 400 and does not modify the existing profile',async
  const before=await onboardingState();assert.equal((await request('/api/me/worker','PUT','{"experience_months":',token,true)).status,400);assert.deepEqual(await onboardingState(),before);
 });
 
+for(const [path,fields] of [
+ ['/api/register',['email','password','name']],
+ ['/api/login',['email','password']],
+ ['/api/me/companies',['name']]
+])for(const field of fields)test(`${path}: ${field} rejects non-string inputs without changing stored data`,async()=>{
+ const email=(await request('/api/me')).data.account.email;
+ const valid={email,password:'safe-local-test-password',name:'검증 업체'};
+ for(const value of [undefined,null,[],[valid[field]],{},0,1234567890,false,true]){
+  const before=await onboardingState();
+  const result=await request(path,'POST',{...valid,[field]:value});
+  assert.equal(result.status,400,`${field}: ${JSON.stringify(value)}`);
+  assert.deepEqual(await onboardingState(),before,'invalid input must not create accounts, sessions or company memberships');
+ }
+});
+
+test('normal strings retain normalization, length boundaries and exact password contents',async()=>{
+ for(const length of [2,80]){
+  const email=`strings-${crypto.randomUUID()}@example.com`,password=' 12345678 ';
+  const created=await request('/api/register','POST',{email:' '+email.toUpperCase()+' ',password,name:' '+'가'.repeat(length)+' '},'');
+  assert.equal(created.status,201);assert.equal(created.data.account.email,email);
+  assert.equal(created.data.account.display_name,'가'.repeat(length));
+  const loggedIn=await request('/api/login','POST',{email:' '+email.toUpperCase()+' ',password},'');
+  assert.equal(loggedIn.status,200);assert.equal(loggedIn.data.account.id,created.data.account.id);
+  assert.equal((await request('/api/login','POST',{email,password:password.trim()},'')).status,401);
+  assert.equal((await request('/api/register','POST',{email,password,name:'정상 이름'},'')).status,409);
+ }
+ for(const length of [2,120]){
+  const name='나'.repeat(length),company=await request('/api/me/companies','POST',{name:' '+name+' '});
+  assert.equal(company.status,201);assert.equal(company.data.name,name);
+  assert.ok((await request('/api/me')).data.companies.some(c=>c.id===company.data.id&&c.name===name));
+ }
+});
+
+test('invalid string contents retain existing validation and leave stored data unchanged',async()=>{
+ const valid={email:`strings-${crypto.randomUUID()}@example.com`,password:'valid-password-123',name:'정상 이름'};
+ for(const patch of [{email:''},{email:'bad-email'},{password:''},{password:'123456789'},{name:' '},{name:'가'},{name:'가'.repeat(81)}]){
+  const before=await onboardingState();
+  assert.equal((await request('/api/register','POST',{...valid,...patch},'')).status,400);
+  assert.deepEqual(await onboardingState(),before);
+ }
+ for(const name of ['', ' ', '가', '가'.repeat(121)]){
+  const before=await onboardingState();
+  assert.equal((await request('/api/me/companies','POST',{name})).status,400);
+  assert.deepEqual(await onboardingState(),before);
+ }
+ const email=(await request('/api/me')).data.account.email;
+ for(const payload of [{email:'',password:''},{email:'bad-email',password:'valid-password-123'},{email,password:''}]){
+  const before=await onboardingState();
+  assert.equal((await request('/api/login','POST',payload,'')).status,401);
+  assert.deepEqual(await onboardingState(),before);
+ }
+});
+
 test('invalid experience values are rejected without silently overwriting 84 months',async()=>{
  for(const value of [null,'','   ',false,true,[],[0],{},'false','84x',-1,901,1.5,'1.5']){
   const result=await request('/api/me/worker','PUT',{experience_months:value});assert.equal(result.status,400,JSON.stringify(value));

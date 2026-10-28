@@ -25,12 +25,16 @@ const path=new URL(req.url,'http://localhost').pathname;
 if(req.method==='GET'&&(path==='/'||path==='/index.html')){const html=await readFile(new URL('../web/index.html',import.meta.url));res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(html);return;}
 if(req.method==='GET'&&path==='/api/health')return json(res,200,{ok:true});
 if(req.method==='POST'&&path==='/api/register'){
-const b=await body(req);const email=String(b.email||'').trim().toLowerCase(),password=String(b.password||''),name=String(b.name||'').trim();
+const b=await body(req);
+if(typeof b.email!=='string'||typeof b.password!=='string'||typeof b.name!=='string')return json(res,400,{error:'이메일, 이름, 비밀번호는 문자열이어야 합니다.'});
+const email=b.email.trim().toLowerCase(),password=b.password,name=b.name.trim();
 if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||password.length<10||name.length<2||name.length>80)return json(res,400,{error:'이메일, 이름(2~80자), 비밀번호(10자 이상)를 확인하세요.'});
 const client=await pool.connect();try{await client.query('BEGIN');const a=await client.query('INSERT INTO accounts(email,password_hash,display_name) VALUES($1,$2,$3) RETURNING id,email,display_name',[email,await hashPassword(password),name]);const id=a.rows[0].id;const token=await loginToken(client,id);await client.query('COMMIT');return json(res,201,{account:a.rows[0],token});}catch(e){await client.query('ROLLBACK');if(e.code==='23505')return json(res,409,{error:'이미 가입된 이메일입니다.'});throw e;}finally{client.release();}
 }
 if(req.method==='POST'&&path==='/api/login'){
-const b=await body(req),email=String(b.email||'').trim().toLowerCase(),password=String(b.password||'');
+const b=await body(req);
+if(typeof b.email!=='string'||typeof b.password!=='string')return json(res,400,{error:'이메일과 비밀번호는 문자열이어야 합니다.'});
+const email=b.email.trim().toLowerCase(),password=b.password;
 const {rows}=await pool.query('SELECT id,email,display_name,password_hash FROM accounts WHERE lower(email)=$1',[email]);
 if(!rows.length||!await verifyPassword(password,rows[0].password_hash))return json(res,401,{error:'이메일 또는 비밀번호가 올바르지 않습니다.'});
 const token=await loginToken(pool,rows[0].id);return json(res,200,{account:{id:rows[0].id,email:rows[0].email,display_name:rows[0].display_name},token});
@@ -52,7 +56,9 @@ if(!Number.isInteger(months)||months<0||months>900)return json(res,400,{error:'�
 const c=await pool.connect();try{await c.query('BEGIN');await c.query("INSERT INTO account_roles(account_id,role) VALUES($1,'worker') ON CONFLICT DO NOTHING",[user.id]);await c.query('INSERT INTO worker_profiles(account_id,experience_months) VALUES($1,$2) ON CONFLICT(account_id) DO UPDATE SET experience_months=EXCLUDED.experience_months',[user.id,months]);await c.query('COMMIT');return json(res,200,{experience_months:months});}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}
 }
 if(req.method==='POST'&&path==='/api/me/companies'){
-const b=await body(req),name=String(b.name||'').trim();if(name.length<2||name.length>120)return json(res,400,{error:'업체명은 2~120자여야 합니다.'});
+const b=await body(req);
+if(typeof b.name!=='string')return json(res,400,{error:'업체명은 문자열이어야 합니다.'});
+const name=b.name.trim();if(name.length<2||name.length>120)return json(res,400,{error:'업체명은 2~120자여야 합니다.'});
 const c=await pool.connect();try{await c.query('BEGIN');const {rows}=await c.query('INSERT INTO organizations(name) VALUES($1) RETURNING id,name',[name]);await c.query('INSERT INTO organization_memberships(organization_id,account_id,role) VALUES($1,$2,$3)',[rows[0].id,user.id,'owner']);await c.query("INSERT INTO account_roles(account_id,role) VALUES($1,'company') ON CONFLICT DO NOTHING",[user.id]);await c.query('COMMIT');return json(res,201,rows[0]);}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}
 }
 if(req.method==='POST'&&path==='/api/logout'){const token=/^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization||'')?.[1];if(token)await pool.query('DELETE FROM account_sessions WHERE token_hash=$1',[digest(token)]);return json(res,200,{ok:true});}
