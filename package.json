@@ -1,0 +1,18 @@
+{
+  "name": "node-construction-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "check": "node --check server/index.js && node --check server/access.js && node --check server/worksites.js && node --check server/job-posts.js && node --check scripts/lib/test-worksite-role.mjs && node --check scripts/lib/test-job-post-role.mjs",
+    "test": "node scripts/test.mjs",
+    "dev:local": "node scripts/dev-server.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}
