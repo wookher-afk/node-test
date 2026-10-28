@@ -16,6 +16,27 @@ function text(value,max,required=false){
  return value.trim()||null;
 }
 function expectedVersion(value){if(!Number.isInteger(value)||value<1||value>2147483647)fail(400,'현재 version을 정수로 입력하세요.');return value;}
+// Receive and validate client-only data before obtaining any DB connection or
+// global lock. Current permissions, referenced rows and version equality still
+// belong inside the locked transaction.
+function input(value,section,method){
+ const create=section==='create',assignment=section==='assignments'&&method==='PUT';
+ objectFields(value,create?['name','address','location_notes','description','region_id']:assignment?['version','permissions']:!section?['version','name','address','location_notes','description','region_id']:['version']);
+ const b={...value};
+ if(!create)expectedVersion(b.version);
+ if(assignment){
+  objectFields(b.permissions,permissions);
+  if(permissions.some(p=>typeof b.permissions[p]!=='boolean')||!b.permissions.view)fail(400,'현장 조회와 각 업무 권한을 불리언으로 명시하세요.');
+ }
+ if(create||!section){
+  for(const [key,max] of [['name',120],['address',500],['location_notes',1000],['description',3000]]){
+   if(Object.hasOwn(b,key)||(create&&(key==='name'||key==='address')))b[key]=text(b[key],max,key==='name'||key==='address');
+  }
+  if(Object.hasOwn(b,'region_id')&&b.region_id!==null)b.region_id=identifier(b.region_id);
+  if(!create&&!['name','address','location_notes','description','region_id'].some(key=>Object.hasOwn(b,key)))fail(400,'수정할 항목이 없습니다.');
+ }
+ return b;
+}
 async function companyRole(client,company,user){
  const {rows}=await client.query('SELECT role FROM organization_memberships WHERE organization_id=$1 AND account_id=$2',[company,user.id]);
  if(!rows.length)fail(404,'대상을 찾을 수 없습니다.');
@@ -67,6 +88,7 @@ export async function worksiteRequest({pool,req,path,body}){
  let route=/^\/api\/companies\/([^/]+)\/worksites$/.exec(path);
  if(route&&['GET','POST'].includes(req.method)){
   const company=identifier(route[1]);
+  const b=req.method==='POST'?input(await body(req),'create',req.method):null;
   return transaction(pool,req,async(client,user)=>{
    const role=await companyRole(client,company,user);
    if(req.method==='GET'){
@@ -75,9 +97,8 @@ export async function worksiteRequest({pool,req,path,body}){
     return {status:200,data:{worksites:rows}};
    }
    if(!manager(role))fail(403,'현장 등록 권한이 없습니다.');
-   const b=await body(req);objectFields(b,['name','address','location_notes','description','region_id']);
-   const name=text(b.name,120,true),address=text(b.address,500,true);
-   const notes=b.location_notes===undefined?null:text(b.location_notes,1000),description=b.description===undefined?null:text(b.description,3000);
+   const {name,address}=b;
+   const notes=b.location_notes??null,description=b.description??null;
    const regionId=b.region_id===undefined?null:await region(client,b.region_id);
    const warnings=await duplicates(client,company,name,address);
    const {rows}=await client.query(`INSERT INTO worksites(organization_id,region_id,name,address,location_notes,description,created_by,created_at,updated_by,updated_at)
@@ -92,6 +113,7 @@ export async function worksiteRequest({pool,req,path,body}){
   (section==='assignments'&&((!rawAccount&&req.method==='GET')||(rawAccount&&['PUT','DELETE'].includes(req.method))));
  if(!supported)return null;
  const id=identifier(rawId),account=rawAccount?identifier(rawAccount):null;
+ const b=req.method==='GET'?null:input(await body(req),section,req.method);
  return transaction(pool,req,async(client,user)=>{
   const action=section==='assignments'?'manage':section==='deactivate'?'deactivate':req.method==='PATCH'?'edit':'view';
   const site=await siteAccess(client,id,user,action);
@@ -104,13 +126,9 @@ export async function worksiteRequest({pool,req,path,body}){
    }
    return {status:200,data:{worksite:site}};
   }
-  const b=await body(req);
-  objectFields(b,section==='assignments'&&req.method==='PUT'?['version','permissions']:!section?['version','name','address','location_notes','description','region_id']:['version']);
   conflict(site,b.version);
   if(section==='assignments'){
    if(req.method==='PUT'){
-    objectFields(b.permissions,permissions);
-    if(permissions.some(p=>typeof b.permissions[p]!=='boolean')||!b.permissions.view)fail(400,'현장 조회와 각 업무 권한을 불리언으로 명시하세요.');
     if(!(await client.query('SELECT 1 FROM organization_memberships WHERE organization_id=$1 AND account_id=$2',[site.organization_id,account])).rowCount)fail(400,'현재 업체 소속인 담당자만 지정할 수 있습니다.');
     await client.query(`INSERT INTO worksite_assignments(worksite_id,organization_id,account_id,can_view,can_edit,can_deactivate,can_confirm_work,created_by,updated_by)
      VALUES($1,$2,$3,$4,$5,$6,$7,$8,$8) ON CONFLICT(worksite_id,account_id) DO UPDATE SET
@@ -129,11 +147,10 @@ export async function worksiteRequest({pool,req,path,body}){
    return {status:200,data:{worksite:rows[0]}};
   }
   const updates=[],values=[id];
-  for(const [key,max] of [['name',120],['address',500],['location_notes',1000],['description',3000]])if(Object.hasOwn(b,key)){
-   values.push(text(b[key],max,key==='name'||key==='address'));updates.push(`${key}=$${values.length}`);
+  for(const key of ['name','address','location_notes','description'])if(Object.hasOwn(b,key)){
+   values.push(b[key]);updates.push(`${key}=$${values.length}`);
   }
   if(Object.hasOwn(b,'region_id')){values.push(await region(client,b.region_id));updates.push(`region_id=$${values.length}`);}
-  if(!updates.length)fail(400,'수정할 항목이 없습니다.');
   values.push(user.id);
   const {rows}=await client.query(`UPDATE worksites SET ${updates.join(',')},version=version+1,updated_by=$${values.length},updated_at=clock_timestamp() WHERE id=$1 RETURNING ${fields}`,values);
   return {status:200,data:{worksite:rows[0]}};

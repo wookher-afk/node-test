@@ -6,6 +6,7 @@ import {Pool} from 'pg';
 import {pool,one,runtimeDatabaseUrl} from './helpers/database.js';
 import {testDatabaseUrl} from '../scripts/lib/test-database.mjs';
 import {digest} from '../server/access.js';
+import http from 'node:http';
 const siteUrl=testDatabaseUrl({...process.env,DATABASE_URL:process.env.TEST_WORKSITE_DATABASE_URL});
 const siteRuntime=new Pool({connectionString:siteUrl});
 const port=Number(process.env.PORT||3000)+2,base='http://127.0.0.1:'+port;
@@ -238,4 +239,95 @@ test('separate site connection cannot select a different host, database or conne
   const result=spawnSync(process.execPath,['server/index.js'],{env:{...process.env,DATABASE_URL:primary,WORKSITE_DATABASE_URL:other.href},encoding:'utf8'});
   assert.notEqual(result.status,0);assert.match(result.stderr,/same database/);
  }
+});
+
+async function partialRequest(path,method,data,token){
+ const payload=Buffer.from(JSON.stringify(data)),cut=Math.floor(payload.length/2);
+ let request;
+ const response=new Promise((resolve,reject)=>{
+  request=http.request(new URL(path,base),{method,headers:{'Content-Type':'application/json','Content-Length':payload.length,Authorization:'Bearer '+token}},res=>{
+   let raw='';res.on('data',chunk=>raw+=chunk);res.on('error',reject);
+   res.on('end',()=>{try{resolve({status:res.statusCode,data:JSON.parse(raw)});}catch(error){reject(error);}});
+  });
+  request.on('error',reject);
+ });
+ response.catch(()=>{});
+ await new Promise((resolve,reject)=>request.write(payload.subarray(0,cut),error=>error?reject(error):resolve()));
+ return {response,finish:()=>request.end(payload.subarray(cut)),abort:()=>request.destroy()};
+}
+async function completesBeforeRelease(promise){
+ let timer;
+ try{return await Promise.race([promise.then(()=>true),new Promise(resolve=>{timer=setTimeout(()=>resolve(false),3000);})]);}
+ finally{clearTimeout(timer);}
+}
+test('BUG-01: slow request bodies on every mutating route do not block another company reads or writes',async()=>{
+ const f=await fixture(),other=await fixture();let s=await site(f);let otherSite=await site(other);
+ const routes=[
+  ['POST',`/api/companies/${f.org}/worksites`,()=>({name:'지연 등록 현장',address:'가상 주소'})],
+  ['PATCH',`/api/worksites/${s.id}`,()=>({version:s.version,name:'지연 수정 현장'})],
+  ['PUT',`/api/worksites/${s.id}/assignments/${f.staff.id}`,()=>({version:s.version,permissions:perms()})],
+  ['DELETE',`/api/worksites/${s.id}/assignments/${f.staff.id}`,()=>({version:s.version})],
+  ['POST',`/api/worksites/${s.id}/deactivate`,()=>({version:s.version})]
+ ];
+ for(const [method,path,data] of routes){
+  const slow=await partialRequest(path,method,data(),f.owner.token);let pending,completed;
+  try{
+   pending=Promise.all([
+    api(`/api/worksites/${otherSite.id}`,'GET',undefined,other.owner.token),
+    api(`/api/worksites/${otherSite.id}`,'PATCH',{version:otherSite.version,name:'다른 업체 정상 수정'},other.owner.token)
+   ]);
+   completed=await completesBeforeRelease(pending);
+  }finally{slow.finish();}
+  const results=await pending,slowResult=await slow.response;
+  assert.equal(completed,true,`${method} ${path}: another company must finish while the body is still incomplete`);
+  assert.deepEqual(results.map(r=>r.status),[200,200]);
+  assert.equal(slowResult.status,method==='POST'&&path.includes('/companies/')?201:200);
+  otherSite=results[1].data.worksite;
+  s=(await api(`/api/worksites/${s.id}`,'GET',undefined,f.owner.token)).data.worksite;
+ }
+});
+test('BUG-01: basic body errors on every mutating route are rejected before waiting for a DB lock',async()=>{
+ const f=await fixture(),s=await site(f),c=await pool.connect();let pending,completed;
+ const before=await state();
+ try{
+  await c.query('BEGIN');await c.query('SELECT pg_advisory_xact_lock(710031,1)');
+  pending=Promise.all([
+   api(`/api/companies/${f.org}/worksites`,'POST',{name:[],address:'주소'},f.owner.token),
+   api(`/api/worksites/${s.id}`,'PATCH',{version:1,name:false},f.owner.token),
+   api(`/api/worksites/${s.id}/deactivate`,'POST',{version:'1'},f.owner.token),
+   api(`/api/worksites/${s.id}/assignments/${f.staff.id}`,'PUT',{version:1,permissions:{}},f.owner.token),
+   api(`/api/worksites/${s.id}/assignments/${f.staff.id}`,'DELETE',{version:null},f.owner.token)
+  ]);
+  completed=await completesBeforeRelease(pending);
+ }finally{await c.query('ROLLBACK');c.release();}
+ const results=await pending;
+ assert.equal(completed,true,'basic input validation must not wait behind the shared lock');
+ assert.deepEqual(results.map(r=>r.status),[400,400,400,400,400]);
+ assert.deepEqual(await state(),before);
+});
+for(const method of ['GET','PATCH'])test(`BUG-02: ${method} rejects a session that expires while actually waiting for the shared lock`,async()=>{
+ const f=await fixture(),s=await site(f),c=await pool.connect();let pending,before;
+ try{
+  await c.query('BEGIN');await c.query('SELECT pg_advisory_xact_lock(710031,1)');
+  await pool.query("UPDATE account_sessions SET expires_at=clock_timestamp()+interval '2 seconds' WHERE token_hash=$1",[digest(f.owner.token)]);
+  before=await state();
+  pending=api(`/api/worksites/${s.id}`,method,method==='GET'?undefined:{version:s.version,name:'만료 후 금지 수정'},f.owner.token);
+  let waiting=false;
+  for(let i=0;i<100;i++){
+   if((await pool.query("SELECT 1 FROM pg_stat_activity WHERE application_name='node-worksites-api' AND wait_event='advisory'")).rowCount){waiting=true;break;}
+   await new Promise(resolve=>setTimeout(resolve,10));
+  }
+  assert.ok(waiting,'request must start its transaction and wait before expiry');
+  assert.equal((await one('SELECT clock_timestamp()<expires_at AS valid FROM account_sessions WHERE token_hash=$1',[digest(f.owner.token)])).valid,true);
+  let expired=false;
+  for(let i=0;i<300;i++){
+   if((await one('SELECT clock_timestamp()>expires_at AS expired FROM account_sessions WHERE token_hash=$1',[digest(f.owner.token)])).expired){expired=true;break;}
+   await new Promise(resolve=>setTimeout(resolve,10));
+  }
+  assert.ok(expired,'database wall clock must pass session expiry before releasing the lock');
+  await c.query('COMMIT');
+ }finally{await c.query('ROLLBACK');c.release();if(pending)await pending;}
+ const result=await pending;
+ assert.equal(result.status,401);assert.deepEqual(result.data,{error:'로그인이 필요합니다.'});
+ assert.deepEqual(await state(),before);
 });

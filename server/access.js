@@ -7,7 +7,7 @@ export const digest=value=>createHash('sha256').update(value).digest('hex');
 export async function requireSession(pool,req){
  const token=/^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization||'')?.[1];
  if(token){
-  const {rows}=await pool.query('SELECT a.id,a.email,a.display_name FROM account_sessions s JOIN accounts a ON a.id=s.account_id WHERE s.token_hash=$1 AND s.expires_at>now()',[digest(token)]);
+  const {rows}=await pool.query('SELECT a.id,a.email,a.display_name FROM account_sessions s JOIN accounts a ON a.id=s.account_id WHERE s.token_hash=$1 AND s.expires_at>clock_timestamp()',[digest(token)]);
   if(rows[0])return rows[0];
  }
  throw Object.assign(new Error('로그인이 필요합니다.'),{status:401});
