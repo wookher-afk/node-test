@@ -2,6 +2,7 @@ import {test,before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import {spawn,spawnSync} from 'node:child_process';
 import {once} from 'node:events';
+import {createHash} from 'node:crypto';
 import {Pool} from 'pg';
 import {pool,one,runtimeDatabaseUrl} from './helpers/database.js';
 import {provisionTestRuntime} from '../scripts/lib/test-runtime-role.mjs';
@@ -167,6 +168,95 @@ test('unknown caller cannot update worker/company data even when JSON is valid',
  assert.equal((await request('/api/me/worker','PUT',{experience_months:0},'')).status,401);
  assert.equal((await request('/api/me/companies','POST',{name:'unauthorized'},'')).status,401);
  assert.deepEqual(await onboardingState(),before);
+});
+
+async function companyCaller(){
+ const created=await request('/api/register','POST',{email:`company-access-${crypto.randomUUID()}@example.com`,password:'company-access-password',name:'권한 검증 계정'},'');
+ assert.equal(created.status,201);
+ return {id:created.data.account.id,token:created.data.token};
+}
+
+test('company APIs consistently reject missing, invalid, expired and revoked sessions without writes',async()=>{
+ const expired=await companyCaller(),revoked=await companyCaller();
+ await pool.query("UPDATE account_sessions SET expires_at=now()-interval '1 second' WHERE account_id=$1",[expired.id]);
+ await pool.query('DELETE FROM account_sessions WHERE token_hash=$1',[createHash('sha256').update(revoked.token).digest('hex')]);
+ const unknown=createHash('sha256').update(crypto.randomUUID()).digest('hex');
+ for(const auth of ['', 'invalid-token', unknown, expired.token, revoked.token]){
+  const before=await onboardingState();
+  for(const [path,method,payload] of [['/api/me','GET',undefined],['/api/me/companies','POST',{name:'권한 없는 등록'}]]){
+   const result=await request(path,method,payload,auth);
+   assert.equal(result.status,401);assert.deepEqual(result.data,{error:'로그인이 필요합니다.'});
+  }
+  assert.deepEqual(await onboardingState(),before);
+ }
+});
+
+for(const role of ['owner','manager','staff'])test(`own company membership summary remains available for ${role} only within their memberships`,async()=>{
+ const caller=await companyCaller(),other=await companyCaller();
+ const mine=await request('/api/me/companies','POST',{name:'본인 소속 업체'},caller.token);
+ const theirs=await request('/api/me/companies','POST',{name:'다른 계정 업체'},other.token);
+ assert.equal(mine.status,201);assert.equal(theirs.status,201);
+ await pool.query('UPDATE organization_memberships SET role=$1 WHERE organization_id=$2 AND account_id=$3',[role,mine.data.id,caller.id]);
+ const before=await onboardingState(),me=await request('/api/me','GET',undefined,caller.token);
+ assert.equal(me.status,200);assert.equal(me.data.account.id,caller.id);
+ assert.deepEqual(me.data.companies,[{id:mine.data.id,name:mine.data.name,role}]);
+ assert.deepEqual(await onboardingState(),before);
+});
+
+test('an account without memberships can read its empty summary and create its own new company',async()=>{
+ const caller=await companyCaller();
+ const before=await onboardingState(),me=await request('/api/me','GET',undefined,caller.token);
+ assert.equal(me.status,200);assert.deepEqual(me.data.companies,[]);
+ assert.deepEqual(await onboardingState(),before);
+ const created=await request('/api/me/companies','POST',{name:'첫 업체'},caller.token);
+ assert.equal(created.status,201);
+ assert.deepEqual((await request('/api/me','GET',undefined,caller.token)).data.companies,[{...created.data,role:'owner'}]);
+});
+
+test('membership changes and removal are reflected on the next request without re-login',async()=>{
+ const caller=await companyCaller();
+ const created=await request('/api/me/companies','POST',{name:'소속 변경 업체'},caller.token);
+ assert.equal(created.status,201);
+ for(const role of ['manager','staff']){
+  await pool.query('UPDATE organization_memberships SET role=$1 WHERE organization_id=$2 AND account_id=$3',[role,created.data.id,caller.id]);
+  const before=await onboardingState();
+  assert.equal((await request('/api/me','GET',undefined,caller.token)).data.companies[0].role,role);
+  assert.deepEqual(await onboardingState(),before);
+ }
+ await pool.query('DELETE FROM organization_memberships WHERE organization_id=$1 AND account_id=$2',[created.data.id,caller.id]);
+ const before=await onboardingState();
+ assert.deepEqual((await request('/api/me','GET',undefined,caller.token)).data.companies,[]);
+ assert.deepEqual(await onboardingState(),before);
+});
+
+test('company and account identifiers supplied in queries cannot select another membership summary',async()=>{
+ const caller=await companyCaller(),other=await companyCaller();
+ const mine=await request('/api/me/companies','POST',{name:'조회 대상 본인 업체'},caller.token);
+ const theirs=await request('/api/me/companies','POST',{name:'비공개 다른 업체'},other.token);
+ assert.equal(mine.status,201);assert.equal(theirs.status,201);
+ // /api/me does not accept a target organization ID. These extra query values
+ // must never become selectors; no company-by-ID endpoint is introduced here.
+ for(const value of [theirs.data.id,'9223372036854775807',null,[],{},false,1.5]){
+  const query=new URLSearchParams({organization_id:JSON.stringify(value),company_id:JSON.stringify(value),account_id:other.id,role:'owner'});
+  const before=await onboardingState(),me=await request('/api/me?'+query,'GET',undefined,caller.token);
+  assert.equal(me.status,200);assert.equal(me.data.account.id,caller.id);
+  assert.deepEqual(me.data.companies,[{...mine.data,role:'owner'}]);
+  assert.deepEqual(await onboardingState(),before);
+ }
+});
+
+test('new company ownership comes from the session, ignoring forged company, account and role fields',async()=>{
+ const caller=await companyCaller(),other=await companyCaller();
+ const theirs=await request('/api/me/companies','POST',{name:'보존할 다른 업체'},other.token);
+ assert.equal(theirs.status,201);
+ const existingCompanies=await pool.query('SELECT * FROM organizations ORDER BY id');
+ const existingMemberships=await pool.query('SELECT * FROM organization_memberships ORDER BY organization_id,account_id');
+ const created=await request('/api/me/companies','POST',{name:'본인 신규 업체',id:theirs.data.id,organization_id:theirs.data.id,company_id:theirs.data.id,account_id:other.id,owner_account_id:other.id,role:'manager'},caller.token);
+ assert.equal(created.status,201);assert.notEqual(created.data.id,theirs.data.id);
+ assert.deepEqual((await request('/api/me','GET',undefined,caller.token)).data.companies,[{...created.data,role:'owner'}]);
+ assert.deepEqual((await request('/api/me','GET',undefined,other.token)).data.companies,[{...theirs.data,role:'owner'}]);
+ assert.deepEqual((await pool.query('SELECT * FROM organizations WHERE id<>$1 ORDER BY id',[created.data.id])).rows,existingCompanies.rows);
+ assert.deepEqual((await pool.query('SELECT * FROM organization_memberships WHERE organization_id<>$1 ORDER BY organization_id,account_id',[created.data.id])).rows,existingMemberships.rows);
 });
 
 test('local role launcher refuses remote/production URLs and missing acknowledgement before connecting',()=>{

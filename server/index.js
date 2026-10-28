@@ -1,14 +1,14 @@
 import {readFile} from 'node:fs/promises';
 import http from 'node:http';
-import {randomBytes, scrypt as scryptCallback, timingSafeEqual, createHash} from 'node:crypto';
+import {randomBytes, scrypt as scryptCallback, timingSafeEqual} from 'node:crypto';
 import {promisify} from 'node:util';
 import {Pool} from 'pg';
+import {digest,requireSession,listOwnCompanies} from './access.js';
 
 const scrypt=promisify(scryptCallback);
 const pool=new Pool({connectionString:process.env.DATABASE_URL});
 const port=Number(process.env.PORT||3000);
 const json=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
-const digest=v=>createHash('sha256').update(v).digest('hex');
 const hashPassword=async p=>{const salt=randomBytes(16).toString('hex');return salt+':'+(await scrypt(p,salt,64)).toString('hex');};
 const verifyPassword=async(p,h)=>{if(!h||!h.includes(':'))return false;const [salt,stored]=h.split(':');const candidate=await scrypt(p,salt,64);const original=Buffer.from(stored,'hex');return candidate.length===original.length&&timingSafeEqual(candidate,original);};
 async function body(req){
@@ -17,7 +17,6 @@ let parsed;try{parsed=JSON.parse(raw||'{}');}catch{throw Object.assign(new Error
 if(parsed===null||typeof parsed!=='object'||Array.isArray(parsed))throw Object.assign(new Error('JSON object required'),{status:400});
 return parsed;
 }
-async function session(req){const token=/^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization||'')?.[1];if(!token)return null;const {rows}=await pool.query('SELECT a.id,a.email,a.display_name FROM account_sessions s JOIN accounts a ON a.id=s.account_id WHERE s.token_hash=$1 AND s.expires_at>now()',[digest(token)]);return rows[0]||null;}
 async function loginToken(client,id){const token=randomBytes(32).toString('hex');await client.query("INSERT INTO account_sessions(account_id,token_hash,expires_at) VALUES($1,$2,now()+interval '30 days')",[id,digest(token)]);return token;}
 const server=http.createServer(async(req,res)=>{
 try{
@@ -40,12 +39,12 @@ if(!rows.length||!await verifyPassword(password,rows[0].password_hash))return js
 const token=await loginToken(pool,rows[0].id);return json(res,200,{account:{id:rows[0].id,email:rows[0].email,display_name:rows[0].display_name},token});
 }
 if(path.startsWith('/api/')){
-const user=await session(req);if(!user)return json(res,401,{error:'로그인이 필요합니다.'});
+const user=await requireSession(pool,req);
 if(req.method==='GET'&&path==='/api/me'){
 const roles=await pool.query('SELECT role FROM account_roles WHERE account_id=$1',[user.id]);
 const profile=await pool.query('SELECT experience_months FROM worker_profiles WHERE account_id=$1',[user.id]);
-const companies=await pool.query('SELECT o.id,o.name,m.role FROM organization_memberships m JOIN organizations o ON o.id=m.organization_id WHERE m.account_id=$1',[user.id]);
-return json(res,200,{account:user,roles:roles.rows.map(r=>r.role),worker:profile.rows[0]||null,companies:companies.rows});
+const companies=await listOwnCompanies(pool,user);
+return json(res,200,{account:user,roles:roles.rows.map(r=>r.role),worker:profile.rows[0]||null,companies});
 }
 if(req.method==='PUT'&&path==='/api/me/worker'){
 const b=await body(req),value=b.experience_months;
