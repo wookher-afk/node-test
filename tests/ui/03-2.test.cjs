@@ -13,6 +13,31 @@ const assert=require('node:assert/strict');
  await page.fill('#spec0','12');await page.fill('#years','5');
  if(mode==='owned'){await page.fill('#maker','시험 제조사');await page.fill('#model','시험 모델');}
  }
+ // Discoverable add entry points, repeated equipment, both modes, edit/delete and reload.
+ for(const mode of ['ability','owned']){
+  for(let i=0;i<2;i++){
+   await page.click(mode==='ability'?'#addAbility':'#addOwned');
+   assert.equal(await page.inputValue('#kind'),'');
+   await fill(mode,'loader','토공·기초','적재');await page.click('#submit');
+  }
+ }
+ assert.equal(await page.locator('.card').count(),4);
+ assert.match(await page.locator('#equipmentCount').innerText(),/운전 가능 장비 2건 · 보유 장비 2건/);
+ for(const index of [0,2]){
+  await page.locator('.card').nth(index).getByText('수정',{exact:true}).click();
+  await page.fill('#years','9');await page.click('#submit');
+  assert.match(await page.locator('.card').nth(index).innerText(),/9년/);
+ }
+ await page.reload();assert.equal(await page.locator('.card').count(),4);
+ for(const index of [2,0])await page.locator('.card').nth(index).getByText('삭제',{exact:true}).click();
+ await page.reload();assert.match(await page.locator('#equipmentCount').innerText(),/운전 가능 장비 1건 · 보유 장비 1건/);
+ await page.click('#addAbility');await fill('ability','loader','토공·기초','적재');
+ const beforeCancel=await page.inputValue('#kind');
+ page.removeAllListeners('dialog');page.once('dialog',d=>d.dismiss());await page.click('#addOwned');
+ assert.equal(await page.inputValue('#kind'),beforeCancel);assert.equal(await page.locator('.card').count(),2);
+ page.on('dialog',d=>d.accept());
+ await page.evaluate(()=>localStorage.removeItem('node_03_2_v1'));await page.reload();
+ await page.locator('#roles input').nth(0).check();await page.locator('#roles input').nth(1).check();
  await fill('ability','loader','토공·기초','적재');await page.fill('#options','<img src=x onerror=alert(1)>');await page.click('#submit');
  await fill('owned','dump-truck','운반·차량','운반');await page.click('#submit');
  assert.equal(await page.locator('.card').count(),2);assert.equal(await page.locator('.card img').count(),0);
