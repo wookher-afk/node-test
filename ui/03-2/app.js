@@ -1,0 +1,36 @@
+(() => {
+ 'use strict';
+ const $=id=>document.getElementById(id), catalog=window.NODE_CATALOG.items;
+ const KEY='node_03_2_v1';
+ let state={version:1,roles:[],records:[],draft:null}, mode='ability', editing=null;
+ const fields=['form','size','custom','alias','evidence','maker','model','year','ready','operator','options','ability','years','months'];
+ const selected=()=>catalog.find(x=>x.id===$('kind').value);
+ function choices(id,items){const el=$(id);el.replaceChildren(new Option('선택하세요',''),...items.map(x=>new Option(x.label??x,x.value??x)));}
+ function majors(){choices('major',[...new Set(catalog.map(x=>x.major))]);middles();}
+ function middles(){choices('middle',[...new Set(catalog.filter(x=>x.major===$('major').value).map(x=>x.middle))]);kinds();}
+ function kinds(){choices('kind',catalog.filter(x=>x.major===$('major').value&&x.middle===$('middle').value).map(x=>({label:x.name,value:x.id})));details();}
+ function details(){const item=selected();choices('form',item?['직접 입력']:[]);choices('size',item?[...item.sizes.map(s=>({label:s.label+' · 기존 목록/미검증',value:s.label})),'직접 입력']:[]);$('specs').replaceChildren();
+  (item?.specs||[]).forEach((name,i)=>{const label=document.createElement('label');label.textContent=name;const input=document.createElement('input');input.id='spec'+i;input.maxLength=120;input.placeholder='제원표·명판 기준, 모르면 비워두세요';label.append(input);$('specs').append(label);});
+  $('source').textContent=item?'분류·제원 입력 항목은 UI 초안입니다. 현장 규격은 기존 코드 목록이며 보고서로 검증되지 않았습니다. 직접 입력값도 사용자 입력으로 구분됩니다.':'장비 종류를 선택하세요.';customVisibility();
+ }
+ function customVisibility(){$('customLabel').hidden=$('size').value!=='직접 입력';$('custom').required=$('size').value==='직접 입력';}
+ function draft(){return {mode,editing,major:$('major').value,middle:$('middle').value,kind:$('kind').value,...Object.fromEntries(fields.map(k=>[k,$(k).value])),specs:[...$('specs').querySelectorAll('input')].map(x=>x.value)};}
+ function save(){state.roles=[...$('roles').querySelectorAll(':checked')].map(x=>x.value);state.draft=draft();try{localStorage.setItem(KEY,JSON.stringify(state));$('status').textContent='이 브라우저에 임시저장했습니다.';return true;}catch{$('status').textContent='저장 공간에 접근할 수 없습니다. 이 화면을 닫으면 입력이 사라질 수 있습니다.';return false;}}
+ function applyMode(){const owned=mode==='owned';$('abilityTab').setAttribute('aria-selected',String(!owned));$('ownedTab').setAttribute('aria-selected',String(owned));$('ownership').hidden=!owned;['maker','model'].forEach(k=>$(k).required=owned);$('editorTitle').textContent=(owned?'보유 장비':'운전 가능 장비')+(editing?' 수정':' 추가');$('submit').textContent=editing?'수정 완료':'목록에 추가';$('cancel').hidden=!editing;}
+ function clear(){editing=null;$('editor').reset();majors();applyMode();}
+ function restoreDraft(d){mode=d.mode==='owned'?'owned':'ability';editing=state.records.some(x=>x.id===d.editing)?d.editing:null;majors();$('major').value=d.major;middles();$('middle').value=d.middle;kinds();$('kind').value=d.kind;details();fields.forEach(k=>{if(typeof d[k]==='string')$(k).value=d[k];});(d.specs||[]).forEach((v,i)=>{if($('spec'+i))$('spec'+i).value=v;});customVisibility();applyMode();}
+ function render(){const list=$('list');list.replaceChildren();if(!state.records.length){list.textContent='아직 등록한 장비가 없습니다.';return;}
+  state.records.forEach(r=>{const item=catalog.find(x=>x.id===r.kind),card=document.createElement('article');card.className='card';const h=document.createElement('h3');h.textContent=(r.mode==='owned'?'보유 장비':'운전 가능 장비')+' · '+(item?.name||'미확인 장비');const p=document.createElement('p');p.textContent=[`${r.major} → ${r.middle} → ${item?.name||''}`,`형태: ${r.formDetail||'미입력'} / 현장 규격: ${r.size==='직접 입력'?r.custom:r.size} (${r.size==='직접 입력'?'사용자 입력·미검증':'기존 목록·미검증'})`,...((r.specs||[]).map((v,i)=>v?`${item?.specs[i]||'제원'}: ${v}`:'').filter(Boolean)),r.alias&&`현장 명칭: ${r.alias} (사용자 입력·미검증)`,r.evidence&&`제원 근거: ${r.evidence}`,r.mode==='owned'&&`제조사·모델: ${r.maker} ${r.model} / ${r.year||'연식 미입력'} / ${r.ready} / 기사 제공 ${r.operator}`,`옵션: ${r.options||'미입력'} (사용자 입력)`,`운전능력: ${r.ability} / 경력 ${r.years}년 ${r.months}개월`].filter(Boolean).join('\n');
+   const actions=document.createElement('div');actions.className='actions';const edit=document.createElement('button');edit.textContent='수정';edit.onclick=()=>{if(editing&&editing!==r.id&&!confirm('진행 중인 수정을 취소하고 다른 장비를 수정할까요?'))return;restoreDraft({...r,editing:r.id});$('formDetail').value=r.formDetail||'';save();$('editor').scrollIntoView({behavior:'smooth'});};const del=document.createElement('button');del.textContent='삭제';del.className='danger';del.onclick=()=>{if(!confirm('이 장비를 목록에서 삭제할까요?'))return;state.records=state.records.filter(x=>x.id!==r.id);if(editing===r.id)clear();render();save();};actions.append(edit,del);card.append(h,p,actions);list.append(card);});
+ }
+ // 형태를 보고서 없이 임의 목록화하지 않고 실제 형태를 명시적으로 입력 받습니다.
+ const formLabel=document.createElement('label');formLabel.textContent='장비 형태 직접 입력';const formInput=document.createElement('input');formInput.id='formDetail';formInput.maxLength=120;formInput.required=true;formLabel.append(formInput);$('form').parentElement.after(formLabel);fields.push('formDetail');
+ $('major').onchange=middles;$('middle').onchange=kinds;$('kind').onchange=details;$('size').onchange=customVisibility;
+ ['ability','owned'].forEach(m=>$(m+'Tab').onclick=()=>{if(mode===m)return;if((editing||$('kind').value)&&!confirm('현재 입력을 비우고 등록 구분을 바꿀까요? 먼저 목록에 추가하면 보관됩니다.'))return;mode=m;clear();save();});
+ $('cancel').onclick=()=>{clear();save();};
+ $('editor').onsubmit=e=>{e.preventDefault();if(!$('editor').reportValidity())return;const r={...draft(),id:editing||crypto.randomUUID(),verification:'unverified'};delete r.editing;const i=state.records.findIndex(x=>x.id===editing);if(i>=0)state.records[i]=r;else state.records.push(r);clear();render();save();};
+ $('save').onclick=save;document.addEventListener('input',e=>{if(e.target.closest('#editor,#roles'))save();});document.addEventListener('change',e=>{if(e.target.closest('#editor,#roles'))save();});
+ function move(direction){if(direction==='next'&&(!$('roles').querySelector(':checked')||!state.records.length)){$('status').textContent='기사 유형을 선택하고 장비를 하나 이상 목록에 추가하세요.';return;}if(($('kind').value||editing)&&!confirm('아직 목록에 반영하지 않은 입력이 있습니다. 임시저장 후 단계 검토로 이동할까요?'))return;if(!save())return;$('review').hidden=false;$('reviewTitle').textContent=direction==='next'?'다음 단계 이동 검토':'이전 단계 이동 검토';$('summary').textContent=`기사 유형: ${state.roles.join(', ')}\n등록 장비: ${state.records.length}건\n임시저장 완료. 실제 이전·다음 화면 연결은 별도 작업 범위입니다.`;$('review').scrollIntoView({behavior:'smooth'});}
+ $('previous').onclick=()=>move('previous');$('next').onclick=()=>move('next');$('back').onclick=()=>{$('review').hidden=true;$('editor').scrollIntoView({behavior:'smooth'});};
+ majors();applyMode();try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(parsed.version!==1||!Array.isArray(parsed.records)||!Array.isArray(parsed.roles))throw Error('invalid');state=parsed;state.roles.forEach(v=>{const el=[...$('roles').querySelectorAll('input')].find(x=>x.value===v);if(el)el.checked=true;});if(state.draft)restoreDraft(state.draft);$('status').textContent='임시저장한 목록과 작성 중 입력을 복원했습니다.';}}catch{$('status').textContent='저장 데이터를 복원할 수 없습니다. 기존 저장값은 자동으로 덮어쓰지 않았습니다.';}render();
+})();
