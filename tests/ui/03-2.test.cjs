@@ -13,8 +13,8 @@ const assert=require('node:assert/strict');
  await page.fill('#spec0','12');await page.selectOption('#ability','독립 작업 가능');await page.fill('#years','5');await page.fill('#months','6');
  if(mode==='owned'){await page.fill('#maker','시험 제조사');await page.fill('#model','시험 모델');}
  }
- await fill('ability','1','토공·기초','적재');await page.fill('#options','<img src=x onerror=alert(1)>');await page.click('#submit');
- await fill('owned','5','운반·차량','운반');await page.click('#submit');
+ await fill('ability','loader','토공·기초','적재');await page.fill('#options','<img src=x onerror=alert(1)>');await page.click('#submit');
+ await fill('owned','dump-truck','운반·차량','운반');await page.click('#submit');
  assert.equal(await page.locator('.card').count(),2);assert.equal(await page.locator('.card img').count(),0);
  await page.locator('.card').first().getByText('수정',{exact:true}).click();await page.fill('#years','8');await page.click('#submit');assert.match(await page.locator('.card').first().innerText(),/8년 6개월/);
  await page.reload();assert.equal(await page.locator('#roles input:checked').count(),2);assert.equal(await page.locator('.card').count(),2);
@@ -22,6 +22,40 @@ const assert=require('node:assert/strict');
  await page.locator('.card').last().getByText('삭제',{exact:true}).click();await page.reload();assert.equal(await page.locator('.card').count(),1);
  await page.click('#next');assert.equal(await page.locator('#review').isVisible(),true);await page.click('#back');await page.click('#previous');assert.equal(await page.locator('#review').isVisible(),true);
  for(const viewport of [{width:1440,height:1000},{width:390,height:844}]){await page.setViewportSize(viewport);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);}
- assert.deepEqual(errors,[]);console.log('PASS: dual roles, dependent selections, ability/ownership, specs, options escaping, add/edit/delete, autosave/draft restore, navigation review, desktop/mobile overflow; no browser errors');
+ // Every legacy ID, both record modes, unknown IDs, and an in-progress forklift edit.
+ const legacyNames=['굴착기','로더','불도저','천공기','항타기','덤프트럭','카고트럭','트레일러','지게차','크레인','고소작업차','롤러','믹서트럭','펌프카','발전기','콤프레서','기타'];
+ await page.evaluate(()=>{
+  const records=Array.from({length:17},(_,i)=>({id:'old-'+i,kind:i%2?i:String(i),mode:i%2?'owned':'ability',major:i===8?'인양·고소':'old',middle:'인양',specs:['kept-'+i],alias:'alias-'+i,maker:'maker',model:'model',years:'2',months:'3'}));
+  records.push({id:'unknown',kind:'99',mode:'ability',major:'unknown',middle:'unknown',specs:['unknown-kept']});
+  localStorage.setItem('node_03_2_v1',JSON.stringify({version:1,roles:['자가기사'],records,draft:{...records[8],editing:'old-8',form:'직접 입력',formDetail:'기존 형태',size:'직접 입력',custom:'기존 규격'}}));
+ });
+ await page.reload();
+ for(let i=0;i<17;i++)assert.match(await page.locator('.card h3').nth(i).innerText(),new RegExp(legacyNames[i]));
+ assert.match(await page.locator('.card h3').nth(17).innerText(),/미확인 장비/);
+ assert.equal(await page.inputValue('#kind'),'forklift');assert.equal(await page.inputValue('#major'),'운반·차량');assert.equal(await page.inputValue('#middle'),'하역');
+ assert.equal(await page.inputValue('#spec0'),'kept-8');assert.equal(await page.inputValue('#custom'),'기존 규격');
+ const migrated=await page.evaluate(()=>JSON.parse(localStorage.getItem('node_03_2_v1')));
+ assert.equal(migrated.version,2);assert.equal(migrated.records[8].kind,'forklift');assert.equal(migrated.records[9].kind,'crane');assert.equal(migrated.records[16].kind,'other');assert.equal(migrated.records[17].kind,'99');
+ for(let i=0;i<17;i++){
+  assert.equal(migrated.records[i].id,'old-'+i);assert.deepEqual(migrated.records[i].specs,['kept-'+i]);assert.equal(migrated.records[i].alias,'alias-'+i);assert.equal(migrated.records[i].mode,i%2?'owned':'ability');
+ }
+ const stable=await page.evaluate(()=>{
+  const c=window.NODE_CATALOG;const before=c.items.map(x=>c.migrateEntry({kind:x.id}).kind);c.items.reverse();
+  const after=before.map(kind=>c.migrateEntry({kind}).kind);c.items.reverse();return {before,after,ids:c.items.map(x=>x.id)};
+ });
+ assert.deepEqual(stable.after,stable.before);assert.equal(new Set(stable.ids).size,stable.ids.length);
+ await page.reload();assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('node_03_2_v1'))),migrated);
+ await page.click('#cancel');
+ for(const mode of ['ability','owned']){
+  if(mode==='ability')await page.click('#abilityTab');
+  for(const kind of ['forklift','telehandler']){
+   await fill(mode,kind,'운반·차량','하역');await page.click('#submit');
+   assert.match(await page.locator('.card').last().innerText(),/운반·차량 → 하역/);
+  }
+ }
+ await page.selectOption('#major','인양·고소');await page.selectOption('#middle','인양');
+ assert.deepEqual(await page.locator('#kind option').evaluateAll(xs=>xs.map(x=>x.value)),['','crane']);
+ await page.reload();assert.equal(await page.locator('.card').count(),22);
+ assert.deepEqual(errors,[]);console.log('PASS: dual roles, dependent selections, ability/ownership, specs, options escaping, add/edit/delete, autosave/draft restore, navigation review, desktop/mobile overflow; loading categories in both modes; all 17 legacy IDs and unknown ID; draft migration and idempotent reload; no browser errors');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

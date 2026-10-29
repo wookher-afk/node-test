@@ -2,7 +2,7 @@
  'use strict';
  const $=id=>document.getElementById(id), catalog=window.NODE_CATALOG.items;
  const KEY='node_03_2_v1';
- let state={version:1,roles:[],records:[],draft:null}, mode='ability', editing=null;
+ let state={version:2,roles:[],records:[],draft:null}, mode='ability', editing=null;
  const fields=['form','size','custom','alias','evidence','maker','model','year','ready','operator','options','ability','years','months'];
  const selected=()=>catalog.find(x=>x.id===$('kind').value);
  function choices(id,items){const el=$(id);el.replaceChildren(new Option('선택하세요',''),...items.map(x=>new Option(x.label??x,x.value??x)));}
@@ -32,5 +32,5 @@
  $('save').onclick=save;document.addEventListener('input',e=>{if(e.target.closest('#editor,#roles'))save();});document.addEventListener('change',e=>{if(e.target.closest('#editor,#roles'))save();});
  function move(direction){if(direction==='next'&&(!$('roles').querySelector(':checked')||!state.records.length)){$('status').textContent='기사 유형을 선택하고 장비를 하나 이상 목록에 추가하세요.';return;}if(($('kind').value||editing)&&!confirm('아직 목록에 반영하지 않은 입력이 있습니다. 임시저장 후 단계 검토로 이동할까요?'))return;if(!save())return;$('review').hidden=false;$('reviewTitle').textContent=direction==='next'?'다음 단계 이동 검토':'이전 단계 이동 검토';$('summary').textContent=`기사 유형: ${state.roles.join(', ')}\n등록 장비: ${state.records.length}건\n임시저장 완료. 실제 이전·다음 화면 연결은 별도 작업 범위입니다.`;$('review').scrollIntoView({behavior:'smooth'});}
  $('previous').onclick=()=>move('previous');$('next').onclick=()=>move('next');$('back').onclick=()=>{$('review').hidden=true;$('editor').scrollIntoView({behavior:'smooth'});};
- majors();applyMode();try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(parsed.version!==1||!Array.isArray(parsed.records)||!Array.isArray(parsed.roles))throw Error('invalid');state=parsed;state.roles.forEach(v=>{const el=[...$('roles').querySelectorAll('input')].find(x=>x.value===v);if(el)el.checked=true;});if(state.draft)restoreDraft(state.draft);$('status').textContent='임시저장한 목록과 작성 중 입력을 복원했습니다.';}}catch{$('status').textContent='저장 데이터를 복원할 수 없습니다. 기존 저장값은 자동으로 덮어쓰지 않았습니다.';}render();
+ majors();applyMode();try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(![1,2].includes(parsed.version)||!Array.isArray(parsed.records)||!Array.isArray(parsed.roles))throw Error('invalid');state={...parsed,version:2,records:parsed.records.map(window.NODE_CATALOG.migrateEntry),draft:window.NODE_CATALOG.migrateEntry(parsed.draft)};if(parsed.version===1)localStorage.setItem(KEY,JSON.stringify(state));state.roles.forEach(v=>{const el=[...$('roles').querySelectorAll('input')].find(x=>x.value===v);if(el)el.checked=true;});if(state.draft)restoreDraft(state.draft);$('status').textContent='임시저장한 목록과 작성 중 입력을 복원했습니다.';}}catch{$('status').textContent='저장 데이터를 복원할 수 없습니다. 기존 저장값은 자동으로 덮어쓰지 않았습니다.';}render();
 })();
