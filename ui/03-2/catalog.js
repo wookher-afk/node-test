@@ -37,7 +37,7 @@ window.NODE_CATALOG = (() => {
  ['road-mill','도로절삭기','도로·콘크리트','포장',['장착 드럼 절삭폭 (m)','최대 절삭깊이 (mm)','비트 간격 (mm)']]
  );
  const profiles = {
- excavator:[['미니','궤도식 (LC)','타이어식 (W)'],['브레이커','집게','회전링크','틸트로테이터','오거'],['포크레인','굴삭기','백호','06W']],
+ excavator:[['미니','궤도식 (LC)','타이어식 (W)','대형 굴착기'],['브레이커','집게','회전링크','틸트로테이터','오거'],['포크레인','굴삭기','백호','06W']],
  loader:[['타이어식','궤도식'],['일반 버킷','암석 버킷','경량물 버킷','하이리프트','포크','퀵커플러','계량장치'],['휠로더','페이로더','페이로다']],
  'skid-loader':[['바퀴식 스키드스티어','궤도식 소형 트랙로더'],['버킷','브러시','포크','브레이커','오거','절삭장치','고유량 유압'],['바브캣','밥캣','소형 트랙로더']],
  bulldozer:[['무한궤도식','타이어식'],['LGP','리퍼','윈치','정지 제어장치'],['도저']],
@@ -71,7 +71,7 @@ window.NODE_CATALOG = (() => {
  };
  const referenceSource='research-report.md';
  const referenceSizes={
- excavator:{'궤도식 (LC)':['버킷 0.12㎥','버킷 0.20㎥','버킷 0.40㎥','버킷 0.60㎥','버킷 0.70㎥','버킷 0.80㎥','버킷 1.00㎥','버킷 1.20㎥','버킷 2.00㎥'],'타이어식 (W)':['버킷 0.18㎥','버킷 0.60㎥','버킷 0.80㎥','버킷 1.00㎥']},
+ excavator:{'미니':['008','010','015','017','020','025','030','035'],'궤도식 (LC)':['02LC','03LC','04LC','06LC','08LC','10LC'],'타이어식 (W)':['03W','06W','08W'],'대형 굴착기':['300','300LC','320','360','380','380LC','420','460','460LC']},
  bulldozer:{'무한궤도식':['7t','10t','12t','19t','32t'],'타이어식':['15t','28t','33t']},
  'concrete-pump':{'붐형':['붐 21m','붐 28m','붐 32m','붐 36m','붐 41m','붐 43m','붐 47m','붐 52m']},
  loader:{'타이어식':['3루베 이하','4루베 이하','6루베 이하','6루베 이상']},
@@ -90,6 +90,6 @@ window.NODE_CATALOG = (() => {
   const item = items.find(item=>item.id===kind);
   return {...entry,kind,...(item ? {major:item.major,middle:item.middle} : {})};
  }
- const items = rows.map(([id,name,major,middle,specs])=>({id,name,major,middle,specs:extraSpecs[id]||specs,forms:[...profiles[id][0],'직접 입력'],options:profiles[id][1],aliases:profiles[id][2],sizesByForm:referenceSizes[id]||{},source:['excavator','bulldozer','concrete-pump'].includes(id)?'research-standardization.md':referenceSource}));
+ const items = rows.map(([id,name,major,middle,specs])=>({id,name,major,middle,specs:extraSpecs[id]||specs,forms:[...profiles[id][0],'직접 입력'],options:profiles[id][1],aliases:profiles[id][2],sizesByForm:referenceSizes[id]||{},source:id==='excavator'?'excavator-field-sizes.md':['bulldozer','concrete-pump'].includes(id)?'research-standardization.md':referenceSource}));
  return {version:2, legacyIdMap, migrateEntry, reportStatus:'available', items};
 })();
