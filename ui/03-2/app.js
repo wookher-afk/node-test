@@ -11,7 +11,7 @@
  function kinds(){choices('kind',catalog.filter(x=>x.major===$('major').value&&x.middle===$('middle').value).map(x=>({label:x.name,value:x.id})));details();}
  function sizeChoices(value=''){const item=selected(),reference=['bulldozer','grader','mixer-truck','concrete-pump'].includes(item?.id)?' 적산 참고':' 국내 사용 호칭',labels=item?(item.sizesByForm[$('form').value]||item.sizesByForm['*']||[]):[];choices('size',[...labels.map(label=>({label:item?.id==='excavator'?label:label+' ·'+reference,value:label})),'직접 입력']);if(value){if(![...$('size').options].some(o=>o.value===value))$('size').add(new Option(value+' · 이전 입력',value));$('size').value=value;}customVisibility();}
  function formVisibility(){$('formDetail').parentElement.hidden=$('form').value!=='직접 입력';$('formDetail').required=$('form').value==='직접 입력';}
- function details(){const item=selected();choices('form',item?.forms||[]);sizeChoices();$('specs').replaceChildren();
+ function details(){const item=selected();choices('form',(item?.forms||[]).map(value=>({label:value==='직접 입력'?'기타. 직접입력':value,value})));sizeChoices();$('specs').replaceChildren();
   (item?.specs||[]).forEach((name,i)=>{const label=document.createElement('label');label.textContent=name;const input=document.createElement('input');input.id='spec'+i;input.maxLength=120;input.placeholder='제원표·명판 기준, 모르면 비워두세요';label.append(input);$('specs').append(label);});
   $('optionChecks').replaceChildren();(item?.options||[]).forEach(name=>{const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=name;label.append(input,document.createTextNode(name));$('optionChecks').append(label);});
   $('actualNameLabel').hidden=item?.id!=='other';$('actualName').required=item?.id==='other';
