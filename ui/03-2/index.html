@@ -2,7 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NODE · 03-2 장비 등록</title><link rel="stylesheet" href="style.css"></head>
 <body><main><header><strong>NODE</strong><span>03-2 · 장비·운전능력 및 경력 등록</span></header>
 <p class="notice">개발 검토 화면 · 입력은 이 브라우저에만 저장됩니다. 조사 보고서 기반 검토본입니다. 현장 호칭과 실물 제원은 별도로 기록합니다.</p>
-<section><h1>장비와 운전능력을 등록하세요</h1><p>기사 유형은 둘 다 선택할 수 있습니다. 운전할 수 있는 장비와 실제 보유한 장비는 각각 등록합니다.</p><div id="roles" class="checks"><label><input type="checkbox" value="자가기사">자가기사</label><label><input type="checkbox" value="데모기사">데모기사</label></div></section>
+<section><h1>장비와 운전능력을 등록하세요</h1><p>기사 유형은 자가기사와 데모기사 중 원하는 유형 또는 양쪽 모두 지원 가능합니다.</p><div id="roles" class="checks"><label><input type="checkbox" value="자가기사">자가기사</label><label><input type="checkbox" value="데모기사">데모기사</label></div></section>
 <section id="equipmentOverview"><h2>등록한 장비</h2><p id="equipmentCount" aria-live="polite"></p><div class="actions"><a href="#registeredEquipment">등록 목록 확인·수정·삭제</a></div></section>
 <section><div class="tabs" role="tablist" aria-label="등록 구분"><button id="abilityTab" role="tab" aria-selected="true">운전 가능 장비</button><button id="ownedTab" role="tab" aria-selected="false">보유 장비</button></div>
 <form id="editor"><h2 id="editorTitle">운전 가능 장비 추가</h2><div class="grid">
