@@ -3,3 +3,5 @@
 #searchResults{grid-column:1/-1}#searchResults:empty{display:none}label:has(> #search){grid-column:1/-1}#source a{white-space:nowrap}
 
 #equipmentOverview .actions{align-items:center}#equipmentOverview a{color:#1769d2}#editor > .actions{position:sticky;bottom:12px;background:white;padding:12px 0;border-top:1px solid #dfe5ec;z-index:1}
+
+#addEquipmentActions{border-top:1px solid #dfe5ec;margin-top:16px;padding-top:4px}

@@ -13,6 +13,8 @@ const assert=require('node:assert/strict');
  await page.fill('#spec0','12');await page.fill('#years','5');
  if(mode==='owned'){await page.fill('#maker','시험 제조사');await page.fill('#model','시험 모델');}
  }
+ assert.equal(await page.locator('#equipmentOverview #addAbility,#equipmentOverview #addOwned').count(),0);
+ assert.equal(await page.locator('#editor + #addEquipmentActions #addAbility,#editor + #addEquipmentActions #addOwned').count(),2);
  // Discoverable add entry points, repeated equipment, both modes, edit/delete and reload.
  for(const mode of ['ability','owned']){
   for(let i=0;i<2;i++){
