@@ -4,7 +4,11 @@
 <p class="notice">개발 검토 화면 · 입력은 이 브라우저에만 저장됩니다. 조사 보고서 기반 검토본입니다. 현장 호칭과 실물 제원은 별도로 기록합니다.</p>
 <section><h1>장비와 운전능력을 등록하세요</h1><p>기사 유형은 자가기사와 데모기사 중 원하는 유형 또는 양쪽 모두 지원 가능합니다.</p><div id="roles" class="checks"><label><input type="checkbox" value="자가기사">자가기사</label><label><input type="checkbox" value="데모기사">데모기사</label></div></section>
 <section id="equipmentOverview"><h2>등록한 장비</h2><p id="equipmentCount" aria-live="polite"></p><div class="actions"><a href="#registeredEquipment">등록 목록 확인·수정·삭제</a></div></section>
-<section><p>아래 항목은 각각 등록 해야합니다.</p><div class="tabs" role="tablist" aria-label="등록 구분"><button id="abilityTab" role="tab" aria-selected="true">운전 가능 장비</button><button id="ownedTab" role="tab" aria-selected="false">보유 장비</button></div>
+<section><aside class="equipment-guidance" aria-labelledby="equipmentGuidanceTitle">
+<strong id="equipmentGuidanceTitle">장비 등록 전 확인해 주세요.</strong>
+<p>운전 가능 장비는 해당 장비의 운전에 필요한 면허·자격을 보유한 경우에만 등록해 주세요.</p>
+<p>보유 장비는 본인의 운전 자격과 관계없이 등록할 수 있습니다. 단, 실제 운전자는 해당 장비에 필요한 면허·자격을 갖추어야 합니다.</p>
+</aside><p>아래 항목은 각각 등록 해야합니다.</p><div class="tabs" role="tablist" aria-label="등록 구분"><button id="abilityTab" role="tab" aria-selected="true">운전 가능 장비</button><button id="ownedTab" role="tab" aria-selected="false">보유 장비</button></div>
 <form id="editor"><h2 id="editorTitle">운전 가능 장비 추가</h2><div class="grid">
 <label>장비 찾기 · 표준명/별칭<input id="search" type="search" placeholder="예: 포크레인, 페이로더, 스카이"></label><div id="searchResults" class="checks"></div><label>대분류<select id="major" required></select></label><label>중분류<select id="middle" required></select></label><label>소분류 · 장비 종류<select id="kind" required></select></label>
 <label>장비 형태<select id="form" required></select></label><label>현장 규격<select id="size" required></select></label><label id="customLabel">현장 규격 직접 입력<input id="custom" maxlength="120" placeholder="명판·자료 또는 본인이 사용하는 규격"></label>

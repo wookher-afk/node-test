@@ -5,3 +5,7 @@
 #equipmentOverview .actions{align-items:center}#equipmentOverview a{color:#1769d2}#editor > .actions{position:sticky;bottom:12px;background:white;padding:12px 0;border-top:1px solid #dfe5ec;z-index:1}
 
 #addEquipmentActions{border-top:1px solid #dfe5ec;margin-top:16px;padding-top:4px}
+
+.equipment-guidance{background:#edf5ff;border-left:4px solid #3977bf;border-radius:8px;padding:16px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
+.equipment-guidance strong{display:block;font-size:16px}
+.equipment-guidance p{margin:12px 0 0;font-size:14px}
