@@ -1,0 +1,1179 @@
+[
+  {
+    "id": "excavator",
+    "name": "굴착기",
+    "grade": "기확정",
+    "fields": [
+      {
+        "id": "size",
+        "label": "현장 규격\n선택하세요\n008\n010\n015\n017\n020\n025\n030\n035\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "운전중량 (t)"
+      },
+      {
+        "id": "spec1",
+        "label": "버킷 용량 (㎥)"
+      }
+    ]
+  },
+  {
+    "id": "loader",
+    "name": "로더",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec1",
+        "label": "버킷 용량 (㎥)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_capacityBasis",
+        "label": "버킷 용량 기준\n미입력\n직접 입력\n모름\n해당 없음\n미정\n산적\n평적\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "산적"
+      },
+      {
+        "id": "",
+        "label": "평적"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_bucket",
+        "label": "장착 버킷 설명\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "운전중량 (t)"
+      }
+    ]
+  },
+  {
+    "id": "bulldozer",
+    "name": "불도저",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "운전중량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_weightBasis",
+        "label": "중량 정의\n미입력\n직접 입력\n모름\n해당 없음\n미정\n형식승인\n제작사\n실측\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "형식승인"
+      },
+      {
+        "id": "",
+        "label": "제작사"
+      },
+      {
+        "id": "",
+        "label": "실측"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭·참고 규격 (선택)\n선택하세요\n7t · 적산 참고\n10t · 적산 참고\n12t · 적산 참고\n19t · 적산 참고\n32t · 적산 참고\n직접 입력"
+      },
+      {
+        "id": "spec1",
+        "label": "정격출력 (kW)"
+      }
+    ]
+  },
+  {
+    "id": "drilling-rig",
+    "name": "천공기",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "천공 직경 (mm)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "천공 깊이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_purpose",
+        "label": "용도\n미입력\n직접 입력\n모름\n해당 없음\n미정\n암반\n앵커\n기초\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "암반"
+      },
+      {
+        "id": "",
+        "label": "앵커"
+      },
+      {
+        "id": "",
+        "label": "기초"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_methods",
+        "label": "공법 (복수)\n미입력\n직접 입력\n모름\n해당 없음\n미정\n톱해머\nDTH\n회전\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "톱해머"
+      },
+      {
+        "id": "",
+        "label": "DTH"
+      },
+      {
+        "id": "",
+        "label": "회전"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_body",
+        "label": "본체 모델\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_devices",
+        "label": "장착장치 (복수)\n미입력\n직접 입력\n모름\n해당 없음\n미정\n해머\n오거\n케이싱\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "해머"
+      },
+      {
+        "id": "",
+        "label": "오거"
+      },
+      {
+        "id": "",
+        "label": "케이싱"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      }
+    ]
+  },
+  {
+    "id": "pile-driver",
+    "name": "항타기",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "spec2",
+        "label": "리더 길이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_methods",
+        "label": "공법 (복수)\n미입력\n직접 입력\n모름\n해당 없음\n미정\n항타\n항발\n천공매입\n압입\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "항타"
+      },
+      {
+        "id": "",
+        "label": "항발"
+      },
+      {
+        "id": "",
+        "label": "천공매입"
+      },
+      {
+        "id": "",
+        "label": "압입"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_body",
+        "label": "본체 모델\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_devices",
+        "label": "장치 (복수)\n미입력\n직접 입력\n모름\n해당 없음\n미정\n드롭해머\n유압해머\n진동해머\n오거\n압입장치\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "드롭해머"
+      },
+      {
+        "id": "",
+        "label": "유압해머"
+      },
+      {
+        "id": "",
+        "label": "진동해머"
+      },
+      {
+        "id": "",
+        "label": "오거"
+      },
+      {
+        "id": "",
+        "label": "압입장치"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_energy",
+        "label": "해머 에너지 (kJ)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_ram",
+        "label": "램 중량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_torque",
+        "label": "오거 토크 (kN·m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "장비 중량 (t)"
+      },
+      {
+        "id": "spec1",
+        "label": "작업 높이 (m)"
+      },
+      {
+        "id": "spec3",
+        "label": "적용 말뚝 직경 (mm)"
+      },
+      {
+        "id": "spec4",
+        "label": "오거 토크 (kN·m)"
+      },
+      {
+        "id": "spec5",
+        "label": "해머 사양"
+      }
+    ]
+  },
+  {
+    "id": "dump-truck",
+    "name": "덤프트럭",
+    "grade": "기확정",
+    "fields": [
+      {
+        "id": "size",
+        "label": "현장 규격\n선택하세요\n1톤\n2.5톤\n3.5톤\n5톤\n8톤\n15톤\n25톤\n기타 직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "최대 적재량 (t)"
+      },
+      {
+        "id": "spec1",
+        "label": "적재함 용량 (㎥)"
+      }
+    ]
+  },
+  {
+    "id": "cargo-truck",
+    "name": "카고트럭",
+    "grade": "기확정",
+    "fields": [
+      {
+        "id": "size",
+        "label": "현장 규격 (톤급)\n선택하세요\n1톤\n1.2톤\n1.4톤\n2.5톤\n3.5톤\n5톤\n5.5톤\n8톤\n8.5톤\n11톤\n14톤\n15톤\n18톤\n22톤\n25톤\n기타 직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "최대 적재량 (t)"
+      },
+      {
+        "id": "spec1",
+        "label": "적재함 길이 (m)"
+      }
+    ]
+  },
+  {
+    "id": "trailer",
+    "name": "트레일러",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "equipment_registeredPayload",
+        "label": "등록 적재량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_deckLength",
+        "label": "유효 데크 길이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_deckWidth",
+        "label": "유효 데크 폭 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_deckHeight",
+        "label": "지상고 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "최대 적재량 (t)"
+      },
+      {
+        "id": "spec1",
+        "label": "적재함 길이 (m)"
+      }
+    ]
+  },
+  {
+    "id": "forklift",
+    "name": "지게차",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "정격 하중 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "최대 인상높이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "하중중심거리 (mm)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_power",
+        "label": "동력\n미입력\n직접 입력\n모름\n해당 없음\n미정\n디젤\nLPG\n전동\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "디젤"
+      },
+      {
+        "id": "",
+        "label": "LPG"
+      },
+      {
+        "id": "",
+        "label": "전동"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭·참고 규격 (선택)\n선택하세요\n2.5톤 · 국내 호칭·제조사 모델 사례 / 높이별 잔존하중 별도 확인\n3톤 · 국내 호칭·제조사 모델 사례 / 높이별 잔존하중 별도 확인\n6톤 · 국내 호칭·제조사 모델 사례 / 높이별 잔존하중 별도 확인\n7톤 · 국내 호칭·제조사 모델 사례 / 높이별 잔존하중 별도 확인\n8톤 · 국내 호칭·제조사 모델 사례 / 높이별 잔존하중 별도 확인\n9톤 · 국내 호칭·제조사 모델 사례 / 높이별 잔존하중 별도 확인\n직접 입력"
+      },
+      {
+        "id": "spec3",
+        "label": "동력 (디젤/LPG/전동 등)"
+      }
+    ]
+  },
+  {
+    "id": "telehandler",
+    "name": "텔레핸들러",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "정격 하중 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "최대 인상높이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "최대 전방 도달거리 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_device",
+        "label": "장착장치\n미입력\n직접 입력\n모름\n해당 없음\n미정\n포크\n버킷\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "포크"
+      },
+      {
+        "id": "",
+        "label": "버킷"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      }
+    ]
+  },
+  {
+    "id": "crane",
+    "name": "크레인",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "최대 인양능력 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "작업 반경 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "붐 길이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_radius",
+        "label": "기준 반경 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      }
+    ]
+  },
+  {
+    "id": "aerial-work-platform",
+    "name": "고소작업대(자주식)",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "최대 작업높이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "작업대 허용하중 (kg)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_power",
+        "label": "동력\n미입력\n직접 입력\n모름\n해당 없음\n미정\n전동\n엔진\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "전동"
+      },
+      {
+        "id": "",
+        "label": "엔진"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_environment",
+        "label": "사용 조건\n미입력\n직접 입력\n모름\n해당 없음\n미정\n실내\n실외\n실내외\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "실내"
+      },
+      {
+        "id": "",
+        "label": "실외"
+      },
+      {
+        "id": "",
+        "label": "실내외"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      }
+    ]
+  },
+  {
+    "id": "roller",
+    "name": "롤러",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "운전중량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "다짐 폭 (mm)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_vibration",
+        "label": "진동 여부\n미입력\n직접 입력\n모름\n해당 없음\n미정\n있음\n없음\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "있음"
+      },
+      {
+        "id": "",
+        "label": "없음"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec2",
+        "label": "밸러스트 조건"
+      },
+      {
+        "id": "spec3",
+        "label": "기진력 (kN)"
+      }
+    ]
+  },
+  {
+    "id": "mixer-truck",
+    "name": "믹서트럭",
+    "grade": "A",
+    "fields": [
+      {
+        "id": "a_mixingTransportCapacity",
+        "label": "혼합·운반 용량 (㎥)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "a_drumTotalVolume",
+        "label": "드럼 총용적 (㎥)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭·참고 규격 (선택)\n선택하세요\n혼합·운반 용량 6㎥ · 국내 제조사 제품 사례·적산 참고 / 실물 확인 필요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "이전 드럼 용량 입력 (㎥ · 의미 확인 필요)"
+      }
+    ]
+  },
+  {
+    "id": "concrete-pump",
+    "name": "펌프카",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec1",
+        "label": "최대 토출량 (㎥/h)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_pressure",
+        "label": "토출압력 (bar)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_pipeDiameter",
+        "label": "배관경 (mm)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭·참고 규격 (선택)\n선택하세요\n기존 표기: 붐 21m · 적산 참고·수치 정의 확인 필요\n기존 표기: 붐 28m · 적산 참고·수치 정의 확인 필요\n기존 표기: 붐 32m · 적산 참고·수치 정의 확인 필요\n기존 표기: 붐 36m · 적산 참고·수치 정의 확인 필요\n기존 표기: 붐 41m · 적산 참고·수치 정의 확인 필요\n기존 표기: 붐 43m · 적산 참고·수치 정의 확인 필요\n기존 표기: 붐 47m · 적산 참고·수치 정의 확인 필요\n기존 표기: 붐 52m · 적산 참고·수치 정의 확인 필요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "붐 길이 (m · 이전 입력·정의 확인 필요)"
+      },
+      {
+        "id": "a_verticalReach",
+        "label": "수직도달높이 (m)"
+      },
+      {
+        "id": "a_horizontalReach",
+        "label": "수평도달거리 (m)"
+      }
+    ]
+  },
+  {
+    "id": "generator",
+    "name": "발전기",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "정격출력 (kW)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "정격용량 (kVA)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_rating",
+        "label": "정격 종류\n미입력\n직접 입력\n모름\n해당 없음\n미정\n상용\n비상\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "상용"
+      },
+      {
+        "id": "",
+        "label": "비상"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec2",
+        "label": "정격 종류"
+      },
+      {
+        "id": "spec3",
+        "label": "전압 (V)"
+      },
+      {
+        "id": "spec4",
+        "label": "주파수 (Hz)"
+      },
+      {
+        "id": "spec5",
+        "label": "상수·역률"
+      }
+    ]
+  },
+  {
+    "id": "compressor",
+    "name": "콤프레서",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "equipment_flow",
+        "label": "실제 토출량 (값·단위 ㎥/min 또는 CFM)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_pressure",
+        "label": "기준 사용압력 (값·단위 bar/MPa)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_measurement",
+        "label": "토출량 측정 기준 (FAD 等)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "토출량 (㎥/min)"
+      },
+      {
+        "id": "spec1",
+        "label": "사용 압력 (bar)"
+      }
+    ]
+  },
+  {
+    "id": "other",
+    "name": "기타",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "equipment_description",
+        "label": "규격 원문 (단위 포함)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "실제 제원 (단위 포함)"
+      }
+    ]
+  },
+  {
+    "id": "skid-loader",
+    "name": "스키드로더",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "정격적재용량 ROC (kg)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec1",
+        "label": "운전중량 (t)"
+      },
+      {
+        "id": "spec2",
+        "label": "전폭 (mm)"
+      },
+      {
+        "id": "spec3",
+        "label": "보조유압 유량 (L/min)"
+      }
+    ]
+  },
+  {
+    "id": "grader",
+    "name": "그레이더",
+    "grade": "A",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "블레이드 폭 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭·참고 규격 (선택)\n선택하세요\n블레이드 폭 3.6m · 적산 참고\n직접 입력"
+      },
+      {
+        "id": "spec1",
+        "label": "운전중량 (t)"
+      }
+    ]
+  },
+  {
+    "id": "scraper",
+    "name": "스크레이퍼",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "보울 평적용량 (㎥)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "보울 산적용량 (㎥)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "정격적재중량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_bowl",
+        "label": "보울 방식\n미입력\n직접 입력\n모름\n해당 없음\n미정\n오픈보울\n엘리베이팅\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "오픈보울"
+      },
+      {
+        "id": "",
+        "label": "엘리베이팅"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      }
+    ]
+  },
+  {
+    "id": "water-truck",
+    "name": "살수차",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "equipment_totalCapacity",
+        "label": "탱크 총용량 (L/kL)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_effectiveCapacity",
+        "label": "탱크 유효용량 (L/kL)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_registeredPayload",
+        "label": "등록 적재량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "탱크 용량 (L)"
+      },
+      {
+        "id": "spec1",
+        "label": "펌프 유량 (L/min)"
+      },
+      {
+        "id": "spec2",
+        "label": "압력 (bar)"
+      }
+    ]
+  },
+  {
+    "id": "tow-truck",
+    "name": "견인차",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "견인능력 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "인양능력 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "윈치 능력 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_recoveryReach",
+        "label": "구난 인출거리 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      }
+    ]
+  },
+  {
+    "id": "truck-tractor",
+    "name": "트랙터 · 트레일러 견인차",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "equipment_axles",
+        "label": "축 구성\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_connection",
+        "label": "연결규격\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_grossCombination",
+        "label": "허용 연결총중량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_fifthWheel",
+        "label": "제5륜 하중 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "허용 견인중량 (t)"
+      }
+    ]
+  },
+  {
+    "id": "cargo-crane",
+    "name": "카고크레인",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "차대 적재중량 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "정격하중 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "작업 반경 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_craneModel",
+        "label": "크레인 모델\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_loadChart",
+        "label": "하중·반경 조건\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭·참고 규격 (선택)\n선택하세요\n5톤 · 국내 일부 배차 호칭 / 크레인 인양능력과 별개\n11톤 · 국내 일부 배차 호칭 / 크레인 인양능력과 별개\n15톤 · 국내 일부 배차 호칭 / 크레인 인양능력과 별개\n18톤 · 국내 일부 배차 호칭 / 크레인 인양능력과 별개\n직접 입력"
+      },
+      {
+        "id": "spec3",
+        "label": "붐 길이 (m)"
+      }
+    ]
+  },
+  {
+    "id": "tower-crane",
+    "name": "타워크레인",
+    "grade": "C",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "최대 인양능력 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "지브 길이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "끝단 하중 (t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_bodyModel",
+        "label": "본체 모델\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_installation",
+        "label": "현장 설치 상태\n미입력\n직접 입력\n모름\n해당 없음\n미정\n설치\n미설치\n미정\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "설치"
+      },
+      {
+        "id": "",
+        "label": "미설치"
+      },
+      {
+        "id": "",
+        "label": "미정"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_jib",
+        "label": "지브 구성\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_installedHeight",
+        "label": "현장 설치높이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_support",
+        "label": "현장 지지조건\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec3",
+        "label": "설치높이 (m)"
+      }
+    ]
+  },
+  {
+    "id": "sky-truck",
+    "name": "스카이차(차량탑재형)",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "최대 작업높이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "작업반경 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "작업하중 (kg)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_loadRadius",
+        "label": "하중·반경 조건\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec3",
+        "label": "차대 호칭"
+      }
+    ]
+  },
+  {
+    "id": "ladder-truck",
+    "name": "사다리차",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "작업높이 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "운반카 하중 (kg)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec2",
+        "label": "설치각도 (도)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_distance",
+        "label": "이격거리 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      }
+    ]
+  },
+  {
+    "id": "construction-lift",
+    "name": "건설용 리프트",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "equipment_purpose",
+        "label": "용도\n미입력\n직접 입력\n모름\n해당 없음\n미정\n인화물\n화물\n기타 직접 입력"
+      },
+      {
+        "id": "",
+        "label": "인화물"
+      },
+      {
+        "id": "",
+        "label": "화물"
+      },
+      {
+        "id": "",
+        "label": "기타 직접 입력"
+      },
+      {
+        "id": "equipment_cageLoad",
+        "label": "케이지당 정격하중 (kg/t)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "정격하중 (kg)"
+      },
+      {
+        "id": "spec1",
+        "label": "케이지 치수 (m)"
+      },
+      {
+        "id": "spec2",
+        "label": "속도 (m/min)"
+      },
+      {
+        "id": "spec3",
+        "label": "설치높이 (m)"
+      }
+    ]
+  },
+  {
+    "id": "asphalt-paver",
+    "name": "아스팔트 피니셔",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "equipment_screed",
+        "label": "장착 스크리드\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_baseWidth",
+        "label": "기본 폭 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_hydraulicWidth",
+        "label": "유압확장 폭 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_extendedWidth",
+        "label": "연장 폭 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec0",
+        "label": "최소 포설폭 (m)"
+      },
+      {
+        "id": "spec1",
+        "label": "최대 포설폭 (m)"
+      },
+      {
+        "id": "spec2",
+        "label": "포설두께 (mm)"
+      },
+      {
+        "id": "spec3",
+        "label": "처리능력 (t/h)"
+      }
+    ]
+  },
+  {
+    "id": "road-mill",
+    "name": "도로절삭기",
+    "grade": "B",
+    "fields": [
+      {
+        "id": "spec0",
+        "label": "장착 드럼 절삭폭 (m)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "spec1",
+        "label": "최대 절삭깊이 (mm)\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "equipment_drum",
+        "label": "장착 드럼 모델·구성\n미입력\n직접 입력\n모름\n해당 없음\n미정"
+      },
+      {
+        "id": "size",
+        "label": "현장 호칭 (선택)\n선택하세요\n직접 입력"
+      },
+      {
+        "id": "spec2",
+        "label": "비트 간격 (mm)"
+      }
+    ]
+  }
+]

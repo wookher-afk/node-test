@@ -1,0 +1,212 @@
+{
+  "results": [
+    {
+      "name": "A grade mixer grader lifecycle",
+      "pass": true,
+      "detail": [
+        {
+          "mode": "ability",
+          "equipmentDetails": {
+            "capacityBasis": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "referenceModel": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "sourceUrl": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "checkedDate": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "vehicleVerification": {
+              "status": "",
+              "value": "",
+              "choices": []
+            }
+          },
+          "equipmentSpecStates": {
+            "a_mixingTransportCapacity": "",
+            "a_drumTotalVolume": ""
+          },
+          "major": "도로·콘크리트",
+          "middle": "콘크리트",
+          "kind": "mixer-truck",
+          "form": "차량 탑재형",
+          "size": "",
+          "custom": "",
+          "alias": "",
+          "evidence": "",
+          "maker": "",
+          "model": "",
+          "year": "",
+          "ready": "",
+          "operator": "",
+          "options": "",
+          "years": "5",
+          "actualName": "",
+          "formDetail": "",
+          "optionSelections": [
+            "슈트"
+          ],
+          "specs": [
+            ""
+          ],
+          "aSpecs": {
+            "mixingTransportCapacity": "",
+            "drumTotalVolume": ""
+          },
+          "aEntryRevision": 1,
+          "id": "08f6ddad-d194-4105-9e70-85c6aa984a79",
+          "verification": "unverified"
+        },
+        {
+          "mode": "ability",
+          "equipmentDetails": {
+            "bladeLength": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "extension": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "referenceModel": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "sourceUrl": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "checkedDate": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "vehicleVerification": {
+              "status": "",
+              "value": "",
+              "choices": []
+            }
+          },
+          "equipmentSpecStates": {
+            "spec0": ""
+          },
+          "major": "토공·기초",
+          "middle": "정지",
+          "kind": "grader",
+          "form": "모터그레이더",
+          "size": "",
+          "custom": "",
+          "alias": "",
+          "evidence": "",
+          "maker": "",
+          "model": "",
+          "year": "",
+          "ready": "",
+          "operator": "",
+          "options": "",
+          "years": "5",
+          "actualName": "",
+          "formDetail": "",
+          "optionSelections": [
+            "리퍼"
+          ],
+          "specs": [
+            "",
+            ""
+          ],
+          "aSpecs": {},
+          "aEntryRevision": 1,
+          "id": "773c441d-6a4f-48fe-9c31-61bf2ec4cdca",
+          "verification": "unverified"
+        }
+      ]
+    },
+    {
+      "name": "cargo unknown dimensions",
+      "pass": true,
+      "detail": {
+        "record": {
+          "cargo": {
+            "cargoLength": "",
+            "cargoLengthOther": "",
+            "cargoWidth": "",
+            "cargoWidthOther": "",
+            "cargoLengthMm": "",
+            "cargoWidthMm": ""
+          },
+          "mode": "ability",
+          "major": "운반·차량",
+          "middle": "운반",
+          "kind": "cargo-truck",
+          "form": "일반 적재함",
+          "size": "1톤",
+          "custom": "",
+          "alias": "",
+          "evidence": "",
+          "maker": "",
+          "model": "",
+          "year": "",
+          "ready": "",
+          "operator": "",
+          "options": "",
+          "years": "3",
+          "actualName": "",
+          "formDetail": "",
+          "optionSelections": [],
+          "specs": [
+            "",
+            ""
+          ],
+          "aSpecs": {},
+          "aEntryRevision": 1,
+          "id": "8fde6da5-6d04-4c09-bdbb-f571afcc16b1",
+          "verification": "unverified"
+        },
+        "length": "",
+        "width": ""
+      }
+    },
+    {
+      "name": "legacy raw unchanged in isolated context",
+      "pass": true,
+      "detail": "기존 키 원문 유지"
+    },
+    {
+      "name": "clean new loader layout text scaling",
+      "pass": true,
+      "detail": {
+        "rows": [
+          {
+            "width": 390,
+            "totalHeight": 5021,
+            "formHeight": 3206.296875,
+            "labelFont": "14px"
+          },
+          {
+            "width": 1440,
+            "totalHeight": 3567,
+            "formHeight": 2022.34375,
+            "labelFont": "14px"
+          }
+        ],
+        "scaledLabelFont": "14px"
+      }
+    }
+  ],
+  "errors": []
+}

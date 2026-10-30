@@ -1,0 +1,34 @@
+[
+  {
+    "id": "F01-required",
+    "status": "통과"
+  },
+  {
+    "id": "F02-numeric",
+    "status": "통과"
+  },
+  {
+    "id": "F03-state-values",
+    "status": "통과"
+  },
+  {
+    "id": "F04-cargo-states",
+    "status": "통과"
+  },
+  {
+    "id": "F05-legacy-preservation",
+    "status": "통과"
+  },
+  {
+    "id": "F06-large-layout31",
+    "status": "통과"
+  },
+  {
+    "id": "F07-compact-and-hidden-validation",
+    "status": "통과"
+  },
+  {
+    "id": "F08-validation-state-recovery",
+    "status": "통과"
+  }
+]

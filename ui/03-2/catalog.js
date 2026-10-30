@@ -12,9 +12,9 @@ window.NODE_CATALOG = (() => {
  ['forklift','지게차','운반·차량','하역',['정격 하중 (t)','최대 인상높이 (m)'],['2.5톤','3톤','5톤','7톤','10톤 이상']],
  ['telehandler','텔레핸들러','운반·차량','하역',['정격 하중 (t)','최대 인상높이 (m)','최대 전방 도달거리 (m)']],
  ['crane','크레인','인양·고소','인양',['최대 인양능력 (t)','작업 반경 (m)','붐 길이 (m)']],
- ['aerial-work-platform','고소작업차','인양·고소','고소',['최대 작업높이 (m)','작업대 허용하중 (kg)']],
+ ['aerial-work-platform','고소작업대(자주식)','인양·고소','고소',['최대 작업높이 (m)','작업대 허용하중 (kg)']],
  ['roller','롤러','도로·콘크리트','다짐',['운전중량 (t)','다짐 폭 (mm)']],
- ['mixer-truck','믹서트럭','도로·콘크리트','콘크리트',['드럼 용량 (㎥)']],
+ ['mixer-truck','믹서트럭','도로·콘크리트','콘크리트',['이전 드럼 용량 입력 (㎥ · 의미 확인 필요)']],
  ['concrete-pump','펌프카','도로·콘크리트','콘크리트',['붐 길이 (m)','최대 토출량 (㎥/h)']],
  ['generator','발전기','동력·지원','발전',['정격출력 (kW)','정격용량 (kVA)']],
  ['compressor','콤프레서','동력·지원','압축공기',['토출량 (㎥/min)','사용 압력 (bar)']],
@@ -30,7 +30,7 @@ window.NODE_CATALOG = (() => {
  ['truck-tractor','트랙터 · 트레일러 견인차','운반·차량','운반',['허용 견인중량 (t)']],
  ['cargo-crane','카고크레인','인양·고소','인양',['차대 적재중량 (t)','정격하중 (t)','작업 반경 (m)','붐 길이 (m)']],
  ['tower-crane','타워크레인','인양·고소','인양',['최대 인양능력 (t)','지브 길이 (m)','끝단 하중 (t)','설치높이 (m)']],
- ['sky-truck','스카이차','인양·고소','고소',['최대 작업높이 (m)','작업반경 (m)','작업하중 (kg)','차대 호칭']],
+ ['sky-truck','스카이차(차량탑재형)','인양·고소','고소',['최대 작업높이 (m)','작업반경 (m)','작업하중 (kg)','차대 호칭']],
  ['ladder-truck','사다리차','인양·고소','고소',['작업높이 (m)','운반카 하중 (kg)','설치각도 (도)']],
  ['construction-lift','건설용 리프트','인양·고소','승강',['정격하중 (kg)','케이지 치수 (m)','속도 (m/min)','설치높이 (m)']],
  ['asphalt-paver','아스팔트 피니셔','도로·콘크리트','포장',['최소 포설폭 (m)','최대 포설폭 (m)','포설두께 (mm)','처리능력 (t/h)']],
@@ -47,17 +47,17 @@ window.NODE_CATALOG = (() => {
  'pile-driver':[['항타','항발','천공·매입','압입'],['드롭해머','유압해머','진동해머','오거','케이싱 장치','보조 윈치'],['항타항발기','항발기']],
  'dump-truck':[['후방 배출','측방 배출'],['자동덮개'],['덤프']],
  'cargo-truck':[['일반 적재함','평판'],['가변축','셀프로더','램프'],['카고']],
- trailer:[['로우베드·저상','구즈넥','가변형'],['조향','슬라이드·확장','램프'],['추레라']],
- 'tow-truck':[['언더리프트','셀프로더'],['견인 돌리','윈치'],['구난차','렉카']],
+ trailer:[['로우베드·저상','평판','기타'],['조향','슬라이드·확장','램프'],['추레라']],
+ 'tow-truck':[['구난 · 언더리프트','적재식 셀프로더','복합 (구난·적재)'],['견인 돌리','윈치'],['구난차','렉카']],
  'truck-tractor':[['트랙터'],[],['트레일러 견인차']],
  'water-truck':[['차량 탑재형'],['전방 살수','후방 살수','측면 살수','방수포','고압세척'],[]],
  crane:[['트럭','러프터레인 (RT)','올터레인 (AT)','크롤러'],['카운터웨이트','보조윈치','지브','후크'],['기중기','하이드로']],
  'cargo-crane':[['직진 붐','굴절 붐'],['윈치','무선조종','아웃트리거'],[]],
  'tower-crane':[['수평지브','러핑','셀프이렉팅'],['벽체지지','원격조종'],['타워']],
  forklift:[['카운터밸런스','리치'],['사이드시프트','포크 포지셔너','회전 장치','클램프','연장포크'],[]],
- telehandler:[['텔레스코픽 붐'],[],[]],
- 'aerial-work-platform':[['시저','굴절붐','직진붐','수직마스트'],['전동','엔진','4WD','비마킹 타이어','확장데크','아웃트리거'],['고소작업대','렌탈']],
- 'sky-truck':[['직진 붐','굴절 붐'],['탑승함 확장','탑승함 회전','무선조종'],['스카이']],
+ telehandler:[['고정식','회전식','모름'],['포크','버킷','지지대'],[]],
+ 'aerial-work-platform':[['시저','굴절붐','직진붐','수직마스트'],['전동','엔진','4WD','비마킹 타이어','확장데크','아웃트리거'],['고소작업대','렌탈','고소작업차']],
+ 'sky-truck':[['직진 붐','굴절 붐'],['탑승함 확장','탑승함 회전','무선조종'],['스카이','고소작업차']],
  'ladder-truck':[['차량 탑재형'],['운반카 확장','무선조종'],[]],
  'construction-lift':[['단 케이지','복 케이지'],['램프','인버터'],['건설용 승강기','리프트']],
  roller:[['머캐덤·정적 3륜','탠덤·탄뎀','싱글드럼','타이어','콤비','보행식','트렌치·패드풋'],['진동','살수','평활 드럼','패드풋 드럼','다짐관리','원격조종'],['진동롤러','타이어롤러','콤비롤러','탄뎀롤러']],
@@ -73,10 +73,14 @@ window.NODE_CATALOG = (() => {
  const referenceSizes={
  excavator:{'미니':['008','010','015','017','020','025','030','035'],'궤도식 (LC)':['02LC','03LC','04LC','06LC','08LC','10LC'],'타이어식 (W)':['03W','06W','08W'],'대형 굴착기':['300','300LC','320','360','380','380LC','420','460','460LC']},
  bulldozer:{'무한궤도식':['7t','10t','12t','19t','32t'],'타이어식':['15t','28t','33t']},
+ 'cargo-truck':{'*':['1톤','1.2톤','1.4톤','2.5톤','3.5톤','5톤','5.5톤','8톤','8.5톤','11톤','14톤','15톤','18톤','22톤','25톤']},
+ 'dump-truck':{'*':['1톤','2.5톤','3.5톤','5톤','8톤','15톤','25톤']},
  'concrete-pump':{'붐형':['붐 21m','붐 28m','붐 32m','붐 36m','붐 41m','붐 43m','붐 47m','붐 52m']},
- loader:{'타이어식':['3루베 이하','4루베 이하','6루베 이하','6루베 이상']},
+ loader:{},
  grader:{'모터그레이더':['블레이드 폭 3.6m · 적산 참고']},
- crane:{'*':['13톤','16톤','25톤','50톤','70톤','100톤','160톤','200톤','220톤','300톤']},
+ crane:{'러프터레인 (RT)':['13톤','16톤','25톤','50톤','70톤','80톤','100톤'],'올터레인 (AT)':['100톤','130톤','150톤','200톤','250톤','300톤']},
+ forklift:{'*':['2.5톤','3톤','6톤','7톤','8톤','9톤']},
+ 'cargo-crane':{'*':['5톤','11톤','15톤','18톤']},
  roller:{'콤비':['2.5톤 콤비','3.5톤 콤비']},
  'mixer-truck':{'차량 탑재형':['혼합·운반 용량 6㎥']}
  };
@@ -86,10 +90,31 @@ window.NODE_CATALOG = (() => {
  const legacyIdMap = Object.freeze(Object.fromEntries(legacyIds.map((id,i)=>[String(i),id])));
  function migrateEntry(entry) {
   if (!entry || typeof entry !== 'object') return entry;
-  const kind = legacyIdMap[String(entry.kind)] ?? entry.kind;
+  const kind = Object.hasOwn(legacyIdMap,String(entry.kind)) ? legacyIdMap[String(entry.kind)] : entry.kind;
   const item = items.find(item=>item.id===kind);
   return {...entry,kind,...(item ? {major:item.major,middle:item.middle} : {})};
  }
- const items = rows.map(([id,name,major,middle,specs])=>({id,name,major,middle,specs:extraSpecs[id]||specs,forms:[...profiles[id][0],'직접 입력'],options:profiles[id][1],aliases:profiles[id][2],sizesByForm:referenceSizes[id]||{},source:id==='excavator'?'excavator-field-sizes.md':['bulldozer','concrete-pump'].includes(id)?'research-standardization.md':referenceSource}));
- return {version:2, legacyIdMap, migrateEntry, reportStatus:'available', items};
+ const items = rows.map(([id,name,major,middle,specs])=>({id,name,major,middle,specs:extraSpecs[id]||specs,forms:[...profiles[id][0],'직접 입력'],options:profiles[id][1],aliases:profiles[id][2],sizesByForm:referenceSizes[id]||{},source:id==='cargo-truck'?'cargo-evidence.md':id==='excavator'?'excavator-field-sizes.md':['bulldozer','concrete-pump'].includes(id)?'research-standardization.md':referenceSource}));
+ // 표시용 근거는 저장된 호칭 원문을 변경하지 않습니다.
+ const evidenceRules = [
+  {kind:'forklift',text:'국내 호칭·제조사 모델 사례 / 높이별 잔존하중 별도 확인',section:'references'},
+  {kind:'cargo-crane',text:'국내 일부 배차 호칭 / 크레인 인양능력과 별개',section:'references'},
+  {kind:'cargo-truck',text:'현장 톤급·제조사 사양 참고 / 실차 치수 별도 확인',section:'limits'},
+  {kind:'dump-truck',test:v=>referenceSizes['dump-truck']['*'].includes(v),text:'사용자 확정·현장 통용 톤급',section:'limits'},
+  {kind:'loader',test:v=>['3루베 이하','4루베 이하','6루베 이하','6루베 이상'].includes(v),text:'이전 구간·원문 재검증 필요',section:'loader'},
+  {kind:'mixer-truck',text:'국내 제조사 제품 사례·적산 참고 / 실물 확인 필요',section:'mixer'},
+  {kind:'concrete-pump',text:'적산 참고·수치 정의 확인 필요',section:'pump'},
+  {kind:'bulldozer',text:'적산 참고',section:'references'},
+  {kind:'grader',text:'적산 참고',section:'references'},
+  {kind:'crane',text:'국내 임대사 일부 호칭·전국 표준 아님',section:'references'},
+  {kind:'roller',form:'콤비',text:'잠정 호칭·국내 원문 재확인 필요',section:'references'},
+  {kind:'excavator',text:'사용자 제공 초안·통용성 추가 검증 전',section:'excavator'}
+ ];
+ function evidence(kind,form,value){
+  if(!value||value==='직접 입력')return '사용자 입력·미검증';
+  return evidenceRules.find(r=>r.kind===kind&&(!r.form||r.form===form)&&(!r.test||r.test(value)))?.text||'참고 호칭·실물 제원 별도·미검증';
+ }
+ function evidenceLink(kind){if(kind==='cargo-truck')return 'cargo-evidence.md';return 'a-evidence.html#'+(evidenceRules.find(r=>r.kind===kind)?.section||'limits');}
+ const aSpecFields={'mixer-truck':{mixingTransportCapacity:'혼합·운반 용량 (㎥)',drumTotalVolume:'드럼 총용적 (㎥)'},'concrete-pump':{verticalReach:'수직도달높이 (m)',horizontalReach:'수평도달거리 (m)'}};
+ return {evidence,evidenceLink,aSpecFields,version:2, legacyIdMap, migrateEntry, reportStatus:'available', items};
 })();

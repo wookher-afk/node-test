@@ -1,0 +1,729 @@
+{
+  "results": [
+    {
+      "name": "empty next",
+      "pass": true,
+      "detail": "기사 유형을 선택하고 장비를 하나 이상 목록에 추가하세요."
+    },
+    {
+      "name": "31 category entry and field access / 390,1440",
+      "pass": true,
+      "detail": [
+        "excavator",
+        "loader",
+        "bulldozer",
+        "drilling-rig",
+        "pile-driver",
+        "dump-truck",
+        "cargo-truck",
+        "trailer",
+        "forklift",
+        "telehandler",
+        "crane",
+        "aerial-work-platform",
+        "roller",
+        "mixer-truck",
+        "concrete-pump",
+        "generator",
+        "compressor",
+        "other",
+        "skid-loader",
+        "grader",
+        "scraper",
+        "water-truck",
+        "tow-truck",
+        "truck-tractor",
+        "cargo-crane",
+        "tower-crane",
+        "sky-truck",
+        "ladder-truck",
+        "construction-lift",
+        "asphalt-paver",
+        "road-mill"
+      ]
+    },
+    {
+      "name": "new user excavator timing",
+      "pass": true,
+      "detail": {
+        "actions": 11,
+        "explicitClicks": 5,
+        "automationSeconds": 1.118,
+        "summary": "기사 유형: 자가기사, 데모기사\n등록 장비: 1건\n임시저장 완료. 실제 이전·다음 화면 연결은 별도 작업 범위입니다."
+      }
+    },
+    {
+      "name": "representatives and multiple owned",
+      "pass": true,
+      "detail": [
+        {
+          "id": "dump-truck",
+          "record": {
+            "mode": "ability",
+            "major": "운반·차량",
+            "middle": "운반",
+            "kind": "dump-truck",
+            "form": "후방 배출",
+            "size": "1톤",
+            "custom": "",
+            "alias": "",
+            "evidence": "",
+            "maker": "",
+            "model": "",
+            "year": "",
+            "ready": "",
+            "operator": "",
+            "options": "",
+            "years": "3",
+            "actualName": "",
+            "formDetail": "",
+            "optionSelections": [],
+            "specs": [
+              "",
+              ""
+            ],
+            "aSpecs": {},
+            "aEntryRevision": 1,
+            "id": "2c40653e-7b05-4e5c-8bcf-43cd8c2eccb3",
+            "verification": "unverified"
+          }
+        },
+        {
+          "id": "cargo-truck",
+          "record": {
+            "cargo": {
+              "cargoLength": "",
+              "cargoLengthOther": "",
+              "cargoWidth": "",
+              "cargoWidthOther": "",
+              "cargoLengthMm": "",
+              "cargoWidthMm": ""
+            },
+            "mode": "ability",
+            "major": "운반·차량",
+            "middle": "운반",
+            "kind": "cargo-truck",
+            "form": "일반 적재함",
+            "size": "1톤",
+            "custom": "",
+            "alias": "",
+            "evidence": "",
+            "maker": "",
+            "model": "",
+            "year": "",
+            "ready": "",
+            "operator": "",
+            "options": "",
+            "years": "3",
+            "actualName": "",
+            "formDetail": "",
+            "optionSelections": [],
+            "specs": [
+              "",
+              ""
+            ],
+            "aSpecs": {},
+            "aEntryRevision": 1,
+            "id": "d63791d5-a177-4972-b2d1-348e5fdb7498",
+            "verification": "unverified"
+          }
+        },
+        {
+          "id": "loader",
+          "record": {
+            "mode": "ability",
+            "equipmentDetails": {
+              "capacityBasis": {
+                "status": "unknown",
+                "value": "",
+                "choices": []
+              },
+              "bucket": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "referenceModel": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "sourceUrl": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "checkedDate": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "vehicleVerification": {
+                "status": "",
+                "value": "",
+                "choices": []
+              }
+            },
+            "equipmentSpecStates": {
+              "spec1": "value"
+            },
+            "major": "토공·기초",
+            "middle": "적재",
+            "kind": "loader",
+            "form": "타이어식",
+            "size": "",
+            "custom": "",
+            "alias": "",
+            "evidence": "",
+            "maker": "",
+            "model": "",
+            "year": "",
+            "ready": "",
+            "operator": "",
+            "options": "",
+            "years": "3",
+            "actualName": "",
+            "formDetail": "",
+            "optionSelections": [],
+            "specs": [
+              "",
+              "2.8"
+            ],
+            "aSpecs": {},
+            "aEntryRevision": 1,
+            "id": "625ab34f-8555-4977-ad5a-e748499b2751",
+            "verification": "unverified"
+          }
+        },
+        {
+          "id": "bulldozer",
+          "record": {
+            "mode": "ability",
+            "equipmentDetails": {
+              "weightBasis": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "blade": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "referenceModel": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "sourceUrl": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "checkedDate": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "vehicleVerification": {
+                "status": "",
+                "value": "",
+                "choices": []
+              }
+            },
+            "equipmentSpecStates": {
+              "spec0": ""
+            },
+            "major": "토공·기초",
+            "middle": "정지",
+            "kind": "bulldozer",
+            "form": "무한궤도식",
+            "size": "",
+            "custom": "",
+            "alias": "",
+            "evidence": "",
+            "maker": "",
+            "model": "",
+            "year": "",
+            "ready": "",
+            "operator": "",
+            "options": "",
+            "years": "3",
+            "actualName": "",
+            "formDetail": "",
+            "optionSelections": [],
+            "specs": [
+              "",
+              ""
+            ],
+            "aSpecs": {},
+            "aEntryRevision": 1,
+            "id": "1add1359-60e1-44e2-b8fb-bf713b76369f",
+            "verification": "unverified"
+          }
+        },
+        {
+          "id": "tower-crane",
+          "record": {
+            "mode": "ability",
+            "equipmentDetails": {
+              "bodyModel": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "installation": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "jib": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "installedHeight": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "support": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "radius": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "freeHeight": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "operation": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "referenceModel": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "sourceUrl": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "checkedDate": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "vehicleVerification": {
+                "status": "",
+                "value": "",
+                "choices": []
+              }
+            },
+            "equipmentSpecStates": {
+              "spec0": "",
+              "spec1": "",
+              "spec2": ""
+            },
+            "major": "인양·고소",
+            "middle": "인양",
+            "kind": "tower-crane",
+            "form": "수평지브",
+            "size": "",
+            "custom": "",
+            "alias": "",
+            "evidence": "",
+            "maker": "",
+            "model": "",
+            "year": "",
+            "ready": "",
+            "operator": "",
+            "options": "",
+            "years": "3",
+            "actualName": "",
+            "formDetail": "",
+            "optionSelections": [],
+            "specs": [
+              "",
+              "",
+              "",
+              ""
+            ],
+            "aSpecs": {},
+            "aEntryRevision": 1,
+            "id": "74c44ff8-5679-4684-a3c7-145f84f26521",
+            "verification": "unverified"
+          }
+        },
+        {
+          "id": "other",
+          "record": {
+            "mode": "ability",
+            "equipmentDetails": {
+              "description": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "device": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "referenceModel": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "sourceUrl": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "checkedDate": {
+                "status": "",
+                "value": "",
+                "choices": []
+              },
+              "vehicleVerification": {
+                "status": "",
+                "value": "",
+                "choices": []
+              }
+            },
+            "equipmentSpecStates": {},
+            "major": "기타",
+            "middle": "직접 등록",
+            "kind": "other",
+            "form": "직접 입력",
+            "size": "",
+            "custom": "",
+            "alias": "",
+            "evidence": "",
+            "maker": "",
+            "model": "",
+            "year": "",
+            "ready": "",
+            "operator": "",
+            "options": "",
+            "years": "3",
+            "actualName": "검수 장비",
+            "formDetail": "시험 형태",
+            "optionSelections": [],
+            "specs": [
+              ""
+            ],
+            "aSpecs": {},
+            "aEntryRevision": 1,
+            "id": "bc5cf5d3-f72c-4569-8384-3f5408c52d2b",
+            "verification": "unverified"
+          }
+        }
+      ]
+    },
+    {
+      "name": "edit delete reload new page preserve",
+      "pass": true,
+      "detail": {
+        "records": 7
+      }
+    },
+    {
+      "name": "draft previous next restore and separate equipment",
+      "pass": true,
+      "detail": "보관·복원 확인"
+    },
+    {
+      "name": "status distinctions zero roundtrip",
+      "pass": true,
+      "detail": [
+        {
+          "s": "",
+          "draft": {
+            "spec1": ""
+          },
+          "value": "4.2"
+        },
+        {
+          "s": "unknown",
+          "draft": {
+            "spec1": "unknown"
+          },
+          "value": "4.2"
+        },
+        {
+          "s": "na",
+          "draft": {
+            "spec1": "na"
+          },
+          "value": "4.2"
+        },
+        {
+          "s": "value",
+          "draft": {
+            "spec1": "value"
+          },
+          "value": "0"
+        }
+      ]
+    },
+    {
+      "name": "invalid years and numeric spec",
+      "pass": true,
+      "detail": {
+        "years": [
+          {
+            "value": "-1",
+            "valid": false
+          },
+          {
+            "value": "81",
+            "valid": false
+          },
+          {
+            "value": "1.5",
+            "valid": false
+          },
+          {
+            "value": "0",
+            "valid": true
+          }
+        ],
+        "negativeTextSpecSaved": true,
+        "record": {
+          "mode": "ability",
+          "equipmentDetails": {
+            "capacityBasis": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "bucket": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "referenceModel": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "sourceUrl": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "checkedDate": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "vehicleVerification": {
+              "status": "",
+              "value": "",
+              "choices": []
+            }
+          },
+          "equipmentSpecStates": {
+            "spec1": "value"
+          },
+          "major": "토공·기초",
+          "middle": "적재",
+          "kind": "loader",
+          "form": "타이어식",
+          "size": "",
+          "custom": "",
+          "alias": "초안 검수",
+          "evidence": "",
+          "maker": "",
+          "model": "",
+          "year": "",
+          "ready": "",
+          "operator": "",
+          "options": "",
+          "years": "0",
+          "actualName": "",
+          "formDetail": "",
+          "optionSelections": [],
+          "specs": [
+            "",
+            "-999 abc"
+          ],
+          "aSpecs": {},
+          "aEntryRevision": 1,
+          "id": "5803f3e6-a53d-4951-be89-bf3211cb8af6",
+          "verification": "unverified"
+        }
+      }
+    },
+    {
+      "name": "whitespace required owned fields",
+      "pass": true,
+      "detail": {
+        "whitespaceSaved": true
+      }
+    },
+    {
+      "name": "large text and screenshots",
+      "pass": true,
+      "detail": {
+        "modeControls": 0,
+        "layouts": [
+          {
+            "width": 390,
+            "overflow": false
+          },
+          {
+            "width": 1440,
+            "overflow": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "search aliases no result",
+      "pass": true,
+      "detail": [
+        {
+          "q": "포크레인",
+          "text": "굴착기 · 토공·기초 → 굴착 (포크레인·굴삭기·백호·06W)"
+        },
+        {
+          "q": "페이로더",
+          "text": "로더 · 토공·기초 → 적재 (휠로더·페이로더·페이로다)"
+        },
+        {
+          "q": "스카이",
+          "text": "스카이차(차량탑재형) · 인양·고소 → 고소 (스카이·고소작업차)"
+        },
+        {
+          "q": "없는장비xyz",
+          "text": "검색 결과가 없습니다. 기타 장비로 실제 명칭을 입력할 수 있습니다."
+        }
+      ]
+    },
+    {
+      "name": "status empty after numeric value card",
+      "pass": true,
+      "detail": {
+        "record": {
+          "mode": "ability",
+          "equipmentDetails": {
+            "capacityBasis": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "bucket": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "referenceModel": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "sourceUrl": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "checkedDate": {
+              "status": "",
+              "value": "",
+              "choices": []
+            },
+            "vehicleVerification": {
+              "status": "",
+              "value": "",
+              "choices": []
+            }
+          },
+          "equipmentSpecStates": {
+            "spec1": ""
+          },
+          "major": "토공·기초",
+          "middle": "적재",
+          "kind": "loader",
+          "form": "타이어식",
+          "size": "",
+          "custom": "",
+          "alias": "",
+          "evidence": "",
+          "maker": "",
+          "model": "",
+          "year": "",
+          "ready": "",
+          "operator": "",
+          "options": "",
+          "years": "3",
+          "actualName": "",
+          "formDetail": "",
+          "optionSelections": [],
+          "specs": [
+            "",
+            "4.2"
+          ],
+          "aSpecs": {},
+          "aEntryRevision": 1,
+          "id": "d7a215fd-69bf-4af0-b8dc-19d2b40dff65",
+          "verification": "unverified"
+        },
+        "card": "운전 가능 장비 · 로더\n\n토공·기초 → 적재 → 로더\n형태: 타이어식 / 현장 호칭: 미입력 (사용자 입력·미검증)\n버킷 용량 (㎥): 4.2\n운용 가능 옵션: 미입력\n해당 장비 작업 경력: 3년\n\n근거와 확인 한계\n이전 입력 보기 · 보관 원문\n수정\n삭제"
+      }
+    },
+    {
+      "name": "other whitespace and direct form whitespace",
+      "pass": true,
+      "detail": {
+        "otherBlocked": true,
+        "blankFormSaved": true
+      }
+    },
+    {
+      "name": "cancel addition and deletion",
+      "pass": true,
+      "detail": "확인창 취소 보존"
+    },
+    {
+      "name": "literal injection options",
+      "pass": true,
+      "detail": "문자열 표시"
+    },
+    {
+      "name": "layout metrics",
+      "pass": true,
+      "detail": [
+        {
+          "width": 390,
+          "height": 9247,
+          "submitY": 985.609375,
+          "fields": 53,
+          "font": "16px"
+        },
+        {
+          "width": 1440,
+          "height": 7440,
+          "submitY": 868.828125,
+          "fields": 53,
+          "font": "16px"
+        }
+      ]
+    },
+    {
+      "name": "storage failure isolated",
+      "pass": true,
+      "detail": "저장 또는 재확인에 실패했습니다. 입력은 화면에 남아 있습니다. 원문 내보내기 후 저장 재시도를 선택하세요."
+    }
+  ],
+  "errors": []
+}

@@ -9,3 +9,25 @@
 .equipment-guidance{background:#edf5ff;border-left:4px solid #3977bf;border-radius:8px;padding:16px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
 .equipment-guidance strong{display:block;font-size:16px}
 .equipment-guidance p{margin:12px 0 0;font-size:14px}
+
+.grid > *,select,button{min-width:0;max-width:100%}p,button,summary,label{overflow-wrap:anywhere}#source a{white-space:normal}
+
+#cargoSteps{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px;background:#f3f7fc;border-radius:8px}#cargoReference{grid-column:1/-1;font-size:14px;overflow-wrap:anywhere}#cargoReference p{margin:6px 0}@media(max-width:640px){#cargoSteps{grid-template-columns:1fr}}
+
+#equipmentFields{padding:16px;background:#f8fafc}#equipmentFields .checks{margin-top:6px}#equipmentFields input[type=radio]{width:auto}#equipmentFields input:disabled{background:#edf0f4}#equipmentFields a{overflow-wrap:anywhere}
+#equipmentFields .equipmentField{display:flex;flex-direction:column;gap:8px}#equipmentFields .checks label{min-width:100px;flex:1 1 100px;padding:8px}
+
+#equipmentPrimary{grid-column:1/-1;margin:0;padding:16px;background:#edf5ff;border:1px solid #b8d2ef}#equipmentPrimary h3{margin:0 0 8px}#equipmentPrimary .grid{margin-bottom:0}#equipmentPrimary input[type=radio]{width:auto}#equipmentPrimary .equipmentField{display:flex;flex-direction:column;gap:8px}#equipmentPrimary .checks{margin-top:6px}#equipmentPrimary .checks label{min-width:100px;flex:1 1 100px;padding:8px}#equipmentPrimary input:disabled{background:#edf0f4}.equipmentReferences{margin-top:16px;font-size:14px}.equipmentReferences p{margin:8px 0}.equipmentReferences a{display:inline-block;margin:4px 16px 4px 0;overflow-wrap:anywhere}
+
+.display-tools{display:flex;justify-content:flex-end;margin-top:12px}
+details{margin:12px 0}summary{cursor:pointer;line-height:1.6;padding:10px 0;font-weight:600}
+#afterSave{padding:16px;background:#edf5ff;border-radius:10px;margin-bottom:18px}
+#equipmentFields{border-radius:10px}#equipmentFields > summary{font-size:16px}
+html.large-text{font-size:20px}
+.large-text body,.large-text label,.large-text input,.large-text select,.large-text button,.large-text summary,.large-text .hint,.large-text .notice,.large-text footer,.large-text .equipmentReferences,.large-text #cargoReference,.large-text .equipment-guidance p,.large-text #equipmentFields > summary{font-size:1rem;line-height:1.65}
+.large-text h1{font-size:1.5rem;word-break:keep-all}.large-text h2{font-size:1.3rem}.large-text h3,.large-text .equipment-guidance strong{font-size:1.1rem}
+.large-text header strong{font-size:1.6rem}.large-text pre{font-size:1rem}
+.large-text .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.large-text input,.large-text select,.large-text button{min-height:48px}
+@media(max-width:640px){.large-text .grid{grid-template-columns:1fr}.large-text section{padding:14px}.large-text header{padding:18px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

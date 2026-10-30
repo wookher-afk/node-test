@@ -1,0 +1,45 @@
+{
+  "results": [
+    {
+      "name": "fresh add action",
+      "pass": true,
+      "detail": {
+        "before": "<option value=\"\">선택하세요</option><option value=\"토공·기초\">토공·기초</option><option value=\"운반·차량\">운반·차량</option><option value=\"인양·고소\">인양·고소</option><option value=\"도로·콘크리트\">도로·콘크리트</option><option value=\"동력·지원\">동력·지원</option><option value=\"기타\">기타</option>",
+        "after": "<option value=\"\">선택하세요</option><option value=\"토공·기초\">토공·기초</option><option value=\"운반·차량\">운반·차량</option><option value=\"인양·고소\">인양·고소</option><option value=\"도로·콘크리트\">도로·콘크리트</option><option value=\"동력·지원\">동력·지원</option><option value=\"기타\">기타</option>",
+        "state": {
+          "version": 2,
+          "roles": [],
+          "records": [],
+          "draft": {
+            "mode": "ability",
+            "editing": null,
+            "major": "",
+            "middle": "",
+            "kind": "",
+            "form": "",
+            "size": "",
+            "custom": "",
+            "alias": "",
+            "evidence": "",
+            "maker": "",
+            "model": "",
+            "year": "",
+            "ready": "즉시 가능",
+            "operator": "가능",
+            "options": "",
+            "years": "",
+            "actualName": "",
+            "formDetail": "",
+            "optionSelections": [],
+            "specs": [],
+            "aSpecs": {},
+            "aEntryRevision": 1,
+            "equipmentDrafts": {}
+          },
+          "aRevision": 1
+        }
+      }
+    }
+  ],
+  "errors": []
+}
