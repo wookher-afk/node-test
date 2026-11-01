@@ -11,7 +11,7 @@ import {fixture,match,approve,confirm,cancel} from '../tests/helpers/matching.js
 try {
  // Also verify a completely fresh install, without pre-existing account rows.
  await pool.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public');
- for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql','006_worksite_management.sql','007_internal_job_posts.sql']) {
+ for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql','006_worksite_management.sql','007_internal_job_posts.sql','008_worker_alpha_registration.sql','009_company_alpha_registration.sql']) {
    await pool.query(await readFile('database/'+name,'utf8'));
  }
  assert.equal((await pool.query("SELECT count(*)::int AS n FROM accounts")).rows[0].n,0);
@@ -215,6 +215,12 @@ try {
  console.log('PASS: 007 preserves original IDs, recruitment and transaction data; no historical promise inference; failure rollback');
 
 
+const eighth=await readFile('database/008_worker_alpha_registration.sql','utf8');
+const failedEighth=await pool.connect();
+try{await assert.rejects(failedEighth.query(eighth.replace('COMMIT;','SELECT 1/0;\nCOMMIT;')),/division by zero/);await failedEighth.query('ROLLBACK');}finally{failedEighth.release();}
+assert.equal((await pool.query("SELECT to_regclass('public.worker_alpha_registrations') AS name")).rows[0].name,null);
+await pool.query(eighth);
+await pool.query(await readFile('database/009_company_alpha_registration.sql','utf8'));
 } catch(error) {await pool.end();throw error;}
 // Only migration/fixture setup uses the administrator. Every HTTP server below
 // connects using the restricted role, while direct DB regression fixtures retain
@@ -228,7 +234,7 @@ try {
  worksiteRuntime=await provisionWorksiteRuntime(pool);
  jobRuntime=await provisionJobPostRuntime(pool);
  assert.deepEqual(await preserved(),before,'role provisioning cannot change existing onboarding data');
- const args=['--test','--test-concurrency=1','tests/account.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js','tests/worksites.test.js','tests/job-posts.test.js'];
+ const args=['--test','--test-concurrency=1','tests/account.test.js','tests/money.test.js','tests/required-match.test.js','tests/required-match.integration.test.js','tests/company-registration.test.js','tests/company-registration.integration.test.js','tests/worker-alpha.test.js','tests/worker-alpha.integration.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js','tests/worksites.test.js','tests/job-posts.test.js'];
  // Asynchronous spawn keeps the administrator pool responsive to keepalives while
  // the test processes use independent real connections to the same local DB.
  const {spawn}=await import('node:child_process');

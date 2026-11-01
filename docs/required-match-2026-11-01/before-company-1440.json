@@ -1,0 +1,462 @@
+[
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "내 업체",
+    "x": 360,
+    "y": 30.15625,
+    "width": 720,
+    "height": 66,
+    "textWidth": 45.71875
+  },
+  {
+    "tag": "SELECT",
+    "id": "companySelect",
+    "text": "",
+    "x": 360,
+    "y": 50.15625,
+    "width": 720,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "BUTTON",
+    "id": "newCompany",
+    "text": "새 업체 등록",
+    "x": 360,
+    "y": 111.15625,
+    "width": 99.578125,
+    "height": 44,
+    "textWidth": 77.578125
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "1 기본정보",
+    "x": 360,
+    "y": 155.15625,
+    "width": 234.65625,
+    "height": 44,
+    "textWidth": 66.671875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "2 현장정보",
+    "x": 602.65625,
+    "y": 155.15625,
+    "width": 234.671875,
+    "height": 44,
+    "textWidth": 68.90625
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "3 모집조건",
+    "x": 845.328125,
+    "y": 155.15625,
+    "width": 234.671875,
+    "height": 44,
+    "textWidth": 69.28125
+  },
+  {
+    "tag": "H2",
+    "id": "",
+    "text": "3. 모집조건",
+    "x": 380,
+    "y": 257.0625,
+    "width": 680,
+    "height": 30,
+    "textWidth": 108.328125
+  },
+  {
+    "tag": "LEGEND",
+    "id": "editorTitle",
+    "text": "모집 그룹 추가",
+    "x": 393,
+    "y": 306.96875,
+    "width": 94.921875,
+    "height": 20,
+    "textWidth": 90.921875
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "모집 유형",
+    "x": 393,
+    "y": 353.96875,
+    "width": 654,
+    "height": 66,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "SELECT",
+    "id": "resourceMode",
+    "text": "",
+    "x": 393,
+    "y": 373.96875,
+    "width": 654,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "모집 인원",
+    "x": 393,
+    "y": 434.96875,
+    "width": 654,
+    "height": 66,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "INPUT",
+    "id": "headcount",
+    "text": "",
+    "x": 393,
+    "y": 454.96875,
+    "width": 654,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "대분류",
+    "x": 393,
+    "y": 515.96875,
+    "width": 654,
+    "height": 66,
+    "textWidth": 41.53125
+  },
+  {
+    "tag": "SELECT",
+    "id": "major",
+    "text": "",
+    "x": 393,
+    "y": 535.96875,
+    "width": 654,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "작업 난이도·범위 (선택)",
+    "x": 393,
+    "y": 596.96875,
+    "width": 654,
+    "height": 66,
+    "textWidth": 148.96875
+  },
+  {
+    "tag": "INPUT",
+    "id": "difficulty",
+    "text": "",
+    "x": 393,
+    "y": 616.96875,
+    "width": 654,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "해당 직종·장비 최소 경력 (개월, 무관은 0)",
+    "x": 393,
+    "y": 677.96875,
+    "width": 654,
+    "height": 66,
+    "textWidth": 262.96875
+  },
+  {
+    "tag": "INPUT",
+    "id": "experienceMonths",
+    "text": "",
+    "x": 393,
+    "y": 697.96875,
+    "width": 654,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LEGEND",
+    "id": "",
+    "text": "현장 지역",
+    "x": 406,
+    "y": 758.96875,
+    "width": 63.3125,
+    "height": 20,
+    "textWidth": 59.3125
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "시·도",
+    "x": 406,
+    "y": 805.96875,
+    "width": 308,
+    "height": 66,
+    "textWidth": 32.125
+  },
+  {
+    "tag": "SELECT",
+    "id": "province",
+    "text": "",
+    "x": 406,
+    "y": 825.96875,
+    "width": 308,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "시·군·구",
+    "x": 726,
+    "y": 805.96875,
+    "width": 308,
+    "height": 66,
+    "textWidth": 50.40625
+  },
+  {
+    "tag": "SELECT",
+    "id": "district",
+    "text": "",
+    "x": 726,
+    "y": 825.96875,
+    "width": 308,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "BUTTON",
+    "id": "addRegion",
+    "text": "지역 추가",
+    "x": 406,
+    "y": 886.96875,
+    "width": 81.5625,
+    "height": 44,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "제시 급여 (만원)",
+    "x": 393,
+    "y": 995.28125,
+    "width": 321,
+    "height": 90,
+    "textWidth": 103.015625
+  },
+  {
+    "tag": "INPUT",
+    "id": "pay",
+    "text": "",
+    "x": 393,
+    "y": 1015.28125,
+    "width": 287.3125,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "급여 단위",
+    "x": 726,
+    "y": 995.28125,
+    "width": 321,
+    "height": 90,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "SELECT",
+    "id": "unit",
+    "text": "",
+    "x": 726,
+    "y": 1015.28125,
+    "width": 321,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "출근시간",
+    "x": 393,
+    "y": 1115.28125,
+    "width": 321,
+    "height": 66,
+    "textWidth": 55.375
+  },
+  {
+    "tag": "BUTTON",
+    "id": "start",
+    "text": "08:00",
+    "x": 393,
+    "y": 1135.28125,
+    "width": 321,
+    "height": 46,
+    "textWidth": 43.640625
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "퇴근시간",
+    "x": 726,
+    "y": 1115.28125,
+    "width": 321,
+    "height": 66,
+    "textWidth": 55.375
+  },
+  {
+    "tag": "BUTTON",
+    "id": "end",
+    "text": "17:00",
+    "x": 726,
+    "y": 1135.28125,
+    "width": 321,
+    "height": 46,
+    "textWidth": 39.71875
+  },
+  {
+    "tag": "LEGEND",
+    "id": "",
+    "text": "작업기간",
+    "x": 406,
+    "y": 1232.59375,
+    "width": 59.375,
+    "height": 20,
+    "textWidth": 55.375
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "일정 선택",
+    "x": 406,
+    "y": 1279.59375,
+    "width": 628,
+    "height": 66,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "SELECT",
+    "id": "schedule",
+    "text": "",
+    "x": 406,
+    "y": 1299.59375,
+    "width": 628,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "급여 지급일·지급조건",
+    "x": 393,
+    "y": 1388.59375,
+    "width": 654,
+    "height": 66,
+    "textWidth": 133.1875
+  },
+  {
+    "tag": "INPUT",
+    "id": "paymentTerms",
+    "text": "",
+    "x": 393,
+    "y": 1408.59375,
+    "width": 654,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "지급 방식",
+    "x": 393,
+    "y": 1484.59375,
+    "width": 321,
+    "height": 66,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "SELECT",
+    "id": "paymentMethod",
+    "text": "",
+    "x": 393,
+    "y": 1504.59375,
+    "width": 321,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "거래 조건",
+    "x": 726,
+    "y": 1484.59375,
+    "width": 321,
+    "height": 66,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "SELECT",
+    "id": "taxTerms",
+    "text": "",
+    "x": 726,
+    "y": 1504.59375,
+    "width": 321,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "기타 지급·계약 조건 (선택)",
+    "x": 393,
+    "y": 1580.59375,
+    "width": 654,
+    "height": 66,
+    "textWidth": 167
+  },
+  {
+    "tag": "INPUT",
+    "id": "otherTerms",
+    "text": "",
+    "x": 393,
+    "y": 1600.59375,
+    "width": 654,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "BUTTON",
+    "id": "addLine",
+    "text": "모집 그룹 추가",
+    "x": 393,
+    "y": 1661.59375,
+    "width": 113.421875,
+    "height": 44,
+    "textWidth": 91.421875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "save",
+    "text": "업체 등록 정보 저장",
+    "x": 380,
+    "y": 1749.59375,
+    "width": 680,
+    "height": 48,
+    "textWidth": 123.296875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "previous",
+    "text": "이전",
+    "x": 360,
+    "y": 1837.59375,
+    "width": 720,
+    "height": 44,
+    "textWidth": 27.6875
+  }
+]

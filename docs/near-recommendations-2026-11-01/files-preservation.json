@@ -1,0 +1,9 @@
+{
+  "changedExistingFiles": [
+    "server/auto-matching.js"
+  ],
+  "allowedExistingFileChanges": [
+    "server/auto-matching.js"
+  ],
+  "otherExistingFilesUnchanged": true
+}

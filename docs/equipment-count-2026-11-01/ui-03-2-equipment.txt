@@ -1,0 +1,32 @@
+loader lifecycle PASS
+bulldozer lifecycle PASS
+drilling-rig lifecycle PASS
+pile-driver lifecycle PASS
+trailer lifecycle PASS
+forklift lifecycle PASS
+telehandler lifecycle PASS
+crane lifecycle PASS
+aerial-work-platform lifecycle PASS
+roller lifecycle PASS
+mixer-truck lifecycle PASS
+concrete-pump lifecycle PASS
+generator lifecycle PASS
+compressor lifecycle PASS
+other lifecycle PASS
+skid-loader lifecycle PASS
+grader lifecycle PASS
+scraper lifecycle PASS
+water-truck lifecycle PASS
+tow-truck lifecycle PASS
+truck-tractor lifecycle PASS
+cargo-crane lifecycle PASS
+tower-crane lifecycle PASS
+sky-truck lifecycle PASS
+ladder-truck lifecycle PASS
+construction-lift lifecycle PASS
+asphalt-paver lifecycle PASS
+road-mill lifecycle PASS
+all28 PASS
+field-specifications31 PASS
+lossless PASS
+visual PASS

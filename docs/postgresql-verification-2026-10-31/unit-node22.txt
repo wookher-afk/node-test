@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: 실재 날짜·윤년·미래·공백·역전 검사
+ok 1 - 실재 날짜·윤년·미래·공백·역전 검사
+  ---
+  duration_ms: 19.736708
+  type: 'test'
+  ...
+# Subtest: 지원하지 않는 잠금은 저장하지 않음
+ok 2 - 지원하지 않는 잠금은 저장하지 않음
+  ---
+  duration_ms: 1.009584
+  type: 'test'
+  ...
+# Subtest: 원문 기준 비교 · 낡은 탭 재시도 덮어쓰기 금지
+ok 3 - 원문 기준 비교 · 낡은 탭 재시도 덮어쓰기 금지
+  ---
+  duration_ms: 0.353834
+  type: 'test'
+  ...
+# Subtest: 저장 후 읽기검증 실패 시 추가 쓰기 중단
+ok 4 - 저장 후 읽기검증 실패 시 추가 쓰기 중단
+  ---
+  duration_ms: 0.231292
+  type: 'test'
+  ...
+# Subtest: 중첩 알 수 없는 값·검증승격·손상 ID 쓰기 차단
+ok 5 - 중첩 알 수 없는 값·검증승격·손상 ID 쓰기 차단
+  ---
+  duration_ms: 0.248916
+  type: 'test'
+  ...
+# Subtest: 보유와 초안은 추천 아님 · 손상 신키 폴백 금지
+ok 6 - 보유와 초안은 추천 아님 · 손상 신키 폴백 금지
+  ---
+  duration_ms: 0.150042
+  type: 'test'
+  ...
+# Subtest: 이관 지문은 객체 키·항목 순서 독립, 동일 원문 회차 구분
+ok 7 - 이관 지문은 객체 키·항목 순서 독립, 동일 원문 회차 구분
+  ---
+  duration_ms: 7.050458
+  type: 'test'
+  ...
+# Subtest: 모든 ability 장비를 개별 보존하고 장비·기사로 면허 추정하지 않음
+ok 8 - 모든 ability 장비를 개별 보존하고 장비·기사로 면허 추정하지 않음
+  ---
+  duration_ms: 0.278
+  type: 'test'
+  ...
+# Subtest: 면허번호 필수 및 기존 번호 없는 기록 읽기·변경 없는 보존
+ok 9 - 면허번호 필수 및 기존 번호 없는 기록 읽기·변경 없는 보존
+  ---
+  duration_ms: 0.950667
+  type: 'test'
+  ...
+# Subtest: separates ability/ownership, preserves equipment detail, single engine default
+ok 10 - separates ability/ownership, preserves equipment detail, single engine default
+  ---
+  duration_ms: 2.655792
+  type: 'test'
+  ...
+# Subtest: rejects malformed pay, dates, priorities, ownership and duplicate identities
+ok 11 - rejects malformed pay, dates, priorities, ownership and duplicate identities
+  ---
+  duration_ms: 0.91775
+  type: 'test'
+  ...
+# Subtest: allows existing empty size with actual equipment specs and overnight hours
+ok 12 - allows existing empty size with actual equipment specs and overnight hours
+  ---
+  duration_ms: 0.331541
+  type: 'test'
+  ...
+# Subtest: GET scopes lookup to authenticated account, not request payload
+ok 13 - GET scopes lookup to authenticated account, not request payload
+  ---
+  duration_ms: 0.166667
+  type: 'test'
+  ...
+# Subtest: PUT transaction uses session identity and rolls back stale writes
+ok 14 - PUT transaction uses session identity and rolls back stale writes
+  ---
+  duration_ms: 0.303542
+  type: 'test'
+  ...
+# Subtest: PUT database failure rolls back and releases
+ok 15 - PUT database failure rolls back and releases
+  ---
+  duration_ms: 0.277875
+  type: 'test'
+  ...
+# Subtest: existing version update uses expected version and account identity
+ok 16 - existing version update uses expected version and account identity
+  ---
+  duration_ms: 0.263417
+  type: 'test'
+  ...
+# Subtest: allows optional empty equipment experience and still rejects invalid numbers
+ok 17 - allows optional empty equipment experience and still rejects invalid numbers
+  ---
+  duration_ms: 0.126667
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 92.472084

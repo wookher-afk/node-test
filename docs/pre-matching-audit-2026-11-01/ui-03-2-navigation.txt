@@ -1,0 +1,8 @@
+PASS navigation ready
+PASS navigation continue
+PASS navigation no-role
+PASS navigation no-record
+PASS navigation draft-cancel
+PASS navigation draft-accept
+PASS navigation storage-failure
+PASS navigation corrupt

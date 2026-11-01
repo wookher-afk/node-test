@@ -1,0 +1,278 @@
+{
+  "dbs": [
+    {
+      "datname": "heowook",
+      "datacl": null,
+      "datconfig": null
+    },
+    {
+      "datname": "node_alpha_01_local",
+      "datacl": null,
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_alpha_01_20261031",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_classification_20261031_audit",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_company_20261101",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_equipment_count_20261101",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_preferences_20261031",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_prematch_audit_20261101",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_required_20261101",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_required_final_20261101",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "node_test_technical_20261101",
+      "datacl": "{=c/heowook,heowook=CTc/heowook}",
+      "datconfig": null
+    },
+    {
+      "datname": "postgres",
+      "datacl": null,
+      "datconfig": null
+    },
+    {
+      "datname": "template0",
+      "datacl": "{=c/postgres,postgres=CTc/postgres}",
+      "datconfig": null
+    },
+    {
+      "datname": "template1",
+      "datacl": "{=c/postgres,postgres=CTc/postgres}",
+      "datconfig": null
+    }
+  ],
+  "roles": [
+    {
+      "rolname": "heowook",
+      "rolsuper": true,
+      "rolinherit": true,
+      "rolcreaterole": true,
+      "rolcreatedb": true,
+      "rolcanlogin": true,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_checkpoint",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_create_subscription",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_database_owner",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_execute_server_program",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_maintain",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_monitor",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_read_all_data",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_read_all_settings",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_read_all_stats",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_read_server_files",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_signal_backend",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_stat_scan_tables",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_use_reserved_connections",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_write_all_data",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "pg_write_server_files",
+      "rolsuper": false,
+      "rolinherit": true,
+      "rolcreaterole": false,
+      "rolcreatedb": false,
+      "rolcanlogin": false,
+      "rolreplication": false,
+      "rolbypassrls": false,
+      "rolconfig": null
+    },
+    {
+      "rolname": "postgres",
+      "rolsuper": true,
+      "rolinherit": true,
+      "rolcreaterole": true,
+      "rolcreatedb": true,
+      "rolcanlogin": true,
+      "rolreplication": true,
+      "rolbypassrls": true,
+      "rolconfig": null
+    }
+  ],
+  "settings": [],
+  "dumps": {
+    "heowook": "6d93458110bdd44b2f7f342d8014ecd3657370e4e9ea07c600c57d0c73be796d",
+    "node_alpha_01_local": "378f8360ee68f77ddb7a9d1477e870f40d96ae77aa676fa6ed5318feb754f2f2",
+    "node_test_alpha_01_20261031": "559630534e5de9a8ef3b251a3d7522e3921f7528448b49d53d7b8ed886739365",
+    "node_test_classification_20261031_audit": "58249a8f671a96a62e6cb5338fb630d356f9a6131e916f34b2828b7a215c3c29",
+    "node_test_company_20261101": "b4310256dac3538edbf7a31a69daf602300ee0527ba71c9b562801328e1e61c6",
+    "node_test_equipment_count_20261101": "2e908a21d0a3230418f24fc95f840f8ec82f3ae09dd9da2ec750db5f234093db",
+    "node_test_preferences_20261031": "2658107b3febbbe182553434681b2ece6fc9d0a963c8e8a3f65687366861ea32",
+    "node_test_prematch_audit_20261101": "601c6ea86da2d7edd76a688620ba339bcb1673101cbdf23ee3f3cdb347e6299c",
+    "node_test_required_20261101": "3c4661f91361d6a49af8fe8589bd4560028d98836755d867b2b23948551bd93d",
+    "node_test_required_final_20261101": "566341b8f662a3d283a9f51d4c78b45d093f65f0abd331a0ecdf7abc7ad8f8a0",
+    "node_test_technical_20261101": "575ded4b6d971b56cdf0bac4c6386aa7cd684af9ba85e7a4b6187385851722d5",
+    "postgres": "6d93458110bdd44b2f7f342d8014ecd3657370e4e9ea07c600c57d0c73be796d"
+  }
+}

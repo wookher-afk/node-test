@@ -1,0 +1,66 @@
+[
+  {
+    "name": "company-groups",
+    "code": 0
+  },
+  {
+    "name": "technical-worker",
+    "code": 0
+  },
+  {
+    "name": "worker-postgres",
+    "code": 0,
+    "firstRunCode": 1,
+    "retryReason": "Local test harness: explicit Chrome and isolated preview URL"
+  },
+  {
+    "name": "worker-alpha",
+    "code": 0
+  },
+  {
+    "name": "03-2",
+    "code": 0,
+    "firstRunCode": 1,
+    "retryReason": "Local test harness: explicit Chrome and isolated preview URL"
+  },
+  {
+    "name": "03-2-a",
+    "code": 0
+  },
+  {
+    "name": "03-2-cargo",
+    "code": 0
+  },
+  {
+    "name": "03-2-dump",
+    "code": 0
+  },
+  {
+    "name": "03-2-equipment",
+    "code": 0
+  },
+  {
+    "name": "03-2-flow",
+    "code": 0
+  },
+  {
+    "name": "03-2-navigation",
+    "code": 0
+  },
+  {
+    "name": "03-2-optional",
+    "code": 0
+  },
+  {
+    "name": "03-2-progressive",
+    "code": 0
+  },
+  {
+    "name": "03-3",
+    "code": 0
+  },
+  {
+    "name": "03-3-multisize",
+    "code": 0
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "database": "node_test_spec_20261101_1793540328249",
+  "results": [
+    {
+      "label": "existing-db-suite",
+      "exitCode": 0
+    },
+    {
+      "label": "existing-44",
+      "exitCode": 0
+    },
+    {
+      "label": "equipment-spec-integration",
+      "exitCode": 0
+    }
+  ],
+  "originalDatabasesUnchanged": true,
+  "existingFilesChanged": [],
+  "newFiles": []
+}

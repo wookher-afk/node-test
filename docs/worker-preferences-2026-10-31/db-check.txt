@@ -1,0 +1,2 @@
+PASS all 6 preexisting registration documents/version/timestamps byte-equivalent to prior audit snapshot
+PASS actual PostgreSQL JSONB region codes/pay/time/range and edit versions in 2 synthetic documents

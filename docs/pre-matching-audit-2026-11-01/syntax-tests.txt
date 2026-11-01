@@ -1,0 +1,8 @@
+PASS --check server/index.js
+PASS --check server/company-registration.js
+PASS --check server/worker-registration.js
+PASS --check server/access.js
+PASS --check server/worksites.js
+PASS --check server/job-posts.js
+PASS --check scripts/lib/test-worksite-role.mjs
+PASS --check scripts/lib/test-job-post-role.mjs

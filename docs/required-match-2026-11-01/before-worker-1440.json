@@ -1,0 +1,312 @@
+[
+  {
+    "tag": "H2",
+    "id": "",
+    "text": "1. 운전 가능 장비·규격·장비별 경력",
+    "x": 260,
+    "y": 201.78125,
+    "width": 920,
+    "height": 30,
+    "textWidth": 319.359375
+  },
+  {
+    "tag": "H2",
+    "id": "",
+    "text": "2. 구직 희망조건",
+    "x": 260,
+    "y": 1112.59375,
+    "width": 920,
+    "height": 30,
+    "textWidth": 154.5625
+  },
+  {
+    "tag": "LEGEND",
+    "id": "",
+    "text": "희망 지역",
+    "x": 273,
+    "y": 1162.5,
+    "width": 63.3125,
+    "height": 20,
+    "textWidth": 59.3125
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "시·도",
+    "x": 273,
+    "y": 1209.5,
+    "width": 441,
+    "height": 62,
+    "textWidth": 32.125
+  },
+  {
+    "tag": "SELECT",
+    "id": "province",
+    "text": "",
+    "x": 273,
+    "y": 1229.5,
+    "width": 441,
+    "height": 42,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "시·군·구",
+    "x": 726,
+    "y": 1209.5,
+    "width": 441,
+    "height": 62,
+    "textWidth": 50.40625
+  },
+  {
+    "tag": "SELECT",
+    "id": "district",
+    "text": "",
+    "x": 726,
+    "y": 1229.5,
+    "width": 441,
+    "height": 42,
+    "textWidth": 0
+  },
+  {
+    "tag": "BUTTON",
+    "id": "addRegion",
+    "text": "지역 추가",
+    "x": 273,
+    "y": 1286.5,
+    "width": 83.5625,
+    "height": 44,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "희망 최소 급여 (만원)",
+    "x": 260,
+    "y": 1394.8125,
+    "width": 454,
+    "height": 86,
+    "textWidth": 134.890625
+  },
+  {
+    "tag": "INPUT",
+    "id": "pay",
+    "text": "",
+    "x": 260,
+    "y": 1414.8125,
+    "width": 420.3125,
+    "height": 42,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "급여 단위",
+    "x": 726,
+    "y": 1394.8125,
+    "width": 454,
+    "height": 86,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "SELECT",
+    "id": "unit",
+    "text": "",
+    "x": 726,
+    "y": 1414.8125,
+    "width": 454,
+    "height": 42,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "희망 출근시간",
+    "x": 260,
+    "y": 1510.8125,
+    "width": 454,
+    "height": 66,
+    "textWidth": 87.234375
+  },
+  {
+    "tag": "BUTTON",
+    "id": "start",
+    "text": "08:00",
+    "x": 260,
+    "y": 1530.8125,
+    "width": 454,
+    "height": 46,
+    "textWidth": 43.640625
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "희망 퇴근시간",
+    "x": 726,
+    "y": 1510.8125,
+    "width": 454,
+    "height": 66,
+    "textWidth": 87.234375
+  },
+  {
+    "tag": "BUTTON",
+    "id": "end",
+    "text": "17:00",
+    "x": 726,
+    "y": 1530.8125,
+    "width": 454,
+    "height": 46,
+    "textWidth": 39.71875
+  },
+  {
+    "tag": "LEGEND",
+    "id": "",
+    "text": "가능 일정",
+    "x": 273,
+    "y": 1628.125,
+    "width": 63.3125,
+    "height": 20,
+    "textWidth": 59.3125
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "일정 선택",
+    "x": 273,
+    "y": 1675.125,
+    "width": 894,
+    "height": 62,
+    "textWidth": 59.5625
+  },
+  {
+    "tag": "SELECT",
+    "id": "schedule",
+    "text": "",
+    "x": 273,
+    "y": 1695.125,
+    "width": 894,
+    "height": 42,
+    "textWidth": 0
+  },
+  {
+    "tag": "LEGEND",
+    "id": "",
+    "text": "조건별 우선순위 (위쪽이 우선)",
+    "x": 273,
+    "y": 1780.125,
+    "width": 194.5,
+    "height": 20,
+    "textWidth": 190.5
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "위로",
+    "x": 356.6875,
+    "y": 1836.125,
+    "width": 51.6875,
+    "height": 44,
+    "textWidth": 27.6875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "아래로",
+    "x": 416.375,
+    "y": 1836.125,
+    "width": 65.53125,
+    "height": 44,
+    "textWidth": 41.53125
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "위로",
+    "x": 356.6875,
+    "y": 1896.125,
+    "width": 51.6875,
+    "height": 44,
+    "textWidth": 27.6875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "아래로",
+    "x": 416.375,
+    "y": 1896.125,
+    "width": 65.53125,
+    "height": 44,
+    "textWidth": 41.53125
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "위로",
+    "x": 384.375,
+    "y": 1956.125,
+    "width": 51.6875,
+    "height": 44,
+    "textWidth": 27.6875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "아래로",
+    "x": 444.0625,
+    "y": 1956.125,
+    "width": 65.53125,
+    "height": 44,
+    "textWidth": 41.53125
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "위로",
+    "x": 356.6875,
+    "y": 2016.125,
+    "width": 51.6875,
+    "height": 44,
+    "textWidth": 27.6875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "아래로",
+    "x": 416.375,
+    "y": 2016.125,
+    "width": 65.53125,
+    "height": 44,
+    "textWidth": 41.53125
+  },
+  {
+    "tag": "LEGEND",
+    "id": "",
+    "text": "운전 가능 장비별 선호 순위 (위쪽이 우선)",
+    "x": 273,
+    "y": 2112.125,
+    "width": 261.671875,
+    "height": 20,
+    "textWidth": 257.671875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "sync",
+    "text": "장비 목록 반영",
+    "x": 273,
+    "y": 2144.125,
+    "width": 115.421875,
+    "height": 44,
+    "textWidth": 91.421875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "save",
+    "text": "전체 등록 정보 서버 저장",
+    "x": 260,
+    "y": 2248.125,
+    "width": 920,
+    "height": 48,
+    "textWidth": 155.15625
+  }
+]

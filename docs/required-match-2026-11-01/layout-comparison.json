@@ -1,0 +1,94 @@
+[
+  {
+    "screen": "company",
+    "viewportWidth": 390,
+    "originalElementsCompared": 46,
+    "inputPositionsAndSizesUnchanged": true,
+    "originalTitleHeightsUnchanged": true,
+    "legendWidthOnlyChanges": [
+      {
+        "title": "모집 그룹 추가",
+        "widthDelta": 81.219
+      },
+      {
+        "title": "현장 지역",
+        "widthDelta": 20.0
+      },
+      {
+        "title": "작업기간",
+        "widthDelta": 20.0
+      }
+    ]
+  },
+  {
+    "screen": "company",
+    "viewportWidth": 1440,
+    "originalElementsCompared": 46,
+    "inputPositionsAndSizesUnchanged": true,
+    "originalTitleHeightsUnchanged": true,
+    "legendWidthOnlyChanges": [
+      {
+        "title": "모집 그룹 추가",
+        "widthDelta": 81.219
+      },
+      {
+        "title": "현장 지역",
+        "widthDelta": 20.0
+      },
+      {
+        "title": "작업기간",
+        "widthDelta": 20.0
+      }
+    ]
+  },
+  {
+    "screen": "worker",
+    "viewportWidth": 390,
+    "originalElementsCompared": 31,
+    "inputPositionsAndSizesUnchanged": true,
+    "originalTitleHeightsUnchanged": true,
+    "legendWidthOnlyChanges": [
+      {
+        "title": "희망 지역",
+        "widthDelta": 20.0
+      },
+      {
+        "title": "가능 일정",
+        "widthDelta": 20.0
+      }
+    ]
+  },
+  {
+    "screen": "worker",
+    "viewportWidth": 1440,
+    "originalElementsCompared": 31,
+    "inputPositionsAndSizesUnchanged": true,
+    "originalTitleHeightsUnchanged": true,
+    "legendWidthOnlyChanges": [
+      {
+        "title": "희망 지역",
+        "widthDelta": 20.0
+      },
+      {
+        "title": "가능 일정",
+        "widthDelta": 20.0
+      }
+    ]
+  },
+  {
+    "screen": "technical",
+    "viewportWidth": 390,
+    "originalElementsCompared": 22,
+    "inputPositionsAndSizesUnchanged": true,
+    "originalTitleHeightsUnchanged": true,
+    "legendWidthOnlyChanges": []
+  },
+  {
+    "screen": "technical",
+    "viewportWidth": 1440,
+    "originalElementsCompared": 22,
+    "inputPositionsAndSizesUnchanged": true,
+    "originalTitleHeightsUnchanged": true,
+    "legendWidthOnlyChanges": []
+  }
+]

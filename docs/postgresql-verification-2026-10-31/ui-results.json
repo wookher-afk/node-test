@@ -1,0 +1,54 @@
+[
+  {
+    "suite": "03-2",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-a",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-cargo",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-dump",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-flow",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-multisize",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-navigation",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-optional",
+    "exit": 0
+  },
+  {
+    "suite": "03-2-progressive",
+    "exit": 0
+  },
+  {
+    "suite": "03-3",
+    "exit": 0
+  },
+  {
+    "suite": "03-3-multisize",
+    "exit": 0
+  },
+  {
+    "suite": "registration-entry",
+    "exit": 0
+  },
+  {
+    "suite": "worker-alpha",
+    "exit": 0
+  }
+]

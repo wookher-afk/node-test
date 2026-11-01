@@ -1,0 +1,124 @@
+{
+  "supportedNode": "22.23.4",
+  "server": {
+    "passed": 147,
+    "failed": 0
+  },
+  "syntax": {
+    "passed": 8,
+    "failed": 0
+  },
+  "uiBrowser": {
+    "executed": 24,
+    "passed": 22,
+    "failed": [
+      "company-postgres",
+      "company-revision"
+    ],
+    "results": [
+      {
+        "name": "company-groups",
+        "code": 0
+      },
+      {
+        "name": "technical-worker",
+        "code": 0
+      },
+      {
+        "name": "worker-postgres",
+        "code": 0
+      },
+      {
+        "name": "worker-alpha",
+        "code": 0
+      },
+      {
+        "name": "03-2",
+        "code": 0
+      },
+      {
+        "name": "03-2-a",
+        "code": 0
+      },
+      {
+        "name": "03-2-cargo",
+        "code": 0
+      },
+      {
+        "name": "03-2-dump",
+        "code": 0
+      },
+      {
+        "name": "03-2-equipment",
+        "code": 0
+      },
+      {
+        "name": "03-2-flow",
+        "code": 0
+      },
+      {
+        "name": "03-2-navigation",
+        "code": 0
+      },
+      {
+        "name": "03-2-optional",
+        "code": 0
+      },
+      {
+        "name": "03-2-progressive",
+        "code": 0
+      },
+      {
+        "name": "03-3",
+        "code": 0
+      },
+      {
+        "name": "03-3-multisize",
+        "code": 0
+      },
+      {
+        "name": "required-match",
+        "code": 0
+      },
+      {
+        "name": "equipment-count",
+        "code": 0
+      },
+      {
+        "name": "company-postgres",
+        "code": 1
+      },
+      {
+        "name": "company-revision",
+        "code": 1
+      },
+      {
+        "name": "registration-entry",
+        "code": 0
+      },
+      {
+        "name": "money-company",
+        "code": 0
+      },
+      {
+        "name": "03-2-multisize",
+        "code": 0
+      },
+      {
+        "name": "equipment-count-postgres",
+        "code": 0
+      },
+      {
+        "name": "persistent-session",
+        "code": 0
+      }
+    ]
+  },
+  "credentialModel": {
+    "passed": 9,
+    "failed": 0
+  },
+  "contractObservations": 43,
+  "httpObservations": 20,
+  "schemaObservations": 3
+}

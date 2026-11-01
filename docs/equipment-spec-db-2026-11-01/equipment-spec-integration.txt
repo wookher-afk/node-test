@@ -1,0 +1,82 @@
+TAP version 13
+# {"wanted":"017","available":"017","status":"matched","matched":true,"equipmentSpec":"pass"}
+# Subtest: real PostgreSQL equipment spec: registration -> storage -> retrieval -> auto-match
+    # Subtest: company 017 / worker 017 => matched
+    ok 1 - company 017 / worker 017 => matched
+      ---
+      duration_ms: 53.907167
+      type: 'test'
+      ...
+# {"wanted":"020","available":"020","status":"matched","matched":true,"equipmentSpec":"pass"}
+    # Subtest: company 020 / worker 020 => matched
+    ok 2 - company 020 / worker 020 => matched
+      ---
+      duration_ms: 13.849
+      type: 'test'
+      ...
+# {"wanted":"017","available":"020","status":"not_matched","matched":false,"equipmentSpec":"fail"}
+    # Subtest: company 017 / worker 020 => not_matched
+    ok 3 - company 017 / worker 020 => not_matched
+      ---
+      duration_ms: 11.897125
+      type: 'test'
+      ...
+# {"wanted":"020","available":"017","status":"not_matched","matched":false,"equipmentSpec":"fail"}
+    # Subtest: company 020 / worker 017 => not_matched
+    ok 4 - company 020 / worker 017 => not_matched
+      ---
+      duration_ms: 12.325375
+      type: 'test'
+      ...
+# {"wanted":"017","available":"","status":"not_matched","matched":false,"equipmentSpec":"unknown"}
+    # Subtest: company 017 / worker (empty) => not_matched
+    ok 5 - company 017 / worker (empty) => not_matched
+      ---
+      duration_ms: 10.579167
+      type: 'test'
+      ...
+    # Subtest: worker size omitted => HTTP 400, DB unchanged
+    ok 6 - worker size omitted => HTTP 400, DB unchanged
+      ---
+      duration_ms: 5.185667
+      type: 'test'
+      ...
+    # Subtest: worker size null => HTTP 400, DB unchanged
+    ok 7 - worker size null => HTTP 400, DB unchanged
+      ---
+      duration_ms: 6.551375
+      type: 'test'
+      ...
+    # Subtest: company size omitted => HTTP 400, DB unchanged
+    ok 8 - company size omitted => HTTP 400, DB unchanged
+      ---
+      duration_ms: 5.139042
+      type: 'test'
+      ...
+    # Subtest: company size null => HTTP 400, DB unchanged
+    ok 9 - company size null => HTTP 400, DB unchanged
+      ---
+      duration_ms: 5.3995
+      type: 'test'
+      ...
+    # Subtest: company size "" => HTTP 400, DB unchanged
+    ok 10 - company size "" => HTTP 400, DB unchanged
+      ---
+      duration_ms: 4.213708
+      type: 'test'
+      ...
+    1..10
+ok 1 - real PostgreSQL equipment spec: registration -> storage -> retrieval -> auto-match
+  ---
+  duration_ms: 365.73325
+  type: 'test'
+  ...
+1..1
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 425.910625

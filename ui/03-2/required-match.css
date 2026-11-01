@@ -1,0 +1,3 @@
+.required-match-control{display:inline-flex;align-items:center;vertical-align:baseline;gap:0;margin:0 6px 0 0;padding:0;border:0;font:14px/20px system-ui;font-weight:400;white-space:nowrap;color:#536474;cursor:pointer}
+.required-match-control input[type=checkbox]{appearance:auto;display:inline-block;flex:none;width:14px;height:14px;min-width:14px;min-height:14px;max-width:14px;margin:0;padding:0;border-radius:0;cursor:pointer}
+.required-match-count{font:14px/20px system-ui;font-weight:400;color:#536474;white-space:nowrap}

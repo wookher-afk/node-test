@@ -6,6 +6,7 @@ import http from 'node:http';
 import {Pool} from 'pg';
 import {pool,one,runtimeDatabaseUrl} from './helpers/database.js';
 import {testDatabaseUrl} from '../scripts/lib/test-database.mjs';
+import '../ui/03-2/money.js';
 import {digest} from '../server/access.js';
 const jobUrl=testDatabaseUrl({...process.env,DATABASE_URL:process.env.TEST_JOB_POST_DATABASE_URL});
 const jobRuntime=new Pool({connectionString:jobUrl});
@@ -246,4 +247,12 @@ test('invalid identifiers, nonexistent targets and a transferred snapshot never 
  await pool.query("INSERT INTO organization_memberships VALUES($1,$2,'owner')",[org,f.outsider.id]);
  await pool.query('UPDATE worksites SET organization_id=$1 WHERE id=$2',[org,f.site.id]);
  const before=await state();assert.equal((await api(`/api/job-posts/${p.id}`,'GET',undefined,f.outsider.token)).status,409);assert.deepEqual(await state(),before);
+});
+
+test('company 만원 conversion persists integer won in current and promise records',async()=>{
+ const f=await fixture(),data=payload(f);data.lines[0].pay.amount_krw=NODE_MONEY.toWon('20');
+ const post=await created(f,data),line=post.lines[0];assert.equal(line.pay.amount_krw,'200000');
+ const current=await one('SELECT daily_pay_krw FROM job_lines WHERE id=$1',[line.id]);assert.equal(current.daily_pay_krw,'200000');
+ const promise=await one('SELECT amount_krw FROM job_post_version_lines WHERE job_line_id=$1',[line.id]);assert.equal(promise.amount_krw,'200000');
+ const restored=(await api(`/api/job-posts/${post.id}`,'GET',undefined,f.owner.token)).data.job_post;assert.equal(NODE_MONEY.fromWon(restored.lines[0].pay.amount_krw),'20');
 });

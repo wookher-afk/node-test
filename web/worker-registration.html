@@ -1,0 +1,51 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NODE Alpha 0.1 작업자 등록</title>
+<link rel="stylesheet" href="/ui/03-2/required-match.css"><style>body{font:16px system-ui;margin:0;background:#f5f7fa;color:#192a37}main{max-width:1000px;margin:auto;padding:20px}section{background:white;padding:20px;margin:18px 0;border-radius:14px}label{display:block;margin:15px 0}input,select,button{font:inherit;padding:10px;max-width:100%;box-sizing:border-box}button{cursor:pointer}iframe{width:100%;height:780px;border:1px solid #ddd}li{padding:8px}li button{margin-left:8px}#notice{white-space:pre-wrap}fieldset{margin:15px 0}*{box-sizing:border-box}input,select{min-width:0;width:100%}fieldset{min-width:0}li{overflow-wrap:anywhere}section>p,form>p{display:none}@media(max-width:480px){main{padding:10px}section{padding:12px}ol{padding-left:22px}}.money-input{display:flex;align-items:center;gap:6px}.money-input>span{white-space:nowrap}#payDisplay{display:block;font-size:14px;color:#536474;margin-top:6px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.time{width:100%;background:#fff;border:1px solid #8798a5;border-radius:8px;text-align:left;min-height:46px}small{display:block;color:#536474;line-height:1.6}#regions button,#dates button{margin:8px 6px 0 0;background:#edf4ff;border:1px solid #b6cbe6;border-radius:20px}dialog{width:min(360px,calc(100% - 32px));border:0;border-radius:16px;padding:24px}dialog::backdrop{background:#0006}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #246ad1}fieldset{border:1px solid #d4dde5;border-radius:10px;padding:12px}legend{font-weight:600}#save{background:#183e70;color:white;border:0;border-radius:8px;width:100%;min-height:48px;margin-top:16px}[hidden]{display:none!important}</style>
+<main><a href="/?entry=equipment#auth">내 계정에서 로그인</a> · <a href="/register/worker">작업자 유형 선택으로</a><h1>장비작업자 구직 등록</h1><p id="notice" role="status">로그인 확인 중…</p><div id="content" hidden>
+<section><h2>1. 운전 가능 장비·규격·장비별 경력</h2><p>장비를 목록에 추가한 뒤 다음 단계 버튼을 누르세요. 소유 장비는 운전능력과 별도로 보관합니다.</p><iframe id="equipment" title="기존 03-2 장비 등록 화면"></iframe></section>
+<section id="conditions"><h2>2. 구직 희망조건</h2><form id="form">
+<fieldset><legend>희망 지역</legend><div class="pair"><label>시·도<select id="province"></select></label><label>시·군·구<select id="district"></select></label></div><button type="button" id="addRegion">지역 추가</button><div id="regions" aria-live="polite"></div><small>여러 지역을 추가할 수 있습니다. 전국 또는 시·도 전체도 선택할 수 있어요.</small></fieldset>
+<div class="pair"><label>희망 최소 급여 (만원)<span class="money-input"><input id="pay" inputmode="decimal" autocomplete="off" required maxlength="16" pattern="[0-9]+([.][0-9]{1,4})?" placeholder="예: 20" aria-describedby="payDisplay"><span>만원</span></span><output id="payDisplay" for="pay" aria-live="polite">만원 단위로 입력하세요.</output></label><label>급여 단위<select id="unit"><option value="day">일급</option><option value="month">월급</option><option value="hour">시급</option></select></label></div>
+<div class="pair"><label>희망 출근시간<button type="button" id="start" class="time" data-value="08:00">08:00</button></label><label>희망 퇴근시간<button type="button" id="end" class="time" data-value="17:00">17:00</button></label></div><small>퇴근시간이 더 이르면 다음 날 퇴근으로 저장됩니다.</small>
+<fieldset><legend>가능 일정</legend><label>일정 선택<select id="schedule"><option value="always">상시 가능</option><option value="dates">특정 날짜</option><option value="range">기간 선택</option></select></label><div id="dateFields" hidden><div class="pair"><label>날짜<input id="dateFrom" type="date" min="1900-01-01" max="2100-12-31"></label><label id="dateToLabel" hidden>종료일<input id="dateTo" type="date" min="1900-01-01" max="2100-12-31"></label></div><button type="button" id="addDate">날짜 추가</button><div id="dates" aria-live="polite"></div></div></fieldset>
+<fieldset><legend>조건별 우선순위 (위쪽이 우선)</legend><ol id="priority"></ol></fieldset>
+<fieldset><legend>운전 가능 장비별 선호 순위 (위쪽이 우선)</legend><button type="button" id="sync">장비 목록 반영</button><ol id="equipmentPriority"></ol></fieldset>
+<button id="save" type="submit">전체 등록 정보 서버 저장</button><p>장비 목록과 희망조건을 함께 저장합니다. 목록에 추가하지 않은 장비 입력은 서버에 저장되지 않습니다.</p>
+</form></section></div></main>
+<script type="module">
+import {preferencesUI} from "/ui/03-2/worker-preferences.js";
+import {requiredMatchUI} from '/ui/03-2/required-match-ui.js';
+const pref=preferencesUI();
+const required=requiredMatchUI({countTarget:document.querySelector('#conditions h2'),fields:[
+ ['workAbility',document.querySelector('section h2'),'작업능력'],['region',document.querySelector('#province').closest('fieldset').querySelector('legend'),'희망 지역'],['pay',document.querySelector('#pay').closest('label'),'희망 최소 급여'],['hours',document.querySelector('#start').parentElement,'근무시간'],['schedule',document.querySelector('#schedule').closest('fieldset').querySelector('legend'),'가능 일정']
+].map(([key,host,name])=>({key,host,name}))});
+const $=id=>document.getElementById(id);let version=0,accountId,priority=['pay','region','hours','equipment'],equipmentPriority=[],records=[],roles=[];
+const names={pay:'급여',region:'지역',hours:'근무시간',equipment:'장비'};
+async function api(method='GET',payload,path='/api/me/worker-registration'){
+ const response=await fetch(path,{method,headers:{'X-Node-Session':'cookie','Content-Type':'application/json'},...(payload?{body:JSON.stringify(payload)}:{})});const data=await response.json();if(!response.ok)throw Error(data.error||'요청 실패');return data;
+}
+function order(id,values,label){$(id).replaceChildren();values.forEach((value,i)=>{const li=document.createElement('li');li.append(document.createTextNode(label(value)));for(const [text,delta] of [['위로',-1],['아래로',1]]){const b=document.createElement('button');b.type='button';b.textContent=text;b.disabled=i+delta<0||i+delta>=values.length;b.onclick=()=>{[values[i],values[i+delta]]=[values[i+delta],values[i]];order(id,values,label);};li.append(b);}$(id).append(li);});}
+function equipmentLabel(id){const x=records.find(x=>x.id===id);return x?[$('equipment').contentWindow.NODE_CATALOG?.items.find(item=>item.id===x.kind)?.name||x.kind,x.form,x.size,x.custom].filter(Boolean).join(' · '):id;}
+function sync(){const data=$('equipment').contentWindow.NODE_ALPHA_EXPORT();records=data.records;roles=data.roles;const ids=records.filter(x=>x.mode==='ability').map(x=>x.id);equipmentPriority=equipmentPriority.filter(x=>ids.includes(x));equipmentPriority.push(...ids.filter(x=>!equipmentPriority.includes(x)));order('equipmentPriority',equipmentPriority,equipmentLabel);}
+$('sync').onclick=()=>{try{sync();}catch{$('notice').textContent='장비 화면이 준비된 뒤 다시 시도하세요.';}};
+window.addEventListener('message',e=>{if(e.origin===location.origin&&e.source===$('equipment').contentWindow&&e.data?.type==='node-alpha-equipment-ready'){sync();$('conditions').scrollIntoView({behavior:'smooth'});}});
+$('form').onsubmit=async e=>{e.preventDefault();$('save').disabled=true;try{
+ sync();const document={requiredMatch:required.read(),roles,abilities:records.filter(x=>x.mode==='ability'),ownedEquipment:records.filter(x=>x.mode==='owned'),preferences:{...pref.read(),conditionPriority:priority,equipmentPriority}};
+ const result=await api('PUT',{document,version});version=result.version;$('equipment').contentWindow.NODE_ALPHA_ACK(version);$('notice').textContent='서버에 저장했습니다. 다시 로그인해도 복원됩니다.';
+}catch(e){$('notice').textContent=e.message;}finally{$('save').disabled=false;}};
+(async()=>{try{
+
+ const me=await api('GET',null,'/api/me');accountId=me.account.id;const saved=await api();version=saved.version;const d=saved.document;required.restore(saved.requiredMatch||d?.requiredMatch||[]);
+ // Restore unsent equipment only against the server version it was based on.
+ // Preserve conflicting/invalid originals before replacing the account-scoped cache.
+ const key='node_alpha_equipment_'+accountId,raw=localStorage.getItem(key);let local;
+ try{local=raw===null?null:JSON.parse(raw);}catch{}
+ const usable=local?.version===2&&Array.isArray(local.roles)&&Array.isArray(local.records);
+ const restoreLocal=usable&&(local.serverVersion===version||(local.serverVersion===undefined&&!d&&version===0));
+ if(!restoreLocal){
+  if(raw!==null)localStorage.setItem(key+'_backup_'+crypto.randomUUID(),raw);
+  localStorage.setItem(key,JSON.stringify({version:2,aRevision:1,serverVersion:version,roles:d?.roles||[],records:[...(d?.abilities||[]),...(d?.ownedEquipment||[])],draft:null}));
+ }else if(local.serverVersion===undefined){local.serverVersion=version;localStorage.setItem(key,JSON.stringify(local));}
+ if(d){const p=d.preferences;priority=p.conditionPriority;equipmentPriority=p.equipmentPriority;records=[...d.abilities,...d.ownedEquipment];pref.restore(p);}
+ order('priority',priority,x=>names[x]);order('equipmentPriority',equipmentPriority,equipmentLabel);$('equipment').onload=()=>sync();$('equipment').src='/ui/03-2/?alpha='+accountId;$('content').hidden=false;$('notice').textContent=restoreLocal&&local.records.length?'브라우저의 장비 목록을 복원했습니다. 변경 내용은 전체 등록 정보 서버 저장을 눌러 저장하세요.':d?'서버에 저장한 등록 정보를 복원했습니다.':'장비와 희망조건을 입력하세요.';
+}catch(e){$('notice').textContent=e.message;}})();
+</script></html>

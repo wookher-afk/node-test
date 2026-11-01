@@ -1,0 +1,2 @@
+PASS all 6 preexisting registration documents/version/timestamps identical to prior audit snapshot
+PASS real PostgreSQL monthly 350만원=3500000원, region/time/schedule and edit version for 6 synthetic documents

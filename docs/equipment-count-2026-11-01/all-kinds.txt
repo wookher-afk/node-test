@@ -1,0 +1,35 @@
+PASS excavator
+PASS loader
+PASS bulldozer
+PASS drilling-rig
+PASS pile-driver
+PASS dump-truck
+PASS cargo-truck
+PASS trailer
+PASS forklift
+PASS telehandler
+PASS crane
+PASS aerial-work-platform
+PASS roller
+PASS mixer-truck
+PASS concrete-pump
+PASS generator
+PASS compressor
+FAILED other [
+  { id: 'editor', error: undefined },
+  { id: 'formDetail', error: '이 입력란을 작성하세요.' },
+  { id: 'actualName', error: '이 입력란을 작성하세요.' }
+] 이 브라우저에 임시저장했습니다.
+PASS skid-loader
+PASS grader
+PASS scraper
+PASS water-truck
+PASS tow-truck
+PASS truck-tractor
+PASS cargo-crane
+PASS tower-crane
+PASS sky-truck
+PASS ladder-truck
+PASS construction-lift
+PASS asphalt-paver
+PASS road-mill

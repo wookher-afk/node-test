@@ -3,8 +3,11 @@ import http from 'node:http';
 import {randomBytes, scrypt as scryptCallback, timingSafeEqual} from 'node:crypto';
 import {promisify} from 'node:util';
 import {Pool} from 'pg';
-import {digest,requireSession,listOwnCompanies} from './access.js';
+import {digest,requireSession,listOwnCompanies,sessionToken,sessionCookie} from './access.js';
 import {worksiteRequest} from './worksites.js';
+import {companyRegistrationRequest} from './company-registration.js';
+import {workerRegistrationRequest} from './worker-registration.js';
+import {autoMatchingRequest} from './auto-matching.js';
 import {jobPostRequest} from './job-posts.js';
 
 const scrypt=promisify(scryptCallback);
@@ -20,7 +23,7 @@ const json=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application
 const hashPassword=async p=>{const salt=randomBytes(16).toString('hex');return salt+':'+(await scrypt(p,salt,64)).toString('hex');};
 const verifyPassword=async(p,h)=>{if(!h||!h.includes(':'))return false;const [salt,stored]=h.split(':');const candidate=await scrypt(p,salt,64);const original=Buffer.from(stored,'hex');return candidate.length===original.length&&timingSafeEqual(candidate,original);};
 async function body(req){
-let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>32768)throw Object.assign(new Error('Request too large'),{status:413});}
+let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>((req.url==='/api/me/worker-registration'||/^\/api\/companies\/\d+\/registration$/.test(req.url))?262144:32768))throw Object.assign(new Error('Request too large'),{status:413});}
 let parsed;try{parsed=JSON.parse(raw||'{}');}catch{throw Object.assign(new Error('Invalid JSON'),{status:400});}
 if(parsed===null||typeof parsed!=='object'||Array.isArray(parsed))throw Object.assign(new Error('JSON object required'),{status:400});
 return parsed;
@@ -29,14 +32,38 @@ async function loginToken(client,id){const token=randomBytes(32).toString('hex')
 const server=http.createServer(async(req,res)=>{
 try{
 const path=new URL(req.url,'http://localhost').pathname;
+// Cookies are ambient credentials: reject cross-origin writes, including login CSRF.
+if(path.startsWith('/api/')&&!['GET','HEAD','OPTIONS'].includes(req.method)){
+ const origin=req.headers.origin;
+ const expected=(process.env.PUBLIC_ORIGIN||`${req.socket.encrypted?'https':'http'}://${req.headers.host}`);
+ if((origin&&origin!==expected)||req.headers['sec-fetch-site']==='cross-site')return json(res,403,{error:'다른 사이트의 요청은 허용하지 않습니다.'});
+ if((req.headers.cookie||req.headers['x-node-session']==='cookie')&&!origin&&req.headers['sec-fetch-site']!=='same-origin')return json(res,403,{error:'요청 출처를 확인할 수 없습니다.'});
+ if(!/^application\/json(?:;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'JSON 요청이 필요합니다.'});
+}
+if(req.method==='POST'&&path==='/api/logout'){
+ const token=sessionToken(req);if(token)await pool.query('DELETE FROM account_sessions WHERE token_hash=$1',[digest(token)]);
+ sessionCookie(res);return json(res,200,{ok:true});
+}
 if(req.method==='GET'&&(path==='/'||path==='/index.html')){const html=await readFile(new URL('../web/index.html',import.meta.url));res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(html);return;}
+if(req.method==='GET'&&['/register/worker','/register/technical'].includes(path)){
+ const file=path==='/register/worker'?'worker-entry.html':'technical-registration.html';
+ const content=await readFile(new URL('../web/'+file,import.meta.url));
+ res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(content);return;
+}
+if(req.method==='GET'&&(path==='/company-registration'||path==='/worker-registration'||path.startsWith('/ui/03-2/')||path.startsWith('/ui/03-3/'))){
+ const relative=path==='/company-registration'?'../web/company-registration.html':path==='/worker-registration'?'../web/worker-registration.html':'..'+path+(path.endsWith('/')?'index.html':'');
+ if(!/^\/ui\/03-[23]\/[a-zA-Z0-9_.-]*$/.test(path)&&path!=='/worker-registration'&&path!=='/company-registration')return json(res,404,{error:'없는 파일'});
+ const file=new URL(relative,import.meta.url);const content=await readFile(file);
+ const type=file.pathname.endsWith('.js')?'text/javascript':file.pathname.endsWith('.css')?'text/css':'text/html';
+ res.writeHead(200,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(content);return;
+}
 if(req.method==='GET'&&path==='/api/health')return json(res,200,{ok:true});
 if(req.method==='POST'&&path==='/api/register'){
 const b=await body(req);
 if(typeof b.email!=='string'||typeof b.password!=='string'||typeof b.name!=='string')return json(res,400,{error:'이메일, 이름, 비밀번호는 문자열이어야 합니다.'});
 const email=b.email.trim().toLowerCase(),password=b.password,name=b.name.trim();
 if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||password.length<10||name.length<2||name.length>80)return json(res,400,{error:'이메일, 이름(2~80자), 비밀번호(10자 이상)를 확인하세요.'});
-const client=await pool.connect();try{await client.query('BEGIN');const a=await client.query('INSERT INTO accounts(email,password_hash,display_name) VALUES($1,$2,$3) RETURNING id,email,display_name',[email,await hashPassword(password),name]);const id=a.rows[0].id;const token=await loginToken(client,id);await client.query('COMMIT');return json(res,201,{account:a.rows[0],token});}catch(e){await client.query('ROLLBACK');if(e.code==='23505')return json(res,409,{error:'이미 가입된 이메일입니다.'});throw e;}finally{client.release();}
+const client=await pool.connect();try{await client.query('BEGIN');const a=await client.query('INSERT INTO accounts(email,password_hash,display_name) VALUES($1,$2,$3) RETURNING id,email,display_name',[email,await hashPassword(password),name]);const id=a.rows[0].id;const token=await loginToken(client,id);await client.query('COMMIT');sessionCookie(res,token);return json(res,201,{account:a.rows[0],...(req.headers['x-node-session']==='cookie'?{}:{token})});}catch(e){await client.query('ROLLBACK');if(e.code==='23505')return json(res,409,{error:'이미 가입된 이메일입니다.'});throw e;}finally{client.release();}
 }
 if(req.method==='POST'&&path==='/api/login'){
 const b=await body(req);
@@ -44,10 +71,16 @@ if(typeof b.email!=='string'||typeof b.password!=='string')return json(res,400,{
 const email=b.email.trim().toLowerCase(),password=b.password;
 const {rows}=await pool.query('SELECT id,email,display_name,password_hash FROM accounts WHERE lower(email)=$1',[email]);
 if(!rows.length||!await verifyPassword(password,rows[0].password_hash))return json(res,401,{error:'이메일 또는 비밀번호가 올바르지 않습니다.'});
-const token=await loginToken(pool,rows[0].id);return json(res,200,{account:{id:rows[0].id,email:rows[0].email,display_name:rows[0].display_name},token});
+const token=await loginToken(pool,rows[0].id);sessionCookie(res,token);return json(res,200,{account:{id:rows[0].id,email:rows[0].email,display_name:rows[0].display_name},...(req.headers['x-node-session']==='cookie'?{}:{token})});
 }
 if(path.startsWith('/api/')){
 const user=await requireSession(pool,req);
+const autoMatchResponse=await autoMatchingRequest({pool,req,path,user});
+if(autoMatchResponse)return json(res,autoMatchResponse.status,autoMatchResponse.data);
+const companyRegistrationResponse=await companyRegistrationRequest({pool,req,path,body,user});
+if(companyRegistrationResponse)return json(res,companyRegistrationResponse.status,companyRegistrationResponse.data);
+const registrationResponse=await workerRegistrationRequest({pool,req,path,body,user});
+if(registrationResponse)return json(res,registrationResponse.status,registrationResponse.data);
 const jobResponse=await jobPostRequest({pool:jobPostPool,req,path,body});
 if(jobResponse)return json(res,jobResponse.status,jobResponse.data);
 const siteResponse=await worksiteRequest({pool:worksitePool,req,path,body});
@@ -72,9 +105,9 @@ if(typeof b.name!=='string')return json(res,400,{error:'업체명은 문자열�
 const name=b.name.trim();if(name.length<2||name.length>120)return json(res,400,{error:'업체명은 2~120자여야 합니다.'});
 const c=await pool.connect();try{await c.query('BEGIN');const {rows}=await c.query('INSERT INTO organizations(name) VALUES($1) RETURNING id,name',[name]);await c.query('INSERT INTO organization_memberships(organization_id,account_id,role) VALUES($1,$2,$3)',[rows[0].id,user.id,'owner']);await c.query("INSERT INTO account_roles(account_id,role) VALUES($1,'company') ON CONFLICT DO NOTHING",[user.id]);await c.query('COMMIT');return json(res,201,rows[0]);}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}
 }
-if(req.method==='POST'&&path==='/api/logout'){const token=/^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization||'')?.[1];if(token)await pool.query('DELETE FROM account_sessions WHERE token_hash=$1',[digest(token)]);return json(res,200,{ok:true});}
+
 }
 return json(res,404,{error:'요청한 기능이 없습니다.'});
-}catch(e){console.error(e);return json(res,e.status||500,{error:e.status?e.message:'서버 오류'});}
+}catch(e){if(e.status===401&&!req.headers.authorization&&req.headers.cookie)sessionCookie(res);console.error(e);return json(res,e.status||500,{error:e.status?e.message:'서버 오류'});}
 });
 server.listen(port,()=>console.log('NODE API listening on '+port));

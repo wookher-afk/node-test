@@ -1,0 +1,13 @@
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert((await p.locator('#notice').innerText()).includes('분류표'))
+
+    at fillLine (/Users/heowook/Documents/ChatGPT/Node/node-alpha-01/tests/ui/company-revision.test.cjs:16:271)
+    at async /Users/heowook/Documents/ChatGPT/Node/node-alpha-01/tests/ui/company-revision.test.cjs:20:2 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

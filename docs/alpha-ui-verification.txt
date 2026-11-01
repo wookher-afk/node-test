@@ -1,0 +1,106 @@
+03-2
+PASS: dual roles, dependent selections, ability/ownership, specs, options escaping, add/edit/delete, autosave/draft restore, navigation review, desktop/mobile overflow; loading categories in both modes; all 17 legacy IDs and unknown ID; draft migration and idempotent reload; no browser errors
+
+
+03-2-a
+T01 PASS
+T02 PASS
+T03 PASS
+T04 PASS
+T05 PASS
+T06 PASS
+T07 PASS
+T08 PASS
+T09 PASS
+T10 PASS
+T11 PASS
+T12 PASS
+T13 PASS
+T14 PASS
+T15 PASS
+T16 PASS
+T17 PASS
+
+
+03-2-cargo
+C01 PASS
+C02 PASS
+C03 PASS
+
+
+03-2-dump
+D01 PASS
+D02 PASS
+
+
+03-2-equipment
+loader lifecycle PASS
+bulldozer lifecycle PASS
+drilling-rig lifecycle PASS
+pile-driver lifecycle PASS
+trailer lifecycle PASS
+forklift lifecycle PASS
+telehandler lifecycle PASS
+crane lifecycle PASS
+aerial-work-platform lifecycle PASS
+roller lifecycle PASS
+mixer-truck lifecycle PASS
+concrete-pump lifecycle PASS
+generator lifecycle PASS
+compressor lifecycle PASS
+other lifecycle PASS
+skid-loader lifecycle PASS
+grader lifecycle PASS
+scraper lifecycle PASS
+water-truck lifecycle PASS
+tow-truck lifecycle PASS
+truck-tractor lifecycle PASS
+cargo-crane lifecycle PASS
+tower-crane lifecycle PASS
+sky-truck lifecycle PASS
+ladder-truck lifecycle PASS
+construction-lift lifecycle PASS
+asphalt-paver lifecycle PASS
+road-mill lifecycle PASS
+all28 PASS
+field-specifications31 PASS
+lossless PASS
+visual PASS
+
+
+03-2-flow
+F01-required PASS
+F02-numeric PASS
+F03-state-values PASS
+F04-cargo-states PASS
+F05-legacy-preservation PASS
+F06-large-layout31 PASS
+F07-compact-and-hidden-validation PASS
+F08-validation-state-recovery PASS
+
+
+03-2-multisize
+catalog-all-forms PASS
+catalog-batch-save PASS
+legacy-without-catalog-choices PASS
+batch-draft-edit-delete-owned PASS
+approved-single-list-form-custom PASS
+cargo-no-spec-copy-and-no-duplicate PASS
+duplicate-submit-and-existing-data-preserved PASS
+
+
+03-2-navigation
+PASS navigation ready
+PASS navigation continue
+PASS navigation no-role
+PASS navigation no-record
+PASS navigation technical
+PASS navigation draft-cancel
+PASS navigation draft-accept
+PASS navigation storage-failure
+PASS navigation corrupt
+
+
+worker-alpha
+PASS Alpha restore/reorder/save/conflict/original-storage/layout 390
+PASS Alpha restore/reorder/save/conflict/original-storage/layout 1440

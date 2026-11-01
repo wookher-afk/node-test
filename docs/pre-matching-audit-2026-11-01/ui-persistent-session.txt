@@ -1,0 +1,8 @@
+PASS Chrome full process close/relaunch and real DB authentication 390
+PASS server restart with existing browser cookie 390
+PASS CSRF rejection, logout deletion and replay rejection 390
+PASS real DB expired session rejects auto login 390
+PASS Chrome full process close/relaunch and real DB authentication 1440
+PASS server restart with existing browser cookie 1440
+PASS CSRF rejection, logout deletion and replay rejection 1440
+PASS real DB expired session rejects auto login 1440

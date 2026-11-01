@@ -1,0 +1,400 @@
+{
+  "temporaryDatabase": "node_test_combination_1793541521115",
+  "before": {
+    "databases": [
+      {
+        "datname": "heowook",
+        "datacl": null
+      },
+      {
+        "datname": "node_alpha_01_local",
+        "datacl": null
+      },
+      {
+        "datname": "node_test_alpha_01_20261031",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_classification_20261031_audit",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_company_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_equipment_count_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_preferences_20261031",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_prematch_audit_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_required_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_required_final_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_technical_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "postgres",
+        "datacl": null
+      },
+      {
+        "datname": "template0",
+        "datacl": "{=c/postgres,postgres=CTc/postgres}"
+      },
+      {
+        "datname": "template1",
+        "datacl": "{=c/postgres,postgres=CTc/postgres}"
+      }
+    ],
+    "roles": [
+      {
+        "rolname": "heowook",
+        "rolsuper": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_checkpoint",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_create_subscription",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_database_owner",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_execute_server_program",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_maintain",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_monitor",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_all_data",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_all_settings",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_all_stats",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_server_files",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_signal_backend",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_stat_scan_tables",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_use_reserved_connections",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_write_all_data",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_write_server_files",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "postgres",
+        "rolsuper": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolconfig": null
+      }
+    ]
+  },
+  "after": {
+    "databases": [
+      {
+        "datname": "heowook",
+        "datacl": null
+      },
+      {
+        "datname": "node_alpha_01_local",
+        "datacl": null
+      },
+      {
+        "datname": "node_test_alpha_01_20261031",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_classification_20261031_audit",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_company_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_equipment_count_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_preferences_20261031",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_prematch_audit_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_required_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_required_final_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "node_test_technical_20261101",
+        "datacl": "{=c/heowook,heowook=CTc/heowook}"
+      },
+      {
+        "datname": "postgres",
+        "datacl": null
+      },
+      {
+        "datname": "template0",
+        "datacl": "{=c/postgres,postgres=CTc/postgres}"
+      },
+      {
+        "datname": "template1",
+        "datacl": "{=c/postgres,postgres=CTc/postgres}"
+      }
+    ],
+    "roles": [
+      {
+        "rolname": "heowook",
+        "rolsuper": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_checkpoint",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_create_subscription",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_database_owner",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_execute_server_program",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_maintain",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_monitor",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_all_data",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_all_settings",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_all_stats",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_read_server_files",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_signal_backend",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_stat_scan_tables",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_use_reserved_connections",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_write_all_data",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "pg_write_server_files",
+        "rolsuper": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolconfig": null
+      },
+      {
+        "rolname": "postgres",
+        "rolsuper": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolconfig": null
+      }
+    ]
+  },
+  "metadataUnchanged": true
+}

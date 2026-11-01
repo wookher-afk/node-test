@@ -1,0 +1,50 @@
+[
+  {
+    "id": "CRUD-independent-response",
+    "pass": true
+  },
+  {
+    "id": "draft-explicit-category-restore",
+    "pass": true
+  },
+  {
+    "id": "dates-validation-history",
+    "pass": true
+  },
+  {
+    "id": "recommendation-fallback-preservation",
+    "pass": true
+  },
+  {
+    "id": "equipment-per-record-live-update-roundtrip",
+    "pass": true
+  },
+  {
+    "id": "legacy-explicit-reordered-dedup",
+    "pass": true
+  },
+  {
+    "id": "corruption-future-unknown-blocked",
+    "pass": true
+  },
+  {
+    "id": "concurrent-tabs-no-overwrite",
+    "pass": true
+  },
+  {
+    "id": "quota-input-retained",
+    "pass": true
+  },
+  {
+    "id": "mobile-large-and-safe-text",
+    "pass": true
+  },
+  {
+    "id": "navigation-technical-and-review",
+    "pass": true
+  },
+  {
+    "id": "editor-steps-cancel-and-layout",
+    "pass": true
+  }
+]

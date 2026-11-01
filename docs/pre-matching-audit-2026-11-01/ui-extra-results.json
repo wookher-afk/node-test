@@ -1,0 +1,30 @@
+[
+  {
+    "name": "company-postgres",
+    "code": 1
+  },
+  {
+    "name": "company-revision",
+    "code": 1
+  },
+  {
+    "name": "registration-entry",
+    "code": 0
+  },
+  {
+    "name": "money-company",
+    "code": 0
+  },
+  {
+    "name": "03-2-multisize",
+    "code": 0
+  },
+  {
+    "name": "equipment-count-postgres",
+    "code": 0
+  },
+  {
+    "name": "persistent-session",
+    "code": 0
+  }
+]

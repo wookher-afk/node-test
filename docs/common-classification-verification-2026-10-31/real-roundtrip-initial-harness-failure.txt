@@ -1,0 +1,32 @@
+PASS REAL UI parent/form reset and multiple options 390px
+PASS REAL UI -> HTTP -> PostgreSQL JSONB -> GET -> UI identical record/options/alias 390px
+PASS REAL reproduced missing catalog validation: unknown kind/parents/size/options accepted and persisted
+PASS REAL company real POST/GET -> occupation FK + day pay + dates; synthetic occupation is NOT an automatic catalog mapping
+PASS REAL company rejects unsupported field kind
+PASS REAL company rejects unsupported field size
+PASS REAL company rejects unsupported field optionSelections
+PASS REAL company rejects unsupported field min_experience_months
+PASS REAL company rejects unsupported field startTime
+PASS REAL company rejects pay unit hour
+PASS REAL company rejects pay unit month
+PASS REAL company rejects catalog string ID as occupation_id
+PASS REAL company region string rejected; worker region strings preserved without FK mapping
+PASS REAL Alpha document save creates no worker_preference_versions projection
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+3 !== 5
+
+    at file:///Users/heowook/Documents/ChatGPT/Node/node-alpha-01/docs/common-classification-verification-2026-10-31/real-roundtrip.mjs:60:184 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 5,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.4

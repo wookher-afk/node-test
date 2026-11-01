@@ -2,7 +2,7 @@
 
 PostgreSQL 16+, Node.js 22. `database/`가 회원과 매칭의 유일한 스키마입니다.
 `001_foundation.sql`과 `002_accounts.sql`은 기존 배포본 그대로 보존합니다.
-`003_unified_matching.sql`, `004_work_records_and_matching_data.sql`, `005_review_integrity_fixes.sql`, `006_worksite_management.sql`, `007_internal_job_posts.sql`은 이를 확장하는 **한 번만 실행하는** 트랜잭션 마이그레이션입니다.
+`003_unified_matching.sql`, `004_work_records_and_matching_data.sql`, `005_review_integrity_fixes.sql`, `006_worksite_management.sql`, `007_internal_job_posts.sql`, `008_worker_alpha_registration.sql`은 이를 확장하는 **한 번만 실행하는** 트랜잭션 마이그레이션입니다.
 서버 시작, Docker 시작, CI는 운영 DB를 마이그레이션하지 않습니다.
 
 ## 개발 환경
@@ -17,7 +17,7 @@ PostgreSQL 16+, Node.js 22. `database/`가 회원과 매칭의 유일한 스키�
 5. 개발 서버는 테스트 후 해당 DB를 사용해 `DATABASE_URL=... npm start`.
    `.env` 파일은 자동 로딩되지 않습니다. 운영 연결 문자열을 개발 파일에 복사하지 마세요.
 
-새로운 별도 개발 DB를 수동 구성할 때만 001 → 002 → 003 → 004 → 005 → 006 → 007을 `psql -v ON_ERROR_STOP=1 -f ...`로 적용합니다.
+새로운 별도 개발 DB를 수동 구성할 때만 001 → 002 → 003 → 004 → 005 → 006 → 007 → 008을 `psql -v ON_ERROR_STOP=1 -f ...`로 적용합니다.
 기존 DB에는 001을 다시 실행하지 않습니다. `db/`의 과거 UUID SQL은 사용하지 않습니다.
 
 ## 보존 범위와 사전 검사
@@ -117,3 +117,19 @@ PUBLIC 권한 회수는 [수정·운영 전 조건](../docs/pr-2-review-fixes.md
 과거 지급 조건은 임의로 채우지 않습니다. 새 등록만 전체 조건을 한 번 봉인하며 실제 지급 의무는 만들지 않습니다.
 기존 회원·현장 역할과 별도 임시 공고 역할을 로컬 검증에 사용하며 운영 권한을 자동 변경하지 않습니다.
 [API·각 근무일 기준 지급일·미결 사항·검증 경계](../docs/internal-job-posts.md)를 확인하세요.
+
+## Mac PostgreSQL 17 실제 연결 검증
+
+2026-10-31 검증에서 `node_alpha_01_local`은 데이터를 유지하는 미리보기 DB,
+`node_test_alpha_01_20261031`은 이번에 새로 만든 폐기 가능한 회귀 검증 DB로 분리했습니다.
+**미리보기 DB에 `npm test`를 실행하지 마세요.** 기존 DB에는 마이그레이션을 다시 실행하지 않습니다.
+미리보기는 로컬의 무시된 `.env.local`을 명시적으로 읽어 `node --env-file=.env.local server/index.js`로 시작합니다.
+상세 결과와 한계: [실DB 검증 보고서](../docs/postgresql-integration-2026-10-31.md).
+
+## 업체 Alpha 등록 (009)
+
+009는 `company_alpha_registrations`에 업체별 기본정보·현장·복수 모집조건 문서를 추가합니다.
+기존 작업자의 008 문서와 동일한 카탈로그·지역 코드·원 단위 정수·일정 계약을 사용합니다.
+기존 `worksites`/`job_posts`/거래 이력은 그대로 보존하며 직종 FK를 이름으로 추정하지 않습니다.
+로컬 미리보기에는 009만 한 번 추가 적용했습니다. 기존 DB에서 테스트 러너를 실행하지 않습니다.
+[업체 등록 검증·저장 경계·남은 제약](../docs/company-registration-2026-11-01.md)을 참조하세요.

@@ -1,0 +1,545 @@
+REAL PostgreSQL; READ ONLY repeatable-read transaction
+{
+  "database": {
+    "name": "node_alpha_01_local",
+    "version": "17.11 (Postgres.app)"
+  },
+  "catalog": {
+    "count": 31,
+    "uniqueIds": 31,
+    "excavator": {
+      "id": "excavator",
+      "name": "굴착기",
+      "major": "토공·기초",
+      "middle": "굴착",
+      "specs": [
+        "운전중량 (t)",
+        "버킷 용량 (㎥)"
+      ],
+      "forms": [
+        "미니",
+        "궤도식 (LC)",
+        "타이어식 (W)",
+        "대형 굴착기",
+        "스파이더 굴착기",
+        "직접 입력"
+      ],
+      "options": [
+        "브레이커",
+        "집게",
+        "회전링크",
+        "틸트로테이터",
+        "오거"
+      ],
+      "aliases": [
+        "포크레인",
+        "굴삭기",
+        "백호",
+        "06W"
+      ],
+      "sizesByForm": {
+        "미니": [
+          "008",
+          "010",
+          "015",
+          "017",
+          "020",
+          "025",
+          "030",
+          "035"
+        ],
+        "궤도식 (LC)": [
+          "02LC",
+          "03LC",
+          "04LC",
+          "06LC",
+          "08LC",
+          "10LC"
+        ],
+        "타이어식 (W)": [
+          "03W",
+          "06W",
+          "08W"
+        ],
+        "대형 굴착기": [
+          "300",
+          "300LC",
+          "320",
+          "360",
+          "380",
+          "380LC",
+          "420",
+          "460",
+          "460LC"
+        ]
+      },
+      "source": "excavator-field-sizes.md"
+    }
+  },
+  "tables": {
+    "worker_alpha_registrations": {
+      "count": 6,
+      "sha256": "7be6ab65be5b90f392ff348cece57a748652b887748b19a91f7e0c1dadf9d2c4"
+    },
+    "occupation_categories": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "occupations": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "regions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "worksites": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "job_lines": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "job_line_dates": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "worker_profiles": {
+      "count": 1,
+      "sha256": "125dd96ea8e01fbed152f4651055136d14617635ec604341913a621377d0f255"
+    },
+    "worker_preference_versions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "worker_preference_occupations": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "worker_preference_regions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "hiring_condition_versions": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_options": {
+      "count": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "columns": [
+    {
+      "table_name": "equipment",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "owner_account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "owner_organization_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "kind",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "grade",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "model",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "serial_ref",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment_options",
+      "column_name": "equipment_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "equipment_options",
+      "column_name": "option_code",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment_options",
+      "column_name": "availability",
+      "data_type": "text"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "job_line_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "version",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "recorded_by",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "occupation_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "region_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "daily_pay_krw",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "min_experience_months",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "resource_mode",
+      "data_type": "text"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "allow_partial",
+      "data_type": "boolean"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "hiring_condition_versions",
+      "column_name": "sealed_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "job_line_dates",
+      "column_name": "job_line_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_line_dates",
+      "column_name": "work_date",
+      "data_type": "date"
+    },
+    {
+      "table_name": "job_line_dates",
+      "column_name": "capacity",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "job_post_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "occupation_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "resource_mode",
+      "data_type": "text"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "daily_pay_krw",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "allow_partial",
+      "data_type": "boolean"
+    },
+    {
+      "table_name": "occupation_categories",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "occupation_categories",
+      "column_name": "name",
+      "data_type": "text"
+    },
+    {
+      "table_name": "occupations",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "occupations",
+      "column_name": "category_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "occupations",
+      "column_name": "name",
+      "data_type": "text"
+    },
+    {
+      "table_name": "regions",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "regions",
+      "column_name": "parent_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "regions",
+      "column_name": "name",
+      "data_type": "text"
+    },
+    {
+      "table_name": "regions",
+      "column_name": "code",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "document",
+      "data_type": "jsonb"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "version",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worker_preference_occupations",
+      "column_name": "preference_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_occupations",
+      "column_name": "occupation_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_regions",
+      "column_name": "preference_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_regions",
+      "column_name": "region_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "worker_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "recorded_by",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "version",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "min_pay_krw",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "max_pay_krw",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "pay_unit",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "available_from",
+      "data_type": "date"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "available_until",
+      "data_type": "date"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "preferred_weekdays",
+      "data_type": "ARRAY"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worker_preference_versions",
+      "column_name": "sealed_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worker_profiles",
+      "column_name": "account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_profiles",
+      "column_name": "experience_months",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "organization_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "region_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "name",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "address",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "location_notes",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "description",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "is_active",
+      "data_type": "boolean"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "created_by",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "updated_by",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "version",
+      "data_type": "integer"
+    }
+  ],
+  "registrationAggregate": {
+    "documents": 6,
+    "records": 12,
+    "unknownKinds": 0,
+    "parentMismatches": 0,
+    "payUnits": [
+      "day"
+    ],
+    "missingYears": 0
+  },
+  "occupationAggregate": {
+    "total": 0,
+    "excavator_names": 0
+  },
+  "triggers": [
+    {
+      "event_object_table": "job_lines",
+      "trigger_name": "matching_write_lock",
+      "action_statement": "EXECUTE FUNCTION node_matching_write_lock()"
+    },
+    {
+      "event_object_table": "job_lines",
+      "trigger_name": "matching_write_lock",
+      "action_statement": "EXECUTE FUNCTION node_matching_write_lock()"
+    },
+    {
+      "event_object_table": "job_lines",
+      "trigger_name": "matching_write_lock",
+      "action_statement": "EXECUTE FUNCTION node_matching_write_lock()"
+    }
+  ]
+}

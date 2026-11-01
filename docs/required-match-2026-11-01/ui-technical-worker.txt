@@ -1,0 +1,2 @@
+PASS real PostgreSQL Chrome 390: 60+ cross-category selections, middle select/clear, individual/all clear, edit/save/reload/relogin, worker role, stale/version rejection, no overflow/errors
+PASS real PostgreSQL Chrome 1440: 60+ cross-category selections, middle select/clear, individual/all clear, edit/save/reload/relogin, worker role, stale/version rejection, no overflow/errors

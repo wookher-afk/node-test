@@ -1,0 +1,13 @@
+{
+  "originalFiles": 247,
+  "unchangedOriginalFiles": 241,
+  "intendedChangedExistingFiles": [
+    "package.json",
+    "database/README.md",
+    "web/index.html",
+    "server/index.js",
+    "scripts/test.mjs",
+    "scripts/lib/test-runtime-role.mjs"
+  ],
+  "unexpectedChanges": []
+}

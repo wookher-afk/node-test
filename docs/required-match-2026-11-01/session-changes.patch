@@ -1,0 +1,336 @@
+--- a/web/worker-registration.html
++++ b/web/worker-registration.html
+@@ -1,5 +1,5 @@
+ <!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NODE Alpha 0.1 작업자 등록</title>
+-<style>body{font:16px system-ui;margin:0;background:#f5f7fa;color:#192a37}main{max-width:1000px;margin:auto;padding:20px}section{background:white;padding:20px;margin:18px 0;border-radius:14px}label{display:block;margin:15px 0}input,select,button{font:inherit;padding:10px;max-width:100%;box-sizing:border-box}button{cursor:pointer}iframe{width:100%;height:780px;border:1px solid #ddd}li{padding:8px}li button{margin-left:8px}#notice{white-space:pre-wrap}fieldset{margin:15px 0}*{box-sizing:border-box}input,select{min-width:0;width:100%}fieldset{min-width:0}li{overflow-wrap:anywhere}section>p,form>p{display:none}@media(max-width:480px){main{padding:10px}section{padding:12px}ol{padding-left:22px}}.money-input{display:flex;align-items:center;gap:6px}.money-input>span{white-space:nowrap}#payDisplay{display:block;font-size:14px;color:#536474;margin-top:6px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.time{width:100%;background:#fff;border:1px solid #8798a5;border-radius:8px;text-align:left;min-height:46px}small{display:block;color:#536474;line-height:1.6}#regions button,#dates button{margin:8px 6px 0 0;background:#edf4ff;border:1px solid #b6cbe6;border-radius:20px}dialog{width:min(360px,calc(100% - 32px));border:0;border-radius:16px;padding:24px}dialog::backdrop{background:#0006}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #246ad1}fieldset{border:1px solid #d4dde5;border-radius:10px;padding:12px}legend{font-weight:600}#save{background:#183e70;color:white;border:0;border-radius:8px;width:100%;min-height:48px;margin-top:16px}[hidden]{display:none!important}</style>
++<link rel="stylesheet" href="/ui/03-2/required-match.css"><style>body{font:16px system-ui;margin:0;background:#f5f7fa;color:#192a37}main{max-width:1000px;margin:auto;padding:20px}section{background:white;padding:20px;margin:18px 0;border-radius:14px}label{display:block;margin:15px 0}input,select,button{font:inherit;padding:10px;max-width:100%;box-sizing:border-box}button{cursor:pointer}iframe{width:100%;height:780px;border:1px solid #ddd}li{padding:8px}li button{margin-left:8px}#notice{white-space:pre-wrap}fieldset{margin:15px 0}*{box-sizing:border-box}input,select{min-width:0;width:100%}fieldset{min-width:0}li{overflow-wrap:anywhere}section>p,form>p{display:none}@media(max-width:480px){main{padding:10px}section{padding:12px}ol{padding-left:22px}}.money-input{display:flex;align-items:center;gap:6px}.money-input>span{white-space:nowrap}#payDisplay{display:block;font-size:14px;color:#536474;margin-top:6px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.time{width:100%;background:#fff;border:1px solid #8798a5;border-radius:8px;text-align:left;min-height:46px}small{display:block;color:#536474;line-height:1.6}#regions button,#dates button{margin:8px 6px 0 0;background:#edf4ff;border:1px solid #b6cbe6;border-radius:20px}dialog{width:min(360px,calc(100% - 32px));border:0;border-radius:16px;padding:24px}dialog::backdrop{background:#0006}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #246ad1}fieldset{border:1px solid #d4dde5;border-radius:10px;padding:12px}legend{font-weight:600}#save{background:#183e70;color:white;border:0;border-radius:8px;width:100%;min-height:48px;margin-top:16px}[hidden]{display:none!important}</style>
+ <main><a href="/?entry=equipment#auth">내 계정에서 로그인</a> · <a href="/register/worker">작업자 유형 선택으로</a><h1>장비작업자 구직 등록</h1><p id="notice" role="status">로그인 확인 중…</p><div id="content" hidden>
+ <section><h2>1. 운전 가능 장비·규격·장비별 경력</h2><p>장비를 목록에 추가한 뒤 다음 단계 버튼을 누르세요. 소유 장비는 운전능력과 별도로 보관합니다.</p><iframe id="equipment" title="기존 03-2 장비 등록 화면"></iframe></section>
+ <section id="conditions"><h2>2. 구직 희망조건</h2><form id="form">
+@@ -13,7 +13,11 @@
+ </form></section></div></main>
+ <script type="module">
+ import {preferencesUI} from "/ui/03-2/worker-preferences.js";
++import {requiredMatchUI} from '/ui/03-2/required-match-ui.js';
+ const pref=preferencesUI();
++const required=requiredMatchUI({countTarget:document.querySelector('#conditions h2'),fields:[
++ ['workAbility',document.querySelector('section h2'),'작업능력'],['region',document.querySelector('#province').closest('fieldset').querySelector('legend'),'희망 지역'],['pay',document.querySelector('#pay').closest('label'),'희망 최소 급여'],['hours',document.querySelector('#start').parentElement,'근무시간'],['schedule',document.querySelector('#schedule').closest('fieldset').querySelector('legend'),'가능 일정']
++].map(([key,host,name])=>({key,host,name}))});
+ const $=id=>document.getElementById(id);let version=0,accountId,priority=['pay','region','hours','equipment'],equipmentPriority=[],records=[],roles=[];
+ const names={pay:'급여',region:'지역',hours:'근무시간',equipment:'장비'};
+ async function api(method='GET',payload,path='/api/me/worker-registration'){
+@@ -25,12 +29,12 @@
+ $('sync').onclick=()=>{try{sync();}catch{$('notice').textContent='장비 화면이 준비된 뒤 다시 시도하세요.';}};
+ window.addEventListener('message',e=>{if(e.origin===location.origin&&e.source===$('equipment').contentWindow&&e.data?.type==='node-alpha-equipment-ready'){sync();$('conditions').scrollIntoView({behavior:'smooth'});}});
+ $('form').onsubmit=async e=>{e.preventDefault();$('save').disabled=true;try{
+- sync();const document={roles,abilities:records.filter(x=>x.mode==='ability'),ownedEquipment:records.filter(x=>x.mode==='owned'),preferences:{...pref.read(),conditionPriority:priority,equipmentPriority}};
++ sync();const document={requiredMatch:required.read(),roles,abilities:records.filter(x=>x.mode==='ability'),ownedEquipment:records.filter(x=>x.mode==='owned'),preferences:{...pref.read(),conditionPriority:priority,equipmentPriority}};
+  const result=await api('PUT',{document,version});version=result.version;$('notice').textContent='서버에 저장했습니다. 다시 로그인해도 복원됩니다.';
+ }catch(e){$('notice').textContent=e.message;}finally{$('save').disabled=false;}};
+ (async()=>{try{
+ 
+- const me=await api('GET',null,'/api/me');accountId=me.account.id;const saved=await api();version=saved.version;const d=saved.document;
++ const me=await api('GET',null,'/api/me');accountId=me.account.id;const saved=await api();version=saved.version;const d=saved.document;required.restore(saved.requiredMatch||d?.requiredMatch||[]);
+  // Server is authoritative on entry. Never read or replace the original 03-2 keys.
+  localStorage.setItem('node_alpha_equipment_'+accountId,JSON.stringify({version:2,aRevision:1,roles:d?.roles||[],records:[...(d?.abilities||[]),...(d?.ownedEquipment||[])],draft:null}));
+  if(d){const p=d.preferences;priority=p.conditionPriority;equipmentPriority=p.equipmentPriority;records=[...d.abilities,...d.ownedEquipment];pref.restore(p);}
+--- a/web/technical-registration.html
++++ b/web/technical-registration.html
+@@ -1,5 +1,5 @@
+ <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NODE · 기술 및 일반작업자 등록</title>
+-<style>
++<link rel="stylesheet" href="/ui/03-2/required-match.css"><style>
+ *{box-sizing:border-box}body{margin:0;font:16px system-ui;color:#192a37;background:#f5f7fa}main{max-width:1000px;margin:auto;padding:24px 16px}section{background:white;border:1px solid #e0e6eb;border-radius:16px;padding:24px;margin:20px 0}h1{font-size:26px}p{line-height:1.6}label{display:block}select,button{font:inherit;max-width:100%;padding:12px;border:1px solid #b8c6d5;border-radius:9px;background:white;color:inherit}select{width:100%;margin:8px 0 18px}button{cursor:pointer;min-height:44px}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #246ad1}.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px}.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0}.choices label{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #dbe4ed;border-radius:8px;overflow-wrap:anywhere}.choices input{width:20px;height:20px;flex-shrink:0}#occupationSummary{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}#occupationSummary button{background:#edf4ff;overflow-wrap:anywhere;text-align:left}#save{background:#183e70;color:white;width:100%;border:0;margin-top:16px}.actions{display:flex;gap:8px;flex-wrap:wrap}small{color:#536474;line-height:1.6}#notice{white-space:pre-wrap}[hidden]{display:none!important}@media(max-width:600px){.pair,.choices{grid-template-columns:1fr}section{padding:16px}main{padding:16px 10px}}
+ </style></head><body><main><a href="/">NODE 첫 화면</a> · <a href="/register/worker">작업자 유형 선택</a><h1>기술 및 일반작업자 등록</h1><p id="notice" role="status">로그인 확인 중…</p>
+ <form id="content" hidden><section><h2>수행 가능한 직종</h2><p>해당하는 소분류를 여러 개 체크하세요. 분류를 이동해도 선택은 유지됩니다.</p><small id="draft">검토용 분류 초안 · 추후 수정될 수 있습니다.</small>
+--- a/web/company-registration.html
++++ b/web/company-registration.html
+@@ -1,4 +1,4 @@
+-<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NODE 업체 등록</title><style>body{font:16px system-ui;margin:0;background:#f5f7fa;color:#192a37}main{max-width:1000px;margin:auto;padding:20px}section{background:white;padding:20px;margin:18px 0;border-radius:14px}label{display:block;margin:15px 0}input,select,button{font:inherit;padding:10px;max-width:100%;box-sizing:border-box}button{cursor:pointer}iframe{width:100%;height:780px;border:1px solid #ddd}li{padding:8px}li button{margin-left:8px}#notice{white-space:pre-wrap}fieldset{margin:15px 0}*{box-sizing:border-box}input,select{min-width:0;width:100%}fieldset{min-width:0}li{overflow-wrap:anywhere}section>p,form>p{display:none}@media(max-width:480px){main{padding:10px}section{padding:12px}ol{padding-left:22px}}.money-input{display:flex;align-items:center;gap:6px}.money-input>span{white-space:nowrap}#payDisplay{display:block;font-size:14px;color:#536474;margin-top:6px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.time{width:100%;background:#fff;border:1px solid #8798a5;border-radius:8px;text-align:left;min-height:46px}small{display:block;color:#536474;line-height:1.6}#regions button,#dates button{margin:8px 6px 0 0;background:#edf4ff;border:1px solid #b6cbe6;border-radius:20px}dialog{width:min(360px,calc(100% - 32px));border:0;border-radius:16px;padding:24px}dialog::backdrop{background:#0006}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #246ad1}fieldset{border:1px solid #d4dde5;border-radius:10px;padding:12px}legend{font-weight:600}#save{background:#183e70;color:white;border:0;border-radius:8px;width:100%;min-height:48px;margin-top:16px}[hidden]{display:none!important}main{max-width:760px}h1{font-size:27px}input,select{min-height:46px;border:1px solid #b6c6d3;border-radius:8px}button{border-radius:8px;border:1px solid #b6c6d3;min-height:44px}nav{display:flex;gap:8px}nav button{flex:1;background:white}nav button[aria-current="step"]{background:#183e70;color:white}.actions{display:flex;gap:10px;margin-top:20px}.actions button{flex:1}article{background:#edf3fa;padding:14px;border-radius:10px;margin:12px 0;overflow-wrap:anywhere}#options label{display:inline-flex;align-items:center;gap:6px;margin:4px 12px 4px 0}#options input{width:auto}#notice{display:block;position:sticky;top:0;background:#f5f7fa;padding:10px;z-index:2}section>p{display:block}#occupationChoices label{display:flex;align-items:center;gap:10px;margin:6px 0;padding:6px}#occupationChoices input{width:22px;min-height:22px;flex-shrink:0}#occupationSummary button{margin:4px;max-width:100%;overflow-wrap:anywhere;text-align:left}</style>
++<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NODE 업체 등록</title><link rel="stylesheet" href="/ui/03-2/required-match.css"><style>body{font:16px system-ui;margin:0;background:#f5f7fa;color:#192a37}main{max-width:1000px;margin:auto;padding:20px}section{background:white;padding:20px;margin:18px 0;border-radius:14px}label{display:block;margin:15px 0}input,select,button{font:inherit;padding:10px;max-width:100%;box-sizing:border-box}button{cursor:pointer}iframe{width:100%;height:780px;border:1px solid #ddd}li{padding:8px}li button{margin-left:8px}#notice{white-space:pre-wrap}fieldset{margin:15px 0}*{box-sizing:border-box}input,select{min-width:0;width:100%}fieldset{min-width:0}li{overflow-wrap:anywhere}section>p,form>p{display:none}@media(max-width:480px){main{padding:10px}section{padding:12px}ol{padding-left:22px}}.money-input{display:flex;align-items:center;gap:6px}.money-input>span{white-space:nowrap}#payDisplay{display:block;font-size:14px;color:#536474;margin-top:6px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.time{width:100%;background:#fff;border:1px solid #8798a5;border-radius:8px;text-align:left;min-height:46px}small{display:block;color:#536474;line-height:1.6}#regions button,#dates button{margin:8px 6px 0 0;background:#edf4ff;border:1px solid #b6cbe6;border-radius:20px}dialog{width:min(360px,calc(100% - 32px));border:0;border-radius:16px;padding:24px}dialog::backdrop{background:#0006}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #246ad1}fieldset{border:1px solid #d4dde5;border-radius:10px;padding:12px}legend{font-weight:600}#save{background:#183e70;color:white;border:0;border-radius:8px;width:100%;min-height:48px;margin-top:16px}[hidden]{display:none!important}main{max-width:760px}h1{font-size:27px}input,select{min-height:46px;border:1px solid #b6c6d3;border-radius:8px}button{border-radius:8px;border:1px solid #b6c6d3;min-height:44px}nav{display:flex;gap:8px}nav button{flex:1;background:white}nav button[aria-current="step"]{background:#183e70;color:white}.actions{display:flex;gap:10px;margin-top:20px}.actions button{flex:1}article{background:#edf3fa;padding:14px;border-radius:10px;margin:12px 0;overflow-wrap:anywhere}#options label{display:inline-flex;align-items:center;gap:6px;margin:4px 12px 4px 0}#options input{width:auto}#notice{display:block;position:sticky;top:0;background:#f5f7fa;padding:10px;z-index:2}section>p{display:block}#occupationChoices label{display:flex;align-items:center;gap:10px;margin:6px 0;padding:6px}#occupationChoices input{width:22px;min-height:22px;flex-shrink:0}#occupationSummary button{margin:4px;max-width:100%;overflow-wrap:anywhere;text-align:left}</style>
+ <main><a href="/#profile">내 계정</a><h1>업체 등록 · 모집조건</h1><p id="notice" role="status">로그인 확인 중…</p><div id="content" hidden>
+ <label>내 업체<select id="companySelect"></select></label><button id="newCompany" type="button">새 업체 등록</button>
+ <nav aria-label="등록 단계"><button type="button" data-step="0">1 기본정보</button><button type="button" data-step="1">2 현장정보</button><button type="button" data-step="2">3 모집조건</button></nav>
+--- a/server/worker-registration.js
++++ b/server/worker-registration.js
+@@ -1,3 +1,4 @@
++import {WORKER_REQUIRED_KEYS,validateRequiredMatch} from '../ui/03-2/required-match.js';
+ import {OCCUPATIONS,occupationById} from '../ui/03-2/occupations.js';
+ import {REGIONS} from '../ui/03-2/regions.js';
+ const fail=message=>{throw Object.assign(new Error(message),{status:400});};
+@@ -40,14 +41,14 @@
+  const permutation=(a,expected)=>Array.isArray(a)&&a.length===expected.length&&new Set(a).size===a.length&&a.every(x=>expected.includes(x));
+  if(!permutation(p.conditionPriority,['pay','region','hours','equipment']))fail('조건 우선순위를 중복 없이 정하세요.');
+  if(!permutation(p.equipmentPriority,abilities.map(x=>x.id)))fail('운전 가능 장비별 선호 순위를 확인하세요.');
+- return {roles,abilities,ownedEquipment,preferences:{...regionFields,...scheduleFields,regions:p.regions,minimumPayWon:p.minimumPayWon,payUnit:p.payUnit,startTime:p.startTime,endTime:p.endTime,availableDates:p.availableDates,conditionPriority:p.conditionPriority,equipmentPriority:p.equipmentPriority}};
++ return {...(b.requiredMatch===undefined?{}:{requiredMatch:validateRequiredMatch(b.requiredMatch,WORKER_REQUIRED_KEYS)}),roles,abilities,ownedEquipment,preferences:{...regionFields,...scheduleFields,regions:p.regions,minimumPayWon:p.minimumPayWon,payUnit:p.payUnit,startTime:p.startTime,endTime:p.endTime,availableDates:p.availableDates,conditionPriority:p.conditionPriority,equipmentPriority:p.equipmentPriority}};
+ }
+ export function validateTechnicalRegistration(d){
+  if(!d||typeof d!=='object'||Array.isArray(d)||d.workerType!=='technical_worker')fail('작업자 유형을 확인하세요.');
+  if(d.occupationCatalogVersion!==OCCUPATIONS.version)fail('직종 분류 버전을 확인하세요.');
+  const ids=d.occupationIds;
+  if(!Array.isArray(ids)||!ids.length||ids.length>OCCUPATIONS.items.length||new Set(ids).size!==ids.length||ids.some(id=>!occupationById.has(id)))fail('직종을 중복 없이 하나 이상 선택하세요.');
+- return {workerType:'technical_worker',occupationCatalogVersion:OCCUPATIONS.version,occupationIds:[...ids]};
++ return {...(d.requiredMatch===undefined?{}:{requiredMatch:validateRequiredMatch(d.requiredMatch,WORKER_REQUIRED_KEYS)}),workerType:'technical_worker',occupationCatalogVersion:OCCUPATIONS.version,occupationIds:[...ids]};
+ }
+ export async function workerRegistrationRequest({pool,req,path,body,user}){
+  const technical=path==='/api/me/technical-registration';
+@@ -55,8 +56,8 @@
+  if(req.method==='GET'){
+   const {rows}=await pool.query('SELECT document,version FROM worker_alpha_registrations WHERE account_id=$1',[user.id]);
+   const row=rows[0];
+-  const document=technical?row?.document.technicalRegistration:row?.document.roles?.length?Object.fromEntries(Object.entries(row.document).filter(([key])=>key!=='technicalRegistration')):null;
+-  return {status:200,data:{document:document||null,version:row?.version||0}};
++  const document=registrationView(row?.document,technical);
++  return {status:200,data:{document:document||null,version:row?.version||0,...(row?.document.requiredMatch===undefined?{}:{requiredMatch:row.document.requiredMatch})}};
+  }
+  if(req.method==='PUT'){
+   const b=await body(req),document=technical?validateTechnicalRegistration(b.document):validateRegistration(b.document);
+@@ -64,13 +65,30 @@
+   const c=await pool.connect();
+   try{
+    await c.query('BEGIN');
++   const previous=b.version===0?{}:(await c.query('SELECT document FROM worker_alpha_registrations WHERE account_id=$1 FOR UPDATE',[user.id])).rows[0]?.document||{};
++   const {requiredMatch,...profile}=document;
++   const merged=technical?{...previous,roles:previous.roles||[],abilities:previous.abilities||[],ownedEquipment:previous.ownedEquipment||[],technicalRegistration:profile}:{...previous,...profile};
++   if(requiredMatch!==undefined)merged.requiredMatch=requiredMatch;
++   validateWorkerRequiredMatch(merged);
+    const {rows}=b.version===0
+-    ? await c.query('INSERT INTO worker_alpha_registrations(account_id,document) VALUES($1,$2::jsonb) ON CONFLICT(account_id) DO NOTHING RETURNING document,version',[user.id,JSON.stringify(technical?{roles:[],abilities:[],ownedEquipment:[],technicalRegistration:document}:document)])
+-    : await c.query(`UPDATE worker_alpha_registrations SET document=CASE WHEN $4::boolean THEN jsonb_set(document,'{technicalRegistration}',$2::jsonb) ELSE $2::jsonb || CASE WHEN document ? 'technicalRegistration' THEN jsonb_build_object('technicalRegistration',document->'technicalRegistration') ELSE '{}'::jsonb END END,version=version+1,updated_at=now() WHERE account_id=$1 AND version=$3 RETURNING document,version`,[user.id,JSON.stringify(document),b.version,technical]);
++    ? await c.query('INSERT INTO worker_alpha_registrations(account_id,document) VALUES($1,$2::jsonb) ON CONFLICT(account_id) DO NOTHING RETURNING document,version',[user.id,JSON.stringify(merged)])
++    : await c.query('UPDATE worker_alpha_registrations SET document=$2::jsonb,version=version+1,updated_at=now() WHERE account_id=$1 AND version=$3 RETURNING document,version',[user.id,JSON.stringify(merged),b.version]);
+    if(!rows.length){await c.query('ROLLBACK');return {status:409,data:{error:'다른 화면에서 변경되었습니다. 새로고침 후 확인하세요.'}};}
+    await c.query("INSERT INTO account_roles(account_id,role) VALUES($1,'worker') ON CONFLICT DO NOTHING",[user.id]);
+-   await c.query('COMMIT');return {status:200,data:{document,version:rows[0].version}};
++   await c.query('COMMIT');return {status:200,data:{document:registrationView(merged,technical),version:rows[0].version}};
+   }catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}
+  }
+  return {status:405,data:{error:'지원하지 않는 요청입니다.'}};
+ }
++
++function registrationView(d,technical){
++ const profile=technical?d?.technicalRegistration:d?.roles?.length?Object.fromEntries(Object.entries(d).filter(([key])=>key!=='technicalRegistration')):null;
++ return profile?{...profile,...(d.requiredMatch===undefined?{}:{requiredMatch:d.requiredMatch})}:null;
++}
++export function validateWorkerRequiredMatch(d){
++ if(d.requiredMatch===undefined)return;
++ for(const key of validateRequiredMatch(d.requiredMatch,WORKER_REQUIRED_KEYS)){
++  if(key==='workAbility'){if(!d.abilities?.length&&!d.technicalRegistration?.occupationIds?.length)throw Object.assign(new Error('작업능력을 먼저 등록하세요.'),{status:400});}
++  else if(!d.preferences)throw Object.assign(new Error('지역·급여·시간·일정은 장비작업자 희망조건을 먼저 등록하세요.'),{status:400});
++ }
++}
+--- a/server/company-registration.js
++++ b/server/company-registration.js
+@@ -1,3 +1,4 @@
++import {COMPANY_REQUIRED_KEYS,validateRequiredMatch} from '../ui/03-2/required-match.js';
+ import {OCCUPATIONS,occupationById} from '../ui/03-2/occupations.js';
+ import {readFileSync} from 'node:fs';
+ import vm from 'node:vm';
+@@ -30,6 +31,7 @@
+  const ids=new Set();
+  for(const line of d.lines){
+   if(!line||!text(line.id,100)||ids.has(line.id))fail('모집항목 식별자를 확인하세요.');ids.add(line.id);
++  if(line.requiredMatch!==undefined){validateRequiredMatch(line.requiredMatch,COMPANY_REQUIRED_KEYS);for(const key of ['difficulty','otherTerms'])if(line.requiredMatch.includes(key)&&!text(line[key],key==='difficulty'?500:1000))fail('필수 일치로 지정한 작업·계약 조건을 입력하세요.');}
+   const technical=line.resourceMode==='technical_worker';
+   if(technical){
+    if(line.occupationCatalogVersion!==OCCUPATIONS.version||line.occupationRequirement!=='all_per_person'||!Array.isArray(line.occupationIds)||!line.occupationIds.length||line.occupationIds.length>OCCUPATIONS.items.length||new Set(line.occupationIds).size!==line.occupationIds.length||line.occupationIds.some(id=>!occupationById.has(id)))fail('임시 직종 코드·버전·그룹 조건을 확인하세요.');
+--- a/scripts/test.mjs
++++ b/scripts/test.mjs
+@@ -234,7 +234,7 @@
+  worksiteRuntime=await provisionWorksiteRuntime(pool);
+  jobRuntime=await provisionJobPostRuntime(pool);
+  assert.deepEqual(await preserved(),before,'role provisioning cannot change existing onboarding data');
+- const args=['--test','--test-concurrency=1','tests/account.test.js','tests/money.test.js','tests/company-registration.test.js','tests/company-registration.integration.test.js','tests/worker-alpha.test.js','tests/worker-alpha.integration.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js','tests/worksites.test.js','tests/job-posts.test.js'];
++ const args=['--test','--test-concurrency=1','tests/account.test.js','tests/money.test.js','tests/required-match.test.js','tests/required-match.integration.test.js','tests/company-registration.test.js','tests/company-registration.integration.test.js','tests/worker-alpha.test.js','tests/worker-alpha.integration.test.js','tests/matching.test.js','tests/records.test.js','tests/review-fixes.test.js','tests/stabilization.test.js','tests/worksites.test.js','tests/job-posts.test.js'];
+  // Asynchronous spawn keeps the administrator pool responsive to keepalives while
+  // the test processes use independent real connections to the same local DB.
+  const {spawn}=await import('node:child_process');
+--- a/ui/03-2/technical-registration.js
++++ b/ui/03-2/technical-registration.js
+@@ -1,5 +1,7 @@
++import {requiredMatchUI} from './required-match-ui.js';
+ import {OCCUPATIONS,occupationById} from './occupations.js';
+ const $=id=>document.getElementById(id),selected=new Set();let version=0;
++const required=requiredMatchUI({countTarget:document.querySelectorAll('#content h2')[1],fields:[{key:'workAbility',host:document.querySelector('#content h2'),name:'작업능력'}]});
+ async function api(path,method='GET',payload){
+  const r=await fetch(path,{method,headers:{'Content-Type':'application/json','X-Node-Session':'cookie'},...(payload?{body:JSON.stringify(payload)}:{})});
+  const d=await r.json();if(!r.ok)throw Error(d.error||'요청 실패');return d;
+@@ -20,9 +22,9 @@
+ $('clearMiddle').onclick=()=>{current().forEach(x=>selected.delete(x.id));render();};
+ $('clearAll').onclick=()=>{selected.clear();render();};
+ $('content').onsubmit=async e=>{e.preventDefault();if(!selected.size){$('notice').textContent='직종을 하나 이상 선택하세요.';return;}$('save').disabled=true;
+- try{const saved=await api('/api/me/technical-registration','PUT',{version,document:{workerType:'technical_worker',occupationCatalogVersion:OCCUPATIONS.version,occupationIds:[...selected]}});version=saved.version;$('notice').textContent='서버에 저장했습니다. 다시 로그인해도 복원됩니다.';}catch(e){$('notice').textContent=e.message;}finally{$('save').disabled=false;}
++ try{const saved=await api('/api/me/technical-registration','PUT',{version,document:{requiredMatch:required.read(),workerType:'technical_worker',occupationCatalogVersion:OCCUPATIONS.version,occupationIds:[...selected]}});version=saved.version;$('notice').textContent='서버에 저장했습니다. 다시 로그인해도 복원됩니다.';}catch(e){$('notice').textContent=e.message;}finally{$('save').disabled=false;}
+ };
+-(async()=>{try{await api('/api/me');const saved=await api('/api/me/technical-registration');version=saved.version;
++(async()=>{try{await api('/api/me');const saved=await api('/api/me/technical-registration');version=saved.version;required.restore(saved.requiredMatch||saved.document?.requiredMatch||[]);
+  if(saved.document){if(saved.document.occupationCatalogVersion!==OCCUPATIONS.version)throw Error('저장된 분류 버전이 다릅니다. 분류 이관 확인이 필요합니다.');saved.document.occupationIds.forEach(id=>selected.add(id));}
+  options('occupationMajor',OCCUPATIONS.majors);middle();$('draft').textContent=`검토용 분류 초안 · 대분류 ${OCCUPATIONS.majors.length}개 / 중분류 ${OCCUPATIONS.middles.length}개 / 소분류 ${OCCUPATIONS.items.length}개 · 추후 수정 가능`;
+  $('content').hidden=false;$('notice').textContent=saved.document?'서버에 저장한 직종을 복원했습니다.':'수행 가능한 직종을 선택하세요.';
+--- a/ui/03-2/company-registration.js
++++ b/ui/03-2/company-registration.js
+@@ -1,6 +1,11 @@
++import {requiredMatchUI} from './required-match-ui.js';
++import {COMPANY_REQUIRED_KEYS} from './required-match.js';
+ import {OCCUPATIONS,occupationById} from './occupations.js';
+ import {preferencesUI} from './worker-preferences.js';
+ const $=id=>document.getElementById(id),items=NODE_CATALOG.items,pref=preferencesUI();
++const required=requiredMatchUI({allowed:COMPANY_REQUIRED_KEYS,countTarget:$('editorTitle'),scopeLabel:'이 모집 그룹 필수 일치',fields:[
++ ['workAbility',$('resourceMode').parentElement,'작업능력'],['experience',$('experienceMonths').parentElement,'최소 경력'],['difficulty',$('difficulty').parentElement,'작업 난이도·범위'],['region',$('province').closest('fieldset').querySelector('legend'),'현장 지역'],['pay',$('pay').closest('label'),'제시 급여'],['hours',$('start').parentElement,'근무시간'],['schedule',$('schedule').closest('fieldset').querySelector('legend'),'작업기간'],['paymentTerms',$('paymentTerms').parentElement,'급여 지급일·지급조건'],['paymentMethod',$('paymentMethod').parentElement,'지급 방식'],['taxTerms',$('taxTerms').parentElement,'거래 조건'],['otherTerms',$('otherTerms').parentElement,'기타 지급·계약 조건']
++ ].map(([key,host,name])=>({key,host,name}))});
+ let companyId=null,version=0,lines=[],editing=null,step=0,companies=[],dirtyEditor=false,originalDocument={};
+ const defaultConditions=()=>({regions:[],regionCodes:[],regionCodeSystem:'kr-lawd-2026-10-01',legacyRegions:[],minimumPayWon:200000,payUnit:'day',startTime:'08:00',endTime:'17:00',availableDates:[],availability:{mode:'always'}});
+ const message=t=>{$('notice').textContent=t;};
+@@ -38,12 +43,12 @@
+ choices('major',[...new Set(items.map(i=>i.major))]);middles();
+ $('major').onchange=middles;$('middle').onchange=kinds;$('kind').onchange=forms;$('equipmentForm').onchange=sizes;$('size').onchange=custom;
+ $('lineEditor').addEventListener('input',()=>{dirtyEditor=true;});$('lineEditor').addEventListener('change',()=>{dirtyEditor=true;});
+-function resetEditor(){selectedOccupations=new Set();$('occupationMajor').value='';occupationMiddles(); $('lineEditor').hidden=lines.length>0;$('openLine').hidden=lines.length===0;editing=null;dirtyEditor=false;$('resourceMode').value='worker';$('major').value='';$('editorTitle').textContent='모집 그룹 추가';$('addLine').textContent='모집 그룹 추가';$('cancelLine').hidden=true;pref.restore(defaultConditions());$('experienceMonths').value=0;$('headcount').value=1;$('paymentTerms').value='';$('difficulty').value='';$('paymentMethod').value='협의';$('taxTerms').value='협의';$('otherTerms').value='';middles();}
++function resetEditor(){required.restore();selectedOccupations=new Set();$('occupationMajor').value='';occupationMiddles(); $('lineEditor').hidden=lines.length>0;$('openLine').hidden=lines.length===0;editing=null;dirtyEditor=false;$('resourceMode').value='worker';$('major').value='';$('editorTitle').firstChild.textContent='모집 그룹 추가';$('addLine').textContent='모집 그룹 추가';$('cancelLine').hidden=true;pref.restore(defaultConditions());$('experienceMonths').value=0;$('headcount').value=1;$('paymentTerms').value='';$('difficulty').value='';$('paymentMethod').value='협의';$('taxTerms').value='협의';$('otherTerms').value='';middles();}
+ function render(){ $('lineList').replaceChildren();lines.forEach((l,i)=>{const a=document.createElement('article'),h=document.createElement('h3'),p=document.createElement('p');h.textContent=`${i+1}. ${l.resourceMode==='technical_worker'?'모집 그룹 · '+l.occupationIds.map(id=>occupationById.get(id)?.name||id).join(' + '):items.find(x=>x.id===l.kind)?.name||l.kind} · ${l.headcount}명`;if(l.resourceMode==='technical_worker'){const note=document.createElement('p');note.textContent='각 인원이 위 직종 모두 수행 · 직종 분류 임시 초안';a.append(note);}p.textContent=[l.major,l.middle,l.form,l.size==='직접 입력'?l.custom:l.size,(l.optionSelections||[]).join(', '),`${l.minExperienceMonths}개월 이상`,l.conditions.regions.join(', '),`${NODE_MONEY.fromWon(l.conditions.minimumPayWon)}만원 / ${l.conditions.payUnit==='day'?'일급':'월급'}`,`${l.conditions.startTime}~${l.conditions.endTime}${l.conditions.endTime<l.conditions.startTime?' (익일)':''}`,l.conditions.availability.mode==='range'?`${l.conditions.availability.start}~${l.conditions.availability.end}`:l.conditions.availability.mode==='dates'?l.conditions.availableDates.join(', '):'상시',l.paymentTerms].filter(Boolean).join(' · ');a.append(h,p);for(const [label,action] of [['수정',()=>edit(i)],['삭제',()=>{lines.splice(i,1);resetEditor();render();}]]){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=action;a.append(b);} $('lineList').append(a);});}
+ $('openLine').onclick=()=>{$('lineEditor').hidden=false;$('openLine').hidden=true;$('lineEditor').scrollIntoView({behavior:'smooth'});};
+-function edit(i){$('lineEditor').hidden=false;$('openLine').hidden=true;const l=lines[i];editing=i;selectedOccupations=new Set(l.occupationIds||[]);$('occupationMajor').value='';occupationMiddles();$('major').value=l.major;middles();$('middle').value=l.middle;kinds();$('kind').value=l.kind;forms();$('equipmentForm').value=l.form;sizes();$('size').value=l.size;$('custom').value=l.custom||'';$('formDetail').value=l.formDetail||'';custom();for(const c of $('options').querySelectorAll('input'))c.checked=(l.optionSelections||[]).includes(c.value);$('resourceMode').value=l.resourceMode;classificationVisibility();$('experienceMonths').value=l.minExperienceMonths;$('paymentTerms').value=l.paymentTerms;$('difficulty').value=l.difficulty||'';$('paymentMethod').value=l.paymentMethod||'협의';$('taxTerms').value=l.taxTerms||'협의';$('otherTerms').value=l.otherTerms||'';$('headcount').value=l.headcount;pref.restore(l.conditions);$('editorTitle').textContent='모집 그룹 수정';$('addLine').textContent='모집 그룹 수정 완료';$('cancelLine').hidden=false;dirtyEditor=false;$('lineEditor').scrollIntoView({behavior:'smooth'});}
++function edit(i){required.restore(lines[i].requiredMatch||[]);$('lineEditor').hidden=false;$('openLine').hidden=true;const l=lines[i];editing=i;selectedOccupations=new Set(l.occupationIds||[]);$('occupationMajor').value='';occupationMiddles();$('major').value=l.major;middles();$('middle').value=l.middle;kinds();$('kind').value=l.kind;forms();$('equipmentForm').value=l.form;sizes();$('size').value=l.size;$('custom').value=l.custom||'';$('formDetail').value=l.formDetail||'';custom();for(const c of $('options').querySelectorAll('input'))c.checked=(l.optionSelections||[]).includes(c.value);$('resourceMode').value=l.resourceMode;classificationVisibility();$('experienceMonths').value=l.minExperienceMonths;$('paymentTerms').value=l.paymentTerms;$('difficulty').value=l.difficulty||'';$('paymentMethod').value=l.paymentMethod||'협의';$('taxTerms').value=l.taxTerms||'협의';$('otherTerms').value=l.otherTerms||'';$('headcount').value=l.headcount;pref.restore(l.conditions);$('editorTitle').firstChild.textContent='모집 그룹 수정';$('addLine').textContent='모집 그룹 수정 완료';$('cancelLine').hidden=false;dirtyEditor=false;$('lineEditor').scrollIntoView({behavior:'smooth'});}
+ $('cancelLine').onclick=resetEditor;
+-$('addLine').onclick=()=>{try{const technical=$('resourceMode').value==='technical_worker';if(technical&&!selectedOccupations.size)throw Error('필요 직종을 하나 이상 선택하세요.');if(!$('resourceMode').value)throw Error('모집 유형을 선택하세요.');for(const id of (technical?[]:['major','middle','kind','equipmentForm','size']))if(!$(id).value)throw Error('장비 분류와 규격을 순서대로 선택하세요.');for(const x of $('lineEditor').querySelectorAll('input,select')){if(x.closest('[hidden]'))continue;if(!x.reportValidity())return;}if(!technical&&$('size').value==='직접 입력'&&!$('custom').value.trim())throw Error('현장규격을 직접 입력하세요.');if(!technical&&$('equipmentForm').value==='직접 입력'&&!$('formDetail').value.trim())throw Error('형태를 직접 입력하세요.');const l={...(editing!==null?lines[editing]:{}),difficulty:$('difficulty').value,paymentMethod:$('paymentMethod').value,taxTerms:$('taxTerms').value,otherTerms:$('otherTerms').value,id:editing===null?crypto.randomUUID():lines[editing].id,major:$('major').value,middle:$('middle').value,kind:$('kind').value,form:$('equipmentForm').value,formDetail:$('formDetail').value,size:$('size').value,custom:$('custom').value,optionSelections:[...$('options').querySelectorAll('input:checked')].map(x=>x.value),resourceMode:$('resourceMode').value,minExperienceMonths:Number($('experienceMonths').value),conditions:pref.read(),paymentTerms:$('paymentTerms').value,headcount:Number($('headcount').value)};if(technical){for(const key of ['major','middle','kind','form','formDetail','size','custom','optionSelections'])delete l[key];Object.assign(l,{occupationIds:[...selectedOccupations],occupationCatalogVersion:OCCUPATIONS.version,occupationRequirement:'all_per_person'});}else{for(const key of ['occupationIds','occupationCatalogVersion','occupationRequirement'])delete l[key];}if(editing===null)lines.push(l);else lines[editing]=l;resetEditor();render();message('모집항목을 반영했습니다. 마지막으로 업체 등록 정보를 저장하세요.');}catch(e){message(e.message);}};
++$('addLine').onclick=()=>{try{const technical=$('resourceMode').value==='technical_worker';if(technical&&!selectedOccupations.size)throw Error('필요 직종을 하나 이상 선택하세요.');if(!$('resourceMode').value)throw Error('모집 유형을 선택하세요.');for(const id of (technical?[]:['major','middle','kind','equipmentForm','size']))if(!$(id).value)throw Error('장비 분류와 규격을 순서대로 선택하세요.');for(const x of $('lineEditor').querySelectorAll('input,select')){if(x.closest('[hidden]'))continue;if(!x.reportValidity())return;}if(!technical&&$('size').value==='직접 입력'&&!$('custom').value.trim())throw Error('현장규격을 직접 입력하세요.');if(!technical&&$('equipmentForm').value==='직접 입력'&&!$('formDetail').value.trim())throw Error('형태를 직접 입력하세요.');const l={...(editing!==null?lines[editing]:{}),difficulty:$('difficulty').value,paymentMethod:$('paymentMethod').value,taxTerms:$('taxTerms').value,otherTerms:$('otherTerms').value,id:editing===null?crypto.randomUUID():lines[editing].id,major:$('major').value,middle:$('middle').value,kind:$('kind').value,form:$('equipmentForm').value,formDetail:$('formDetail').value,size:$('size').value,custom:$('custom').value,optionSelections:[...$('options').querySelectorAll('input:checked')].map(x=>x.value),resourceMode:$('resourceMode').value,minExperienceMonths:Number($('experienceMonths').value),conditions:pref.read(),requiredMatch:required.read(),paymentTerms:$('paymentTerms').value,headcount:Number($('headcount').value)};if(technical){for(const key of ['major','middle','kind','form','formDetail','size','custom','optionSelections'])delete l[key];Object.assign(l,{occupationIds:[...selectedOccupations],occupationCatalogVersion:OCCUPATIONS.version,occupationRequirement:'all_per_person'});}else{for(const key of ['occupationIds','occupationCatalogVersion','occupationRequirement'])delete l[key];}if(editing===null)lines.push(l);else lines[editing]=l;resetEditor();render();message('모집항목을 반영했습니다. 마지막으로 업체 등록 정보를 저장하세요.');}catch(e){message(e.message);}};
+ function show(n){step=n;for(const x of document.querySelectorAll('[data-page]'))x.hidden=Number(x.dataset.page)!==n;for(const b of document.querySelectorAll('[data-step]'))b.setAttribute('aria-current',Number(b.dataset.step)===n?'step':'false');$('previous').hidden=n===0;$('next').hidden=n===2;document.querySelector(`[data-page="${n}"] h2`).focus();}
+ function validPage(n){if(n===1&&!$('address').value.trim()){message('현장주소를 검색해 선택하세요.');$('searchAddress').focus();return false;}for(const x of document.querySelectorAll(`[data-page="${n}"] input`))if(!x.reportValidity())return false;return true;}
+ for(const b of document.querySelectorAll('[data-step]'))b.onclick=()=>{const n=Number(b.dataset.step);if(n<=step||validPage(step))show(n);};
+--- /dev/null
++++ b/ui/03-2/required-match.js
+@@ -0,0 +1,8 @@
++// Shared field IDs for future bilateral matching; this module does not match people.
++export const WORKER_REQUIRED_KEYS=Object.freeze(['workAbility','region','pay','hours','schedule']);
++export const COMPANY_REQUIRED_KEYS=Object.freeze([...WORKER_REQUIRED_KEYS,'experience','difficulty','paymentTerms','paymentMethod','taxTerms','otherTerms']);
++export const REQUIRED_MATCH_POLICY=Object.freeze({version:1,maxSelected:3,workerScope:'account_profile',companyScope:'recruitment_group',occupationRule:'all_per_person',workAbilityCountsAs:1,requiredSides:'both',legalRequirements:'independent_mandatory_gate',engineImplemented:false});
++export function validateRequiredMatch(value,allowed){
++ if(!Array.isArray(value)||value.length>3||new Set(value).size!==value.length||value.some(k=>!allowed.includes(k))){const e=new Error('필수 일치 조건은 허용된 항목에서 중복 없이 최대 3개 선택하세요.');e.status=400;throw e;}
++ return [...value];
++}
+--- /dev/null
++++ b/ui/03-2/required-match-ui.js
+@@ -0,0 +1,20 @@
++import {validateRequiredMatch,WORKER_REQUIRED_KEYS} from './required-match.js';
++// Only new controls are styled. Existing labels, inputs, grids and ordering stay intact.
++export function requiredMatchUI({fields,countTarget,allowed=WORKER_REQUIRED_KEYS,scopeLabel='필수 일치'}){
++ let selected=[],controls=[];
++ const count=document.createElement('span');count.className='required-match-count';count.setAttribute('role','status');count.setAttribute('aria-label',scopeLabel+' 선택 수');countTarget.append(count);
++ const render=()=>{count.textContent=` 필수 일치 ${selected.length}/3`;for(const {input} of controls){input.checked=selected.includes(input.value);input.disabled=!input.checked&&selected.length>=3;}};
++ for(const {key,host,name} of fields){
++  const title=[...host.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());
++  if(!title)throw Error('필수 조건 제목이 없습니다: '+key);
++  const original=host.querySelector('input,select,button');if(host.tagName==='LABEL'&&original?.id)host.htmlFor=original.id;
++  const control=document.createElement('span');control.className='required-match-control';
++  const input=document.createElement('input');input.type='checkbox';input.value=key;input.dataset.requiredMatch=key;input.setAttribute('aria-label',name+' 필수 일치');
++  control.title=name+' 필수 일치';control.append(input);title.before(control);
++  input.addEventListener('change',()=>{selected=input.checked?[...selected,key]:selected.filter(k=>k!==key);selected=validateRequiredMatch(selected,allowed);render();});
++  control.addEventListener('click',e=>{if(e.target!==input){e.preventDefault();e.stopPropagation();if(!input.disabled)input.click();}});
++  controls.push({host,control,input,title});
++ }
++ render();
++ return {read:()=>[...selected],restore(value=[]){selected=validateRequiredMatch(value,allowed);render();}};
++}
+--- /dev/null
++++ b/ui/03-2/required-match.css
+@@ -0,0 +1,3 @@
++.required-match-control{display:inline-flex;align-items:center;vertical-align:baseline;gap:0;margin:0 6px 0 0;padding:0;border:0;font:14px/20px system-ui;font-weight:400;white-space:nowrap;color:#536474;cursor:pointer}
++.required-match-control input[type=checkbox]{appearance:auto;display:inline-block;flex:none;width:14px;height:14px;min-width:14px;min-height:14px;max-width:14px;margin:0;padding:0;border-radius:0;cursor:pointer}
++.required-match-count{font:14px/20px system-ui;font-weight:400;color:#536474;white-space:nowrap}
+--- /dev/null
++++ b/tests/required-match.test.js
+@@ -0,0 +1,29 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {validateRequiredMatch,WORKER_REQUIRED_KEYS,COMPANY_REQUIRED_KEYS,REQUIRED_MATCH_POLICY} from '../ui/03-2/required-match.js';
++import {validateRegistration,validateTechnicalRegistration,validateWorkerRequiredMatch} from '../server/worker-registration.js';
++import {validateCompanyRegistration} from '../server/company-registration.js';
++import {documentFixture} from './helpers/company-fixture.js';
++import {OCCUPATIONS} from '../ui/03-2/occupations.js';
++const worker=()=>({roles:['데모기사','자가기사'],abilities:[{id:'a',mode:'ability',kind:'excavator',form:'타이어식 (W)',size:'06W',years:'3'}],ownedEquipment:[{id:'o',mode:'owned',kind:'excavator',form:'타이어식 (W)',size:'06W',years:'3'}],preferences:{...documentFixture().lines[0].conditions,conditionPriority:['pay','region','hours','equipment'],equipmentPriority:['a']}});
++test('required conditions permit zero through three and reject malformed, unknown, duplicate, legal and fourth keys',()=>{
++ for(let n=0;n<=3;n++)assert.deepEqual(validateRequiredMatch(WORKER_REQUIRED_KEYS.slice(0,n),WORKER_REQUIRED_KEYS),WORKER_REQUIRED_KEYS.slice(0,n));
++ for(const v of [null,{},'pay',['pay','pay'],['unknown'],['legalLicense'],WORKER_REQUIRED_KEYS.slice(0,4),[1]])assert.throws(()=>validateRequiredMatch(v,COMPANY_REQUIRED_KEYS),{status:400});
++});
++test('worker preferences and separate ability/ownership round trip with required conditions without touching legacy payloads',()=>{
++ const d=worker();assert.deepEqual(validateRegistration(d),d);d.requiredMatch=['workAbility','pay','region'];assert.deepEqual(validateRegistration(d),d);validateWorkerRequiredMatch(d);
++});
++test('each company recruitment group has independent 0-3 limits and common workAbility key',()=>{
++ const d=documentFixture();d.lines[0].requiredMatch=['workAbility','pay','region'];d.lines.push({...structuredClone(d.lines[0]),id:'b',requiredMatch:['hours','schedule','experience']});assert.deepEqual(validateCompanyRegistration(structuredClone(d)),d);
++ d.lines[1].requiredMatch.push('pay');assert.throws(()=>validateCompanyRegistration(d),{status:400});
++});
++test('optional free-text required conditions cannot refer to blank conditions',()=>{
++ for(const k of ['difficulty','otherTerms']){const d=documentFixture();d.lines[0].requiredMatch=[k];assert.throws(()=>validateCompanyRegistration(d),{status:400});d.lines[0][k]='조건';assert.equal(validateCompanyRegistration(d).lines[0][k],'조건');}
++});
++test('179 occupations still count as one workAbility condition with all-per-person semantics',()=>{
++ const d={workerType:'technical_worker',occupationCatalogVersion:OCCUPATIONS.version,occupationIds:OCCUPATIONS.items.map(x=>x.id),requiredMatch:['workAbility']};assert.deepEqual(validateTechnicalRegistration(d),d);validateWorkerRequiredMatch({technicalRegistration:d,requiredMatch:d.requiredMatch});
++ const c=documentFixture(),l=c.lines[0];for(const k of ['major','middle','kind','form','size','optionSelections'])delete l[k];Object.assign(l,{resourceMode:'technical_worker',occupationCatalogVersion:d.occupationCatalogVersion,occupationIds:d.occupationIds,occupationRequirement:'all_per_person',requiredMatch:['workAbility','pay','schedule']});assert.equal(validateCompanyRegistration(c).lines[0].requiredMatch.length,3);
++});
++test('shared worker criteria require registered source values and legal gates are independent policy, not implemented matching',()=>{
++ assert.throws(()=>validateWorkerRequiredMatch({requiredMatch:['region']}),{status:400});assert.throws(()=>validateWorkerRequiredMatch({requiredMatch:['workAbility']}),{status:400});assert.equal(REQUIRED_MATCH_POLICY.requiredSides,'both');assert.equal(REQUIRED_MATCH_POLICY.legalRequirements,'independent_mandatory_gate');assert.equal(REQUIRED_MATCH_POLICY.engineImplemented,false);
++});
+--- /dev/null
++++ b/tests/required-match.integration.test.js
+@@ -0,0 +1,32 @@
++import test,{after} from 'node:test';
++import assert from 'node:assert/strict';
++import {spawn} from 'node:child_process';
++import {setTimeout as delay} from 'node:timers/promises';
++import {runtimeDatabaseUrl,pool} from './helpers/database.js';
++import {documentFixture} from './helpers/company-fixture.js';
++after(()=>pool.end());
++test('real DB required conditions save, edit, clear, relogin, group scope, shared profile, stale/error rollback and legacy preservation',async()=>{
++ const base='http://127.0.0.1:3102';let logs='';const child=spawn(process.execPath,['server/index.js'],{env:{...process.env,DATABASE_URL:runtimeDatabaseUrl(),PORT:'3102'},stdio:['ignore','pipe','pipe']});child.stdout.on('data',d=>logs+=d);child.stderr.on('data',d=>logs+=d);
++ const api=async(path,method='GET',body,token)=>{const r=await fetch(base+path,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},...(body?{body:JSON.stringify(body)}:{})});return {status:r.status,data:await r.json()};};
++ try{let ready=false;for(let i=0;i<60;i++){try{if((await api('/api/health')).status===200){ready=true;break;}}catch{}await delay(100);}assert(ready,logs);
++ const email='required-'+Date.now()+'@example.com',password='test-required-match-123';let a=await api('/api/register','POST',{email,password,name:'필수조건 검증'});assert.equal(a.status,201);let token=a.data.token;
++ const wp='/api/me/worker-registration',tp='/api/me/technical-registration';const condition=documentFixture().lines[0].conditions;
++ const worker={roles:['자가기사','데모기사'],abilities:[{id:'a',mode:'ability',kind:'excavator',form:'타이어식 (W)',size:'06W',years:'3'}],ownedEquipment:[{id:'o',mode:'owned',kind:'excavator',form:'타이어식 (W)',size:'06W',years:'3'}],preferences:{...condition,conditionPriority:['pay','region','hours','equipment'],equipmentPriority:['a']},requiredMatch:['pay','region','hours']};
++ assert.equal((await api(wp,'PUT',{version:0,document:worker},token)).status,200);
++ const tech={workerType:'technical_worker',occupationCatalogVersion:'draft-2026-11-01-1',occupationIds:['NODE-JO-0001','NODE-JO-0011'],requiredMatch:['pay','region','workAbility']};
++ assert.equal((await api(tp,'PUT',{version:1,document:tech},token)).status,200);assert.deepEqual((await api(wp,'GET',null,token)).data.document.requiredMatch,tech.requiredMatch);
++ const before=(await api(wp,'GET',null,token)).data;assert.deepEqual(before.document.ownedEquipment,worker.ownedEquipment);
++ for(const requiredMatch of [['workAbility','pay','region','schedule'],['pay','pay'],['license'],null]){assert.equal((await api(tp,'PUT',{version:2,document:{...tech,requiredMatch}},token)).status,400);assert.deepEqual((await api(wp,'GET',null,token)).data,before);}
++ assert.equal((await api(tp,'PUT',{version:1,document:tech},token)).status,409);
++ // Old clients omitting the new field must not erase the shared selection.
++ const legacy={...worker};delete legacy.requiredMatch;assert.equal((await api(wp,'PUT',{version:2,document:legacy},token)).status,200);assert.deepEqual((await api(tp,'GET',null,token)).data.document,tech);
++ const cleared={...tech,requiredMatch:[]};assert.equal((await api(tp,'PUT',{version:3,document:cleared},token)).status,200);assert.deepEqual((await api(wp,'GET',null,token)).data.document.requiredMatch,[]);
++ const org=await api('/api/me/companies','POST',{name:'필수 그룹 검증'},token);const cp=`/api/companies/${org.data.id}/registration`,company=documentFixture();company.worksite.qualifications='기존 자격자료 보존';company.lines[0].requiredMatch=['pay','region','workAbility'];company.lines.push({...structuredClone(company.lines[0]),id:'second',requiredMatch:['experience','hours','schedule']});assert.equal((await api(cp,'PUT',{version:0,document:company},token)).status,200);
++ const invalid=structuredClone(company);invalid.lines[0].requiredMatch.push('hours');assert.equal((await api(cp,'PUT',{version:1,document:invalid},token)).status,400);assert.deepEqual((await api(cp,'GET',null,token)).data.document,company);
++ company.lines[0].requiredMatch=[];company.lines[1].headcount=4;assert.equal((await api(cp,'PUT',{version:1,document:company},token)).status,200);
++ await api('/api/logout','POST',{},token);assert.equal((await api(wp,'GET',null,token)).status,401);a=await api('/api/login','POST',{email,password});token=a.data.token;
++ assert.deepEqual((await api(tp,'GET',null,token)).data.document,cleared);assert.deepEqual((await api(cp,'GET',null,token)).data.document,company);assert.deepEqual((await api(wp,'GET',null,token)).data.document,{...legacy,requiredMatch:[]});
++ // A technical-only profile cannot invent absent pay or region criteria.
++ const second=await api('/api/register','POST',{email:'other-'+email,password,name:'기술작업자'});assert.equal((await api(tp,'PUT',{version:0,document:tech},second.data.token)).status,400);assert.equal((await api(tp,'PUT',{version:0,document:{...tech,requiredMatch:['workAbility']}},second.data.token)).status,200);assert.equal((await api(cp,'GET',null,second.data.token)).status,404);
++ }finally{if(child.exitCode===null&&child.signalCode===null){const stopped=new Promise(r=>child.once('exit',r));child.kill();await stopped;}}
++});
+--- /dev/null
++++ b/tests/ui/required-match.test.cjs
+@@ -0,0 +1,26 @@
++const {chromium}=require(process.env.NODE_BROWSER_MODULE||'playwright');
++const assert=require('node:assert/strict'),fs=require('node:fs'),{randomBytes}=require('node:crypto');
++const base=process.env.NODE_REQUIRED_BASE||'http://127.0.0.1:8052',out='docs/required-match-2026-11-01';
++(async()=>{const b=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});try{for(const width of [390,1440]){
++ const c=await b.newContext({viewport:{width,height:900}}),p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'/');
++ const api=(path,method='GET',body)=>p.evaluate(async({path,method,body})=>{const r=await fetch(path,{method,headers:{'Content-Type':'application/json','X-Node-Session':'cookie'},...(body?{body:JSON.stringify(body)}:{})});return {status:r.status,data:await r.json()};},{path,method,body});
++ const email='required-ui-'+randomBytes(8).toString('hex')+'@example.com',password=randomBytes(20).toString('hex');assert.equal((await api('/api/register','POST',{email,password,name:'필수조건 화면검증'})).status,201);
++ const checkbox=k=>p.locator(`[data-required-match="${k}"]`);
++ const choose=async(keys,all)=>{for(const k of keys)await checkbox(k).check();assert.equal(await p.locator('[data-required-match]:checked').count(),keys.length);if(keys.length===3){for(const k of all.filter(k=>!keys.includes(k)))assert(await checkbox(k).isDisabled());assert(await checkbox(keys[0]).isEnabled());await checkbox(keys[0]).uncheck();for(const k of all)assert(await checkbox(k).isEnabled());await checkbox(keys[0]).check();}};
++ async function layout(){assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));const result=await p.evaluate(()=>[...document.querySelectorAll('.required-match-control')].filter(x=>x.getBoundingClientRect().width).map(x=>{const t=x.nextSibling,r=x.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(t);const rects=[...range.getClientRects()];return {key:x.querySelector('input').value,checkbox:{x:r.x,y:r.y,width:r.width,height:r.height},titleRects:rects.map(r=>({x:r.x,y:r.y,width:r.width,height:r.height}))};}));for(const row of result){assert.equal(row.titleRects.length,1,JSON.stringify(row));assert(row.checkbox.x+row.checkbox.width<=row.titleRects[0].x+1,JSON.stringify(row));assert(Math.abs(row.checkbox.y-row.titleRects[0].y)<14,JSON.stringify(row));}return result;}
++ await p.goto(base+'/company-registration');await p.locator('#content').waitFor({state:'visible'});await p.fill('#companyName','필수조건 업체');await p.fill('#contactName','검증 담당자');await p.fill('#phone','010-0000-0000');await p.click('#next');await p.fill('#siteName','필수조건 현장');await p.evaluate(()=>{window.daum={Postcode:class{constructor(o){this.o=o}embed(){this.o.oncomplete({userSelectedType:'R',roadAddress:'서울특별시 종로구 사직로 161',zonecode:'03045'})}}}});await p.click('#searchAddress');await p.fill('#qualifications','기존 면허정보 유지');await p.click('#next');
++ const companyKeys=['workAbility','experience','difficulty','region','pay','hours','schedule','paymentTerms','paymentMethod','taxTerms','otherTerms'];
++ async function fillGroup(){await p.selectOption('#resourceMode','technical_worker');await p.selectOption('#occupationMajor','NODE-JM-001');await p.selectOption('#occupationMiddle','NODE-JG-001');await p.locator('#occupationChoices input').nth(0).check();await p.locator('#occupationChoices input').nth(1).check();await p.selectOption('#province','11');await p.click('#addRegion');await p.fill('#paymentTerms','당일 지급');}
++ await fillGroup();await choose(['workAbility','region','pay'],companyKeys);assert.equal(await p.locator('#occupationChoices input:checked').count(),2);await layout();await p.screenshot({path:`${out}/selected-company-${width}.png`,fullPage:true});await p.click('#addLine');assert.equal(await p.locator('#lineList article').count(),1);await p.click('#openLine');assert.match(await p.locator('.required-match-count').innerText(),/0\/3/);await fillGroup();await choose(['experience','hours','schedule'],companyKeys);await p.click('#addLine');await p.click('#save');await p.waitForFunction(()=>document.querySelector('#notice').textContent.includes('서버에 저장했습니다'));
++ const me=(await api('/api/me')).data,id=me.companies[0].id,cp=`/api/companies/${id}/registration`;let saved=(await api(cp)).data;assert.deepEqual(saved.document.lines[0].requiredMatch,['region','pay','workAbility']);assert.deepEqual(saved.document.lines[1].requiredMatch,['hours','schedule','experience']);assert.equal(saved.document.lines[0].occupationRequirement,'all_per_person');
++ await p.locator('#lineList article').first().getByRole('button',{name:'수정',exact:true}).click();assert(await checkbox('pay').isChecked());await checkbox('pay').uncheck();await p.click('#addLine');await p.click('#save');await p.waitForFunction(()=>document.querySelector('#notice').textContent.includes('서버에 저장했습니다'));saved=(await api(cp)).data;assert.equal(saved.document.lines[0].requiredMatch.length,2);assert.equal(saved.document.lines[1].requiredMatch.length,3);
++ const wp='/api/me/worker-registration',worker={roles:['자가기사','데모기사'],abilities:[{id:'a',mode:'ability',kind:'excavator',form:'타이어식 (W)',size:'06W',years:'3',optionSelections:['브레이커']}],ownedEquipment:[{id:'o',mode:'owned',kind:'excavator',form:'타이어식 (W)',size:'06W',years:'2'}],preferences:{...saved.document.lines[0].conditions,conditionPriority:['pay','region','hours','equipment'],equipmentPriority:['a']},requiredMatch:['region','pay','hours']};assert.equal((await api(wp,'PUT',{version:0,document:worker})).status,200);
++ await p.goto(base+'/worker-registration');await p.locator('#content').waitFor({state:'visible'});await p.waitForFunction(()=>document.getElementById('equipment').contentWindow.NODE_ALPHA_EXPORT);assert(await checkbox('schedule').isDisabled());await checkbox('region').uncheck();assert(await checkbox('schedule').isEnabled());await checkbox('workAbility').check();assert.match(await p.locator('.required-match-count').innerText(),/3\/3/);const workerLayout=await layout();await p.screenshot({path:`${out}/selected-worker-${width}.png`,fullPage:true});await p.click('#save');await p.waitForFunction(()=>document.querySelector('#notice').textContent.includes('서버에 저장했습니다'));let ws=(await api(wp)).data;assert.deepEqual(ws.document.requiredMatch,['pay','hours','workAbility']);assert.equal(ws.document.ownedEquipment.length,1);assert.equal(ws.document.abilities.length,1);assert.deepEqual(ws.document.roles,['자가기사','데모기사']);
++ await p.goto(base+'/register/technical');await p.locator('#content').waitFor({state:'visible'});assert(await checkbox('workAbility').isChecked());assert.match(await p.locator('.required-match-count').innerText(),/3\/3/);
++ await p.selectOption('#occupationMajor','NODE-JM-001');await p.selectOption('#occupationMiddle','NODE-JG-001');await p.locator('#occupationChoices input').nth(0).check();await p.locator('#occupationChoices input').nth(1).check();await checkbox('workAbility').uncheck();await p.click('#save');await p.waitForFunction(()=>document.querySelector('#notice').textContent.includes('서버에 저장했습니다'));const tp='/api/me/technical-registration',ts=(await api(tp)).data;assert.deepEqual(ts.document.requiredMatch,['pay','hours']);assert.equal(ts.document.occupationIds.length,2);assert.deepEqual((await api(wp)).data.document.requiredMatch,['pay','hours']);const technicalLayout=await layout();await p.screenshot({path:`${out}/selected-technical-${width}.png`,fullPage:true});
++ const invalid={...ts.document,requiredMatch:['workAbility','region','pay','hours']};assert.equal((await api(tp,'PUT',{version:ts.version,document:invalid})).status,400);assert.deepEqual((await api(tp)).data,ts);
++ assert.equal((await api('/api/logout','POST',{})).status,200);assert.equal((await api(tp)).status,401);assert.equal((await api('/api/login','POST',{email,password})).status,200);await p.reload();await p.locator('#content').waitFor({state:'visible'});assert.equal(await p.locator('#occupationSummary button').count(),2);assert.equal(await checkbox('workAbility').isChecked(),false);assert.match(await p.locator('.required-match-count').innerText(),/2\/3/);
++ await p.goto(base+'/worker-registration');await p.locator('#content').waitFor({state:'visible'});assert(await checkbox('pay').isChecked());assert(await checkbox('hours').isChecked());assert.equal(await checkbox('workAbility').isChecked(),false);await checkbox('pay').uncheck();await checkbox('hours').uncheck();await p.waitForFunction(()=>document.getElementById('equipment').contentWindow.NODE_ALPHA_EXPORT);await p.click('#save');await p.waitForFunction(()=>document.querySelector('#notice').textContent.includes('서버에 저장했습니다'));assert.deepEqual((await api(wp)).data.document.requiredMatch,[]);
++ await p.goto(base+'/company-registration');await p.locator('#content').waitFor({state:'visible'});await p.click('[data-step="2"]');await p.locator('#lineList article').nth(1).getByRole('button',{name:'수정',exact:true}).click();assert(await checkbox('experience').isChecked());assert(await checkbox('hours').isChecked());assert(await checkbox('schedule').isChecked());assert.equal(await p.locator('#occupationSummary button').count(),2);assert.equal((await api(cp)).data.document.worksite.qualifications,'기존 면허정보 유지');const companyLayout=await layout();assert.deepEqual(errors,[]);
++ fs.writeFileSync(`${out}/real-layout-${width}.json`,JSON.stringify({companyLayout,workerLayout,technicalLayout},null,2));console.log(`PASS ${width}px: left-side single-line titles, 0-3 limit, fourth disabled/uncheck, group independence/edit, shared worker scope, empty new-profile restore, occupation AND, separate owned/ability arrays, real DB save/edit/logout/relogin, invalid-request rollback, no overflow/errors`);await c.close();
++}}finally{await b.close()}})().catch(e=>{console.error(e);process.exit(1)});

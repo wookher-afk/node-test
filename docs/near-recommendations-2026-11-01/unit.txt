@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: full candidate is read only; exact match retains its original meaning
+ok 1 - full candidate is read only; exact match retains its original meaning
+  ---
+  duration_ms: 3.19575
+  type: 'test'
+  ...
+# Subtest: daily price shortfall is recommended with both amounts and signed difference
+ok 2 - daily price shortfall is recommended with both amounts and signed difference
+  ---
+  duration_ms: 1.17075
+  type: 'test'
+  ...
+# Subtest: partial inclusive dates expose covered and missing periods, without changing exact match
+ok 3 - partial inclusive dates expose covered and missing periods, without changing exact match
+  ---
+  duration_ms: 0.353458
+  type: 'test'
+  ...
+# Subtest: dates/range/always and legacy dates compute exact inclusive intersection
+ok 4 - dates/range/always and legacy dates compute exact inclusive intersection
+  ---
+  duration_ms: 1.5345
+  type: 'test'
+  ...
+# Subtest: sparse dates preserve holes and leap day; one overlapping boundary day counts
+ok 5 - sparse dates preserve holes and leap day; one overlapping boundary day counts
+  ---
+  duration_ms: 0.218208
+  type: 'test'
+  ...
+# Subtest: disjoint, unspecified and invalid schedules fail closed
+ok 6 - disjoint, unspecified and invalid schedules fail closed
+  ---
+  duration_ms: 0.354625
+  type: 'test'
+  ...
+# Subtest: specification mismatch/missing excludes even with relaxed selections and higher pay
+ok 7 - specification mismatch/missing excludes even with relaxed selections and higher pay
+  ---
+  duration_ms: 0.78425
+  type: 'test'
+  ...
+# Subtest: existing required gates, options, experience and unsupported units stay mandatory
+ok 8 - existing required gates, options, experience and unsupported units stay mandatory
+  ---
+  duration_ms: 0.820625
+  type: 'test'
+  ...
+# Subtest: ranking puts full first; Pareto layers do not resolve price/schedule tradeoffs
+ok 9 - ranking puts full first; Pareto layers do not resolve price/schedule tradeoffs
+  ---
+  duration_ms: 1.355625
+  type: 'test'
+  ...
+# Subtest: numeric account ID ties are deterministic beyond safe integer, separately per line
+ok 10 - numeric account ID ties are deterministic beyond safe integer, separately per line
+  ---
+  duration_ms: 1.240042
+  type: 'test'
+  ...
+# Subtest: recommendation endpoint authorizes membership, reads only, excludes rejected workers and private data
+ok 11 - recommendation endpoint authorizes membership, reads only, excludes rejected workers and private data
+  ---
+  duration_ms: 0.757542
+  type: 'test'
+  ...
+# Subtest: optional preferences remain optional, but cannot enter the all-conditions-full tier
+ok 12 - optional preferences remain optional, but cannot enter the all-conditions-full tier
+  ---
+  duration_ms: 0.144916
+  type: 'test'
+  ...
+# Subtest: technical worker recommendations retain all-occupations and experience gates
+ok 13 - technical worker recommendations retain all-occupations and experience gates
+  ---
+  duration_ms: 0.333542
+  type: 'test'
+  ...
+# Subtest: simultaneous price and schedule gaps have no fixed cutoff; all missing days are explicit
+ok 14 - simultaneous price and schedule gaps have no fixed cutoff; all missing days are explicit
+  ---
+  duration_ms: 0.115542
+  type: 'test'
+  ...
+# Subtest: unknown pay units and missing schedules exclude even when neither side selected them
+ok 15 - unknown pay units and missing schedules exclude even when neither side selected them
+  ---
+  duration_ms: 0.237625
+  type: 'test'
+  ...
+# Subtest: technical-only malformed preferences fail closed without throwing
+ok 16 - technical-only malformed preferences fail closed without throwing
+  ---
+  duration_ms: 0.199792
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70.707708

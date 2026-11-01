@@ -1,0 +1,1 @@
+PASS one-license-for-multiple-specifications

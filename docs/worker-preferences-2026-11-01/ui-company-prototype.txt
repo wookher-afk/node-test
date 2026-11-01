@@ -1,0 +1,2 @@
+PASS company prototype old won restore/exact precision/20만원=200000원/day/month/draft/summary/layout 390
+PASS company prototype old won restore/exact precision/20만원=200000원/day/month/draft/summary/layout 1440

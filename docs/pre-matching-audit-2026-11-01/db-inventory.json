@@ -1,0 +1,559 @@
+{
+  "database": {
+    "version": "PostgreSQL 17.11 (Postgres.app) on aarch64-apple-darwin23.6.0, compiled by Apple clang version 15.0.0 (clang-1500.3.9.4), 64-bit",
+    "read_only": "on"
+  },
+  "tableCounts": {
+    "account_roles": 76,
+    "account_sessions": 46,
+    "accounts": 46,
+    "activity_confirmations": 0,
+    "activity_records": 0,
+    "applications": 0,
+    "audit_events": 0,
+    "calendar_events": 0,
+    "case_decision_order": 0,
+    "case_decisions": 0,
+    "company_alpha_registrations": 16,
+    "completion_confirmations": 0,
+    "equipment": 0,
+    "equipment_options": 0,
+    "hiring_condition_dates": 0,
+    "hiring_condition_versions": 0,
+    "job_line_dates": 0,
+    "job_lines": 0,
+    "job_post_events": 0,
+    "job_post_version_dates": 0,
+    "job_post_version_lines": 0,
+    "job_post_versions": 0,
+    "job_posts": 0,
+    "learning_permission_events": 0,
+    "match_approvals": 0,
+    "match_dates": 0,
+    "match_events": 0,
+    "match_term_parties": 0,
+    "match_terms": 0,
+    "matches": 0,
+    "occupation_categories": 0,
+    "occupations": 0,
+    "organization_memberships": 37,
+    "organizations": 37,
+    "payment_claims": 0,
+    "payment_due_date_history": 0,
+    "payment_obligations": 0,
+    "receipt_confirmations": 0,
+    "recommendation_impressions": 0,
+    "recommendation_outcomes": 0,
+    "record_cases": 0,
+    "regions": 0,
+    "resource_reservations": 0,
+    "transaction_reviews": 0,
+    "transport_assignments": 0,
+    "transport_handoffs": 0,
+    "transport_requests": 0,
+    "transport_vehicles": 0,
+    "worker_alpha_registrations": 39,
+    "worker_preference_occupations": 0,
+    "worker_preference_regions": 0,
+    "worker_preference_versions": 0,
+    "worker_profiles": 1,
+    "worker_regions": 0,
+    "worksite_assignments": 0,
+    "worksite_events": 0,
+    "worksites": 0
+  },
+  "validation": {
+    "worker": {
+      "total": 36,
+      "valid": 36,
+      "errors": {}
+    },
+    "technical": {
+      "total": 3,
+      "valid": 3,
+      "errors": {}
+    },
+    "company": {
+      "total": 16,
+      "valid": 16,
+      "errors": {}
+    },
+    "abilityClassification": {
+      "total": 36,
+      "valid": 36,
+      "errors": {}
+    },
+    "ownedClassification": {
+      "total": 20,
+      "valid": 20,
+      "errors": {}
+    }
+  },
+  "coverage": {
+    "workerDocuments": 39,
+    "equipmentWorkers": 36,
+    "technicalWorkers": 3,
+    "abilities": 36,
+    "owned": 20,
+    "workerEquipmentCatalogVersionMissing": 36,
+    "abilityMissingParents": 0,
+    "abilityNoOptionArray": 0,
+    "abilityBlankExperience": 0,
+    "abilityHasMonths": 0,
+    "companyDocuments": 16,
+    "groups": 40,
+    "technicalGroups": 8,
+    "groupsWithSiteCode": 0,
+    "workerRequiredCounts": {
+      "0": 38,
+      "1": 1
+    },
+    "companyRequiredCounts": {
+      "0": 40
+    }
+  },
+  "columns": [
+    {
+      "table_name": "company_alpha_registrations",
+      "column_name": "organization_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "company_alpha_registrations",
+      "column_name": "document",
+      "data_type": "jsonb"
+    },
+    {
+      "table_name": "company_alpha_registrations",
+      "column_name": "version",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "company_alpha_registrations",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "owner_account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "owner_organization_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "kind",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "grade",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "model",
+      "data_type": "text"
+    },
+    {
+      "table_name": "equipment",
+      "column_name": "serial_ref",
+      "data_type": "text"
+    },
+    {
+      "table_name": "job_line_dates",
+      "column_name": "job_line_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_line_dates",
+      "column_name": "work_date",
+      "data_type": "date"
+    },
+    {
+      "table_name": "job_line_dates",
+      "column_name": "capacity",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "job_post_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "occupation_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "resource_mode",
+      "data_type": "text"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "daily_pay_krw",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "job_lines",
+      "column_name": "allow_partial",
+      "data_type": "boolean"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "job_line_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "worker_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "equipment_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "version",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "terms",
+      "data_type": "jsonb"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "terms_hash",
+      "data_type": "text"
+    },
+    {
+      "table_name": "match_terms",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "matches",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "matches",
+      "column_name": "terms_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "matches",
+      "column_name": "status",
+      "data_type": "text"
+    },
+    {
+      "table_name": "matches",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "matches",
+      "column_name": "cancelled_by",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "matches",
+      "column_name": "cancellation_reason",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "document",
+      "data_type": "jsonb"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "version",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worker_profiles",
+      "column_name": "account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_profiles",
+      "column_name": "experience_months",
+      "data_type": "integer"
+    },
+    {
+      "table_name": "worker_regions",
+      "column_name": "account_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_regions",
+      "column_name": "region_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worker_regions",
+      "column_name": "include_descendants",
+      "data_type": "boolean"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "organization_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "region_id",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "name",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "address",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "location_notes",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "description",
+      "data_type": "text"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "is_active",
+      "data_type": "boolean"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "created_by",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "updated_by",
+      "data_type": "bigint"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "updated_at",
+      "data_type": "timestamp with time zone"
+    },
+    {
+      "table_name": "worksites",
+      "column_name": "version",
+      "data_type": "integer"
+    }
+  ],
+  "constraints": [
+    {
+      "table_name": "company_alpha_registrations",
+      "conname": "company_alpha_registrations_document_check",
+      "definition": "CHECK ((jsonb_typeof((document -> 'lines'::text)) = 'array'::text))"
+    },
+    {
+      "table_name": "company_alpha_registrations",
+      "conname": "company_alpha_registrations_organization_id_fkey",
+      "definition": "FOREIGN KEY (organization_id) REFERENCES organizations(id)"
+    },
+    {
+      "table_name": "company_alpha_registrations",
+      "conname": "company_alpha_registrations_pkey",
+      "definition": "PRIMARY KEY (organization_id)"
+    },
+    {
+      "table_name": "company_alpha_registrations",
+      "conname": "company_alpha_registrations_version_check",
+      "definition": "CHECK ((version > 0))"
+    },
+    {
+      "table_name": "job_line_dates",
+      "conname": "job_line_dates_capacity_check",
+      "definition": "CHECK ((capacity > 0))"
+    },
+    {
+      "table_name": "job_line_dates",
+      "conname": "job_line_dates_job_line_id_fkey",
+      "definition": "FOREIGN KEY (job_line_id) REFERENCES job_lines(id)"
+    },
+    {
+      "table_name": "job_line_dates",
+      "conname": "job_line_dates_pkey",
+      "definition": "PRIMARY KEY (job_line_id, work_date)"
+    },
+    {
+      "table_name": "job_lines",
+      "conname": "job_lines_daily_pay_krw_check",
+      "definition": "CHECK ((daily_pay_krw >= 0))"
+    },
+    {
+      "table_name": "job_lines",
+      "conname": "job_lines_job_post_id_fkey",
+      "definition": "FOREIGN KEY (job_post_id) REFERENCES job_posts(id)"
+    },
+    {
+      "table_name": "job_lines",
+      "conname": "job_lines_occupation_id_fkey",
+      "definition": "FOREIGN KEY (occupation_id) REFERENCES occupations(id)"
+    },
+    {
+      "table_name": "job_lines",
+      "conname": "job_lines_pkey",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "job_lines",
+      "conname": "job_lines_resource_mode_check",
+      "definition": "CHECK ((resource_mode = ANY (ARRAY['worker'::text, 'equipment_and_worker'::text, 'equipment'::text])))"
+    },
+    {
+      "table_name": "match_terms",
+      "conname": "match_terms_equipment_id_fkey",
+      "definition": "FOREIGN KEY (equipment_id) REFERENCES equipment(id)"
+    },
+    {
+      "table_name": "match_terms",
+      "conname": "match_terms_id_terms_hash_key",
+      "definition": "UNIQUE (id, terms_hash)"
+    },
+    {
+      "table_name": "match_terms",
+      "conname": "match_terms_job_line_id_fkey",
+      "definition": "FOREIGN KEY (job_line_id) REFERENCES job_lines(id)"
+    },
+    {
+      "table_name": "match_terms",
+      "conname": "match_terms_job_line_id_worker_id_version_key",
+      "definition": "UNIQUE (job_line_id, worker_id, version)"
+    },
+    {
+      "table_name": "match_terms",
+      "conname": "match_terms_pkey",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "match_terms",
+      "conname": "match_terms_version_check",
+      "definition": "CHECK ((version > 0))"
+    },
+    {
+      "table_name": "match_terms",
+      "conname": "match_terms_worker_id_fkey",
+      "definition": "FOREIGN KEY (worker_id) REFERENCES accounts(id)"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "no_equipment_overlap",
+      "definition": "EXCLUDE USING gist (equipment_id WITH =, period WITH &&) WHERE (((equipment_id IS NOT NULL) AND (status = 'confirmed'::text)))"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "no_worker_overlap",
+      "definition": "EXCLUDE USING gist (account_id WITH =, period WITH &&) WHERE (((account_id IS NOT NULL) AND (status = 'confirmed'::text)))"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "resource_reservations_account_id_fkey",
+      "definition": "FOREIGN KEY (account_id) REFERENCES accounts(id)"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "resource_reservations_check",
+      "definition": "CHECK ((num_nonnulls(account_id, equipment_id) = 1))"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "resource_reservations_equipment_id_fkey",
+      "definition": "FOREIGN KEY (equipment_id) REFERENCES equipment(id)"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "resource_reservations_match_id_fkey",
+      "definition": "FOREIGN KEY (match_id) REFERENCES matches(id)"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "resource_reservations_period_check",
+      "definition": "CHECK ((NOT isempty(period)))"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "resource_reservations_pkey",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "resource_reservations",
+      "conname": "resource_reservations_status_check",
+      "definition": "CHECK ((status = ANY (ARRAY['confirmed'::text, 'released'::text])))"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "conname": "worker_alpha_registrations_account_id_fkey",
+      "definition": "FOREIGN KEY (account_id) REFERENCES accounts(id)"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "conname": "worker_alpha_registrations_document_check",
+      "definition": "CHECK (((jsonb_typeof((document -> 'abilities'::text)) = 'array'::text) AND (jsonb_typeof((document -> 'ownedEquipment'::text)) = 'array'::text)))"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "conname": "worker_alpha_registrations_pkey",
+      "definition": "PRIMARY KEY (account_id)"
+    },
+    {
+      "table_name": "worker_alpha_registrations",
+      "conname": "worker_alpha_registrations_version_check",
+      "definition": "CHECK ((version > 0))"
+    }
+  ]
+}

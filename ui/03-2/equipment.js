@@ -30,7 +30,7 @@ window.NODE_EQUIPMENT = (()=>{
  };
  let container,primary,moved=[];
  const scope=()=>$('editor');
- function unmount(){for(const label of moved)$('specs').append(label);moved=[];primary?.remove();container?.remove();primary=container=null;}
+ function unmount(){for(const label of moved)$('specs').append(label);moved=[];primary?.remove();$('equipmentReferences')?.remove();container?.remove();primary=container=null;}
  function states(select){for(const [value,text] of [['','미입력'],['value','직접 입력'],['unknown','모름'],['na','해당 없음'],['pending','미정']])select.add(new Option(text,value));}
  function moveSpec(input,grid){if(!input)return;const label=input.parentElement;moved.push(label);grid.append(label);
   const state=document.createElement('select');state.dataset.specStatus=input.id;state.setAttribute('aria-label',label.firstChild.textContent+' 입력 상태');states(state);label.insertBefore(state,input);
@@ -43,13 +43,13 @@ window.NODE_EQUIPMENT = (()=>{
   const h=document.createElement('h3');h.id='equipmentPrimaryTitle';h.textContent='현장 규격 · '+profile.core;
   const hint=document.createElement('p');hint.id='equipmentPrimaryHint';hint.className='hint';
   hint.textContent='형태에 맞는 규격을 직접 입력하거나 모름을 선택하세요. 상세 수치는 선택 사항이며, 별도 현장 호칭 없이도 등록할 수 있습니다. 숫자 0과 미입력은 구분합니다.';
-  const grid=document.createElement('div');grid.className='grid';primary.append(h,hint,grid);$('formDetail').parentElement.after(primary);
+  const grid=document.createElement('div');grid.className='grid';primary.append(h,hint,grid);$('optionalDetails').append(primary);
   const [indices,named]=coreFields[id]||[[],[]];for(const i of indices)moveSpec($('spec'+i),grid);
   if(id==='mixer-truck')for(const key of ['mixingTransportCapacity','drumTotalVolume'])moveSpec($('a_'+key),grid);
   if(id==='loader')$('spec1').placeholder='예: 2.8 · 장착 버킷의 실제 용량(㎥·루베), 기준은 옆에서 선택';
   if(references[id]){const box=document.createElement('details');box.className='equipmentReferences';box.id='equipmentReferences';const title=document.createElement('summary');title.textContent='제조사·국내 공급 모델 참고';box.append(title);
    const note=document.createElement('p');note.textContent='참고 예시이며 현재 장비의 제원으로 자동 입력하지 않습니다. 장착 구성·판본·실차를 확인하세요.'+(id==='telehandler'?' 최대 하중과 최대 높이가 동시에 성립한다는 뜻은 아닙니다.':'');box.append(note);
-   for(const [text,url] of references[id]){const a=document.createElement('a');a.textContent=text;a.href=url;a.target='_blank';a.rel='noopener';box.append(a);}primary.append(box);
+   for(const [text,url] of references[id]){const a=document.createElement('a');a.textContent=text;a.href=url;a.target='_blank';a.rel='noopener';box.append(a);}$('optionalDetails').append(box);
   }
   container=document.createElement('details');container.id='equipmentFields';
   const heading=document.createElement('summary');heading.textContent='추가 제원 · 근거 (선택)';const flow=document.createElement('p');flow.textContent=profile.flow;

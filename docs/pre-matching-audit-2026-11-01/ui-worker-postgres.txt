@@ -1,0 +1,2 @@
+PASS REAL PostgreSQL browser signup/login/logout/relogin/ability/ownership/preferences/edit/refresh/multiple roles 390
+PASS REAL PostgreSQL browser signup/login/logout/relogin/ability/ownership/preferences/edit/refresh/multiple roles 1440

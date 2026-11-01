@@ -1,0 +1,1 @@
+PASS: dual roles, dependent selections, ability/ownership, specs, options escaping, add/edit/delete, autosave/draft restore, navigation review, desktop/mobile overflow; loading categories in both modes; all 17 legacy IDs and unknown ID; draft migration and idempotent reload; no browser errors

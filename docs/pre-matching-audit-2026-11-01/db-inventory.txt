@@ -1,0 +1,115 @@
+{
+  "database": {
+    "version": "PostgreSQL 17.11 (Postgres.app) on aarch64-apple-darwin23.6.0, compiled by Apple clang version 15.0.0 (clang-1500.3.9.4), 64-bit",
+    "read_only": "on"
+  },
+  "tableCounts": {
+    "account_roles": 76,
+    "account_sessions": 46,
+    "accounts": 46,
+    "activity_confirmations": 0,
+    "activity_records": 0,
+    "applications": 0,
+    "audit_events": 0,
+    "calendar_events": 0,
+    "case_decision_order": 0,
+    "case_decisions": 0,
+    "company_alpha_registrations": 16,
+    "completion_confirmations": 0,
+    "equipment": 0,
+    "equipment_options": 0,
+    "hiring_condition_dates": 0,
+    "hiring_condition_versions": 0,
+    "job_line_dates": 0,
+    "job_lines": 0,
+    "job_post_events": 0,
+    "job_post_version_dates": 0,
+    "job_post_version_lines": 0,
+    "job_post_versions": 0,
+    "job_posts": 0,
+    "learning_permission_events": 0,
+    "match_approvals": 0,
+    "match_dates": 0,
+    "match_events": 0,
+    "match_term_parties": 0,
+    "match_terms": 0,
+    "matches": 0,
+    "occupation_categories": 0,
+    "occupations": 0,
+    "organization_memberships": 37,
+    "organizations": 37,
+    "payment_claims": 0,
+    "payment_due_date_history": 0,
+    "payment_obligations": 0,
+    "receipt_confirmations": 0,
+    "recommendation_impressions": 0,
+    "recommendation_outcomes": 0,
+    "record_cases": 0,
+    "regions": 0,
+    "resource_reservations": 0,
+    "transaction_reviews": 0,
+    "transport_assignments": 0,
+    "transport_handoffs": 0,
+    "transport_requests": 0,
+    "transport_vehicles": 0,
+    "worker_alpha_registrations": 39,
+    "worker_preference_occupations": 0,
+    "worker_preference_regions": 0,
+    "worker_preference_versions": 0,
+    "worker_profiles": 1,
+    "worker_regions": 0,
+    "worksite_assignments": 0,
+    "worksite_events": 0,
+    "worksites": 0
+  },
+  "validation": {
+    "worker": {
+      "total": 36,
+      "valid": 36,
+      "errors": {}
+    },
+    "technical": {
+      "total": 3,
+      "valid": 3,
+      "errors": {}
+    },
+    "company": {
+      "total": 16,
+      "valid": 16,
+      "errors": {}
+    },
+    "abilityClassification": {
+      "total": 36,
+      "valid": 36,
+      "errors": {}
+    },
+    "ownedClassification": {
+      "total": 20,
+      "valid": 20,
+      "errors": {}
+    }
+  },
+  "coverage": {
+    "workerDocuments": 39,
+    "equipmentWorkers": 36,
+    "technicalWorkers": 3,
+    "abilities": 36,
+    "owned": 20,
+    "workerEquipmentCatalogVersionMissing": 36,
+    "abilityMissingParents": 0,
+    "abilityNoOptionArray": 0,
+    "abilityBlankExperience": 0,
+    "abilityHasMonths": 0,
+    "companyDocuments": 16,
+    "groups": 40,
+    "technicalGroups": 8,
+    "groupsWithSiteCode": 0,
+    "workerRequiredCounts": {
+      "0": 38,
+      "1": 1
+    },
+    "companyRequiredCounts": {
+      "0": 40
+    }
+  }
+}

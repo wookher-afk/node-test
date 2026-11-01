@@ -1,0 +1,274 @@
+TAP version 13
+# Subtest: one virtual worker and recruitment match without mutation; legal verification is excluded from MVP
+ok 1 - one virtual worker and recruitment match without mutation; legal verification is excluded from MVP
+  ---
+  duration_ms: 4.228708
+  type: 'test'
+  ...
+# Subtest: each side mandatory conditions and same-equipment experience block failures
+ok 2 - each side mandatory conditions and same-equipment experience block failures
+  ---
+  duration_ms: 2.94175
+  type: 'test'
+  ...
+# Subtest: unselected preference mismatch is shown but does not become a mandatory gate
+ok 3 - unselected preference mismatch is shown but does not become a mandatory gate
+  ---
+  duration_ms: 0.295875
+  type: 'test'
+  ...
+# Subtest: disjoint work dates block matching regardless of schedule selection on either side
+ok 4 - disjoint work dates block matching regardless of schedule selection on either side
+  ---
+  duration_ms: 0.481167
+  type: 'test'
+  ...
+# Subtest: overlapping dates retain the existing requirement to cover every company work date
+ok 5 - overlapping dates retain the existing requirement to cover every company work date
+  ---
+  duration_ms: 0.473042
+  type: 'test'
+  ...
+# Subtest: unspecified, missing or invalid dates cannot confirm a match even when unselected
+ok 6 - unspecified, missing or invalid dates cannot confirm a match even when unselected
+  ---
+  duration_ms: 0.496417
+  type: 'test'
+  ...
+# Subtest: hours mismatch remains optional unless selected by either side
+ok 7 - hours mismatch remains optional unless selected by either side
+  ---
+  duration_ms: 0.309875
+  type: 'test'
+  ...
+# Subtest: unsupported terms, unit conversion, missing selections, resource mode fail closed
+ok 8 - unsupported terms, unit conversion, missing selections, resource mode fail closed
+  ---
+  duration_ms: 1.366125
+  type: 'test'
+  ...
+# Subtest: missing/malformed documents cannot pass
+ok 9 - missing/malformed documents cannot pass
+  ---
+  duration_ms: 0.581833
+  type: 'test'
+  ...
+# Subtest: technical group requires every occupation per person; experience remains unknown
+ok 10 - technical group requires every occupation per person; experience remains unknown
+  ---
+  duration_ms: 0.821042
+  type: 'test'
+  ...
+# Subtest: endpoint binds member and company, only reads, omits registration/private fields
+ok 11 - endpoint binds member and company, only reads, omits registration/private fields
+  ---
+  duration_ms: 0.796625
+  type: 'test'
+  ...
+# Subtest: equipment specification is mandatory: mini 017 and 020 never substitute in either direction
+ok 12 - equipment specification is mandatory: mini 017 and 020 never substitute in either direction
+  ---
+  duration_ms: 0.961083
+  type: 'test'
+  ...
+# Subtest: missing, empty and noncanonical specifications never allow matching
+ok 13 - missing, empty and noncanonical specifications never allow matching
+  ---
+  duration_ms: 1.725042
+  type: 'test'
+  ...
+# Subtest: only the exact equipment record supplies options and experience
+ok 14 - only the exact equipment record supplies options and experience
+  ---
+  duration_ms: 0.371042
+  type: 'test'
+  ...
+# Subtest: auto-match endpoint excludes mismatched mini specifications from eligible results
+ok 15 - auto-match endpoint excludes mismatched mini specifications from eligible results
+  ---
+  duration_ms: 0.188875
+  type: 'test'
+  ...
+# Subtest: company conditions reuse worker region/time/schedule/won semantics, including monthly and multiple lines
+ok 16 - company conditions reuse worker region/time/schedule/won semantics, including monthly and multiple lines
+  ---
+  duration_ms: 4.013
+  type: 'test'
+  ...
+# Subtest: company rejects catalog IDs, parents, forms, sizes, options and invalid conditions
+ok 17 - company rejects catalog IDs, parents, forms, sizes, options and invalid conditions
+  ---
+  duration_ms: 1.431083
+  type: 'test'
+  ...
+# Subtest: explicit custom form/size is preserved and never treated as catalog alias equivalence
+ok 18 - explicit custom form/size is preserved and never treated as catalog alias equivalence
+  ---
+  duration_ms: 0.155083
+  type: 'test'
+  ...
+# Subtest: structured address preserves combined legacy address and rejects inconsistent values
+ok 19 - structured address preserves combined legacy address and rejects inconsistent values
+  ---
+  duration_ms: 0.153958
+  type: 'test'
+  ...
+# Subtest: legacy resource modes stay compatible and incomplete technical groups are rejected
+ok 20 - legacy resource modes stay compatible and incomplete technical groups are rejected
+  ---
+  duration_ms: 0.4115
+  type: 'test'
+  ...
+# Subtest: draft taxonomy has 13/31/179 unique linked IDs and all-per-person groups round trip
+ok 21 - draft taxonomy has 13/31/179 unique linked IDs and all-per-person groups round trip
+  ---
+  duration_ms: 1.587791
+  type: 'test'
+  ...
+# Subtest: reject empty, unknown, duplicate, stale or combined-person requirements and mixed equipment fields
+ok 22 - reject empty, unknown, duplicate, stale or combined-person requirements and mixed equipment fields
+  ---
+  duration_ms: 0.312208
+  type: 'test'
+  ...
+# Subtest: required conditions permit zero through three and reject malformed, unknown, duplicate, legal and fourth keys
+ok 23 - required conditions permit zero through three and reject malformed, unknown, duplicate, legal and fourth keys
+  ---
+  duration_ms: 1.611667
+  type: 'test'
+  ...
+# Subtest: worker preferences and separate ability/ownership round trip with required conditions without touching legacy payloads
+ok 24 - worker preferences and separate ability/ownership round trip with required conditions without touching legacy payloads
+  ---
+  duration_ms: 2.542958
+  type: 'test'
+  ...
+# Subtest: each company recruitment group has independent 0-3 limits and common workAbility key
+ok 25 - each company recruitment group has independent 0-3 limits and common workAbility key
+  ---
+  duration_ms: 0.69925
+  type: 'test'
+  ...
+# Subtest: optional free-text required conditions cannot refer to blank conditions
+ok 26 - optional free-text required conditions cannot refer to blank conditions
+  ---
+  duration_ms: 0.51025
+  type: 'test'
+  ...
+# Subtest: 179 occupations still count as one workAbility condition with all-per-person semantics
+ok 27 - 179 occupations still count as one workAbility condition with all-per-person semantics
+  ---
+  duration_ms: 0.31725
+  type: 'test'
+  ...
+# Subtest: shared worker criteria require registered source values and legal gates are independent policy, not implemented matching
+ok 28 - shared worker criteria require registered source values and legal gates are independent policy, not implemented matching
+  ---
+  duration_ms: 0.190208
+  type: 'test'
+  ...
+# Subtest: separates ability/ownership, preserves equipment detail, single engine default
+ok 29 - separates ability/ownership, preserves equipment detail, single engine default
+  ---
+  duration_ms: 6.4065
+  type: 'test'
+  ...
+# Subtest: rejects malformed pay, dates, priorities, ownership and duplicate identities
+ok 30 - rejects malformed pay, dates, priorities, ownership and duplicate identities
+  ---
+  duration_ms: 1.368041
+  type: 'test'
+  ...
+# Subtest: allows existing empty size with actual equipment specs and overnight hours
+ok 31 - allows existing empty size with actual equipment specs and overnight hours
+  ---
+  duration_ms: 0.31325
+  type: 'test'
+  ...
+# Subtest: GET scopes lookup to authenticated account, not request payload
+ok 32 - GET scopes lookup to authenticated account, not request payload
+  ---
+  duration_ms: 0.510041
+  type: 'test'
+  ...
+# Subtest: PUT transaction uses session identity and rolls back stale writes
+ok 33 - PUT transaction uses session identity and rolls back stale writes
+  ---
+  duration_ms: 1.0975
+  type: 'test'
+  ...
+# Subtest: PUT database failure rolls back and releases
+ok 34 - PUT database failure rolls back and releases
+  ---
+  duration_ms: 0.332291
+  type: 'test'
+  ...
+# Subtest: existing version update uses expected version and account identity
+ok 35 - existing version update uses expected version and account identity
+  ---
+  duration_ms: 0.191375
+  type: 'test'
+  ...
+# Subtest: allows optional empty equipment experience and still rejects invalid numbers
+ok 36 - allows optional empty equipment experience and still rejects invalid numbers
+  ---
+  duration_ms: 0.117709
+  type: 'test'
+  ...
+# Subtest: coded preferences and all schedule modes preserve minute precision
+ok 37 - coded preferences and all schedule modes preserve minute precision
+  ---
+  duration_ms: 0.502542
+  type: 'test'
+  ...
+# Subtest: rejects unknown, inconsistent, duplicate and overlapping region codes or invalid schedules
+ok 38 - rejects unknown, inconsistent, duplicate and overlapping region codes or invalid schedules
+  ---
+  duration_ms: 0.631375
+  type: 'test'
+  ...
+# Subtest: technical profile reuses all 179 draft IDs and rejects malformed catalogs and selections
+ok 39 - technical profile reuses all 179 draft IDs and rejects malformed catalogs and selections
+  ---
+  duration_ms: 0.362584
+  type: 'test'
+  ...
+# Subtest: rejects unknown equipment kind, parents, form, size and malformed options in both lists
+ok 40 - rejects unknown equipment kind, parents, form, size and malformed options in both lists
+  ---
+  duration_ms: 0.56875
+  type: 'test'
+  ...
+# Subtest: preserves custom unverified descriptions, omitted options and optional empty size verbatim
+ok 41 - preserves custom unverified descriptions, omitted options and optional empty size verbatim
+  ---
+  duration_ms: 0.773291
+  type: 'test'
+  ...
+# Subtest: legacy classification survives unchanged but cannot be copied to a new ID or edited to another invalid value
+ok 42 - legacy classification survives unchanged but cannot be copied to a new ID or edited to another invalid value
+  ---
+  duration_ms: 0.682708
+  type: 'test'
+  ...
+# Subtest: PUT rejects invalid equipment before persistence and rolls back without changing saved document
+ok 43 - PUT rejects invalid equipment before persistence and rolls back without changing saved document
+  ---
+  duration_ms: 0.948458
+  type: 'test'
+  ...
+# Subtest: PUT validates against locked stored legacy records and preserves their original classification
+ok 44 - PUT validates against locked stored legacy records and preserves their original classification
+  ---
+  duration_ms: 0.323084
+  type: 'test'
+  ...
+1..44
+# tests 44
+# suites 0
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 107.626

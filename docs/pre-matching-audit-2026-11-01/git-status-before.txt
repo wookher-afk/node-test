@@ -1,0 +1,111 @@
+ M database/README.md
+ M node_company_signup_0_5.html
+ M package.json
+ M scripts/lib/test-runtime-role.mjs
+ M scripts/test.mjs
+ M server/access.js
+ M server/index.js
+ M tests/job-posts.test.js
+ M tests/records.test.js
+ M tests/ui/03-2-a.test.cjs
+ M tests/ui/03-2-cargo.test.cjs
+ M tests/ui/03-2-dump.test.cjs
+ M tests/ui/03-2-equipment.test.cjs
+ M tests/ui/03-2-flow.test.cjs
+ M tests/ui/03-2.test.cjs
+ M ui/03-2/app.js
+ M ui/03-2/cargo.js
+ M ui/03-2/equipment.js
+ M ui/03-2/index.html
+ M ui/03-2/style.css
+ M web/index.html
+?? database/008_worker_alpha_registration.sql
+?? database/009_company_alpha_registration.sql
+?? docs/03-2-approved-minimal-verification-2026-10-31.md
+?? docs/03-2-multisize-verification-2026-10-31.md
+?? docs/03-2-navigation-fix-2026-10-30.md
+?? docs/03-2-optional-2026-10-31/
+?? docs/03-2-optional-verification-2026-10-31.md
+?? docs/03-2-progressive-verification-2026-10-31.md
+?? docs/03-3-audit-2026-10-30/
+?? docs/03-3-equipment-ux-2026-10-30.md
+?? docs/03-3-equipment-ux-2026-10-30/
+?? docs/03-3-license-qualification-spec-2026-10-30.md
+?? docs/03-3-simplification-2026-10-30.md
+?? docs/03-3-storage-decisions-2026-10-30.md
+?? docs/03-3-verification-2026-10-30.md
+?? docs/alpha-01-implementation-2026-10-31.md
+?? docs/alpha-next-db-verification-2026-10-31.md
+?? docs/alpha-source-manifest.json
+?? docs/alpha-ui-verification.txt
+?? docs/alpha-worker-1440.png
+?? docs/alpha-worker-390.png
+?? docs/common-classification-and-matching-field-audit-2026-10-31.md
+?? docs/common-classification-verification-2026-10-31/
+?? docs/company-groups-2026-11-01.md
+?? docs/company-groups-2026-11-01/
+?? docs/company-registration-2026-11-01.md
+?? docs/company-registration-2026-11-01/
+?? docs/company-registration-revision-2026-11-01.md
+?? docs/company-registration-revision-2026-11-01/
+?? docs/equipment-count-2026-11-01/
+?? docs/occupation-taxonomy-draft-2026-11-01.md
+?? docs/persistent-session-and-matching-audit-2026-10-31.md
+?? docs/persistent-session-verification-2026-10-31/
+?? docs/postgresql-integration-2026-10-31.md
+?? docs/postgresql-verification-2026-10-31/
+?? docs/pre-matching-audit-2026-11-01/
+?? docs/registration-entry-ui-verification-2026-10-31.md
+?? docs/registration-entry-verification-2026-10-31.md
+?? docs/required-match-2026-11-01/
+?? docs/technical-worker-2026-11-01.md
+?? docs/technical-worker-2026-11-01/
+?? docs/welcome-entry-verification-2026-10-31.md
+?? docs/worker-preferences-2026-10-31/
+?? docs/worker-preferences-2026-11-01.md
+?? docs/worker-preferences-2026-11-01/
+?? server/company-registration.js
+?? server/worker-registration.js
+?? tests/company-registration.integration.test.js
+?? tests/company-registration.test.js
+?? tests/helpers/company-fixture.js
+?? tests/money.test.js
+?? tests/required-match.integration.test.js
+?? tests/required-match.test.js
+?? tests/ui/03-2-multisize.test.cjs
+?? tests/ui/03-2-navigation.test.cjs
+?? tests/ui/03-2-optional.test.cjs
+?? tests/ui/03-2-progressive.test.cjs
+?? tests/ui/03-3-model.test.mjs
+?? tests/ui/03-3-multisize.test.cjs
+?? tests/ui/03-3.test.cjs
+?? tests/ui/company-groups.test.cjs
+?? tests/ui/company-postgres.test.cjs
+?? tests/ui/company-revision.test.cjs
+?? tests/ui/equipment-count-postgres.test.cjs
+?? tests/ui/equipment-count.test.cjs
+?? tests/ui/money-company.test.cjs
+?? tests/ui/optional-control.cjs
+?? tests/ui/persistent-session.test.cjs
+?? tests/ui/registration-entry.test.cjs
+?? tests/ui/required-match.test.cjs
+?? tests/ui/size-control.cjs
+?? tests/ui/technical-worker.test.cjs
+?? tests/ui/worker-alpha.test.cjs
+?? tests/ui/worker-postgres.test.cjs
+?? tests/worker-alpha.integration.test.js
+?? tests/worker-alpha.test.js
+?? ui/03-2/company-registration.js
+?? ui/03-2/money.js
+?? ui/03-2/occupations.js
+?? ui/03-2/regions.js
+?? ui/03-2/required-match-ui.js
+?? ui/03-2/required-match.css
+?? ui/03-2/required-match.js
+?? ui/03-2/technical-registration.js
+?? ui/03-2/worker-preferences.js
+?? ui/03-3/
+?? web/company-registration.html
+?? web/technical-registration.html
+?? web/worker-entry.html
+?? web/worker-registration.html

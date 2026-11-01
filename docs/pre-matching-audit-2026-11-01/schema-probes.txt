@@ -1,0 +1,17 @@
+[
+  {
+    "test": "worker-db-check-missing-array-keys",
+    "result": "accepted",
+    "rollback": true
+  },
+  {
+    "test": "company-db-check-missing-lines",
+    "result": "accepted",
+    "rollback": true
+  },
+  {
+    "test": "existing-full-day-period",
+    "reservation_period": "[\"2026-11-02 00:00:00+09\",\"2026-11-03 00:00:00+09\")",
+    "adjacent_without_overlap": true
+  }
+]

@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: separates ability/ownership, preserves equipment detail, single engine default
+ok 1 - separates ability/ownership, preserves equipment detail, single engine default
+  ---
+  duration_ms: 2.12175
+  type: 'test'
+  ...
+# Subtest: rejects malformed pay, dates, priorities, ownership and duplicate identities
+ok 2 - rejects malformed pay, dates, priorities, ownership and duplicate identities
+  ---
+  duration_ms: 0.430583
+  type: 'test'
+  ...
+# Subtest: allows existing empty size with actual equipment specs and overnight hours
+ok 3 - allows existing empty size with actual equipment specs and overnight hours
+  ---
+  duration_ms: 0.098916
+  type: 'test'
+  ...
+# Subtest: GET scopes lookup to authenticated account, not request payload
+ok 4 - GET scopes lookup to authenticated account, not request payload
+  ---
+  duration_ms: 0.136792
+  type: 'test'
+  ...
+# Subtest: PUT transaction uses session identity and rolls back stale writes
+ok 5 - PUT transaction uses session identity and rolls back stale writes
+  ---
+  duration_ms: 0.460875
+  type: 'test'
+  ...
+# Subtest: PUT database failure rolls back and releases
+ok 6 - PUT database failure rolls back and releases
+  ---
+  duration_ms: 0.253166
+  type: 'test'
+  ...
+# Subtest: existing version update uses expected version and account identity
+ok 7 - existing version update uses expected version and account identity
+  ---
+  duration_ms: 0.164292
+  type: 'test'
+  ...
+# Subtest: allows optional empty equipment experience and still rejects invalid numbers
+ok 8 - allows optional empty equipment experience and still rejects invalid numbers
+  ---
+  duration_ms: 0.102459
+  type: 'test'
+  ...
+# Subtest: coded preferences and all schedule modes preserve minute precision
+ok 9 - coded preferences and all schedule modes preserve minute precision
+  ---
+  duration_ms: 0.43925
+  type: 'test'
+  ...
+# Subtest: rejects unknown, inconsistent, duplicate and overlapping region codes or invalid schedules
+ok 10 - rejects unknown, inconsistent, duplicate and overlapping region codes or invalid schedules
+  ---
+  duration_ms: 0.910291
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 52.676709

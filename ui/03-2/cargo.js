@@ -18,13 +18,14 @@ window.NODE_CARGO=(()=>{
  let box,legacyEmpty=new Set();
  function init(){if(box)return;box=document.createElement('div');box.id='cargoSteps';box.className='full';box.hidden=true;
  for(const [id,title,select]of [['cargoLength','적재함 길이 구분',true],['cargoLengthOther','길이 구분 직접 입력',false],['cargoWidth','폭 구분',true],['cargoWidthOther','폭 구분 직접 입력',false],['cargoLengthMm','실제 유효 길이 (mm · 선택)',false],['cargoWidthMm','실제 유효 폭 (mm · 선택)',false]]){const label=document.createElement('label');label.textContent=title;const input=document.createElement(select?'select':'input');input.id=id;if(!select)input.maxLength=120;label.append(input);box.append(label);}
- const ref=document.createElement('details');ref.id='cargoReference';box.append(ref);$('customLabel').after(box);
+ const ref=document.createElement('details');ref.id='cargoReference';$('cargoOptional').append(ref);$('customLabel').after(box);
+ for(const id of ['cargoLengthMm','cargoWidthMm'])$('cargoOptional').prepend($(id).parentElement);
  for(const id of ['cargoLength','cargoWidth'])$(id).onchange=()=>{legacyEmpty.delete(id);refresh();};
  for(const id of ['cargoLengthMm','cargoWidthMm']){$(id).inputMode='decimal';$(id).placeholder='mm 단위의 숫자만 입력 · 예: 5490';const state=document.createElement('select');state.id=id+'State';state.setAttribute('aria-label',$(id).parentElement.firstChild.textContent+' 입력 상태');for(const [value,text]of [['','미입력'],['value','직접 입력'],['unknown','모름'],['na','해당 없음']])state.add(new Option(text,value));$(id).before(state);state.onchange=()=>{$(id).setCustomValidity('');$(id).disabled=!['','value'].includes(state.value);};$(id).oninput=()=>{state.value='value';};}
  }
  const keys=['cargoLength','cargoLengthOther','cargoWidth','cargoWidthOther','cargoLengthMm','cargoWidthMm'];
  function options(id,values,old){$(id).replaceChildren(new Option(legacyEmpty.has(id)?'미입력 · 이전 응답 미확인':'미입력',''),new Option('모름','unknown'),new Option('해당 없음','na'),...values.map(v=>new Option(v,v)),new Option('기타 직접 입력','직접 입력'));if(old&&!values.includes(old)&&!['직접 입력','unknown','na'].includes(old))$(id).add(new Option(old+' · 이전 입력',old));$(id).value=old||'';}
- function refresh(change){init();box.hidden=$('kind').value!=='cargo-truck';if(box.hidden)return;const candidates=rows.filter(r=>r.ton===$('size').value);const oldL=$('cargoLength').value,oldW=$('cargoWidth').value;
+ function refresh(change){init();box.hidden=$('kind').value!=='cargo-truck';$('cargoOptional').hidden=box.hidden;if(box.hidden)return;const candidates=rows.filter(r=>r.ton===$('size').value);const oldL=$('cargoLength').value,oldW=$('cargoWidth').value;
  // 기존 입력을 유지하되 이전 조합으로 명시한다. 톤급 변경으로 실차 숫자를 삭제하지 않는다.
  options('cargoLength',[...new Set(candidates.map(r=>r.length))],oldL);
  const lengths=candidates.filter(r=>r.length===$('cargoLength').value);

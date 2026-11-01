@@ -1,0 +1,30 @@
+PASS REAL UI parent/form reset and multiple options 390px
+PASS REAL UI -> HTTP -> PostgreSQL JSONB -> GET -> UI identical record/options/alias 390px
+PASS REAL reproduced missing catalog validation: unknown kind/parents/size/options accepted and persisted
+PASS REAL company real POST/GET -> occupation FK + day pay + dates; synthetic occupation is NOT an automatic catalog mapping
+PASS REAL company rejects unsupported field kind
+PASS REAL company rejects unsupported field size
+PASS REAL company rejects unsupported field optionSelections
+PASS REAL company rejects unsupported field min_experience_months
+PASS REAL company rejects unsupported field startTime
+PASS REAL company rejects pay unit hour
+PASS REAL company rejects pay unit month
+PASS REAL company rejects catalog string ID as occupation_id
+PASS REAL company region string rejected; worker region strings preserved without FK mapping
+PASS REAL Alpha document save creates no worker_preference_versions projection
+PASS REAL company profile has company-name form, no equipment/worksite/job editor
+PASS REAL UI parent/form reset and multiple options 1440px
+PASS REAL UI -> HTTP -> PostgreSQL JSONB -> GET -> UI identical record/options/alias 1440px
+PASS REAL reproduced missing catalog validation: unknown kind/parents/size/options accepted and persisted
+PASS REAL company real POST/GET -> occupation FK + day pay + dates; synthetic occupation is NOT an automatic catalog mapping
+PASS REAL company rejects unsupported field kind
+PASS REAL company rejects unsupported field size
+PASS REAL company rejects unsupported field optionSelections
+PASS REAL company rejects unsupported field min_experience_months
+PASS REAL company rejects unsupported field startTime
+PASS REAL company rejects pay unit hour
+PASS REAL company rejects pay unit month
+PASS REAL company rejects catalog string ID as occupation_id
+PASS REAL company region string rejected; worker region strings preserved without FK mapping
+PASS REAL Alpha document save creates no worker_preference_versions projection
+PASS REAL company profile has company-name form, no equipment/worksite/job editor

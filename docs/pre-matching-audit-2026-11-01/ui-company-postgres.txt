@@ -1,0 +1,40 @@
+page.fill: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#address')[22m
+[2m    - locator resolved to <input readonly id="address" maxlength="300" placeholder="주소 검색으로 선택하세요"/>[22m
+[2m    - fill("서울특별시 종로구 검증 현장")[22m
+[2m  - attempting fill action[22m
+[2m    2 × waiting for element to be visible, enabled and editable[22m
+[2m      - element is not editable[22m
+[2m    - retrying fill action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and editable[22m
+[2m      - element is not editable[22m
+[2m    - retrying fill action[22m
+[2m      - waiting 100ms[22m
+[2m    59 × waiting for element to be visible, enabled and editable[22m
+[2m       - element is not editable[22m
+[2m     - retrying fill action[22m
+[2m       - waiting 500ms[22m
+
+    at /Users/heowook/Documents/ChatGPT/Node/node-alpha-01/tests/ui/company-postgres.test.cjs:13:371 {
+  log: [
+    "  - waiting for locator('#address')",
+    '    - locator resolved to <input readonly id="address" maxlength="300" placeholder="주소 검색으로 선택하세요"/>',
+    '    - fill("서울특별시 종로구 검증 현장")',
+    '  - attempting fill action',
+    '    2 × waiting for element to be visible, enabled and editable',
+    '      - element is not editable',
+    '    - retrying fill action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and editable',
+    '      - element is not editable',
+    '    - retrying fill action',
+    '      - waiting 100ms',
+    '    59 × waiting for element to be visible, enabled and editable',
+    '       - element is not editable',
+    '     - retrying fill action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}

@@ -1,0 +1,20 @@
+{
+  "baselineFileCount": 325,
+  "modifiedExistingFiles": [
+    "web/worker-registration.html",
+    "web/technical-registration.html",
+    "web/company-registration.html",
+    "server/worker-registration.js",
+    "server/company-registration.js",
+    "scripts/test.mjs",
+    "ui/03-2/technical-registration.js",
+    "ui/03-2/company-registration.js"
+  ],
+  "missingExistingFiles": [],
+  "originalStyleBlocksIdentical": {
+    "web/worker-registration.html": true,
+    "web/technical-registration.html": true,
+    "web/company-registration.html": true
+  },
+  "allOtherBaselineFilesUnchanged": true
+}

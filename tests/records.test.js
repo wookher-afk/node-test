@@ -52,14 +52,14 @@ test('payment report, receipt, due-date history and delay inputs are independent
  const {f,a}=await confirmed();
  const obligation=(await one("INSERT INTO payment_obligations(match_id,amount_krw,due_date,payer_organization_id) VALUES($1,250000,'2030-06-15',$2) RETURNING id",[a.m,f.org])).id;
  const claim=(await one("INSERT INTO payment_claims(obligation_id,amount_krw,paid_at) VALUES($1,100000,'2030-06-17 12:00+09') RETURNING id",[obligation])).id;
- const report=(await one("INSERT INTO activity_records(match_id,kind,occurred_at,source,reported_by,reporting_party,payment_obligation_id,payment_claim_id,amount_krw) VALUES($1,'payment_report','2030-06-17 12:00+09','party_report',$2,'company',$3,$4,100000) RETURNING *",[a.m,f.manager,obligation,claim]));
- assert.equal(report.due_date_snapshot.toISOString().slice(0,10),'2030-06-15');
+ const report=(await one("INSERT INTO activity_records(match_id,kind,occurred_at,source,reported_by,reporting_party,payment_obligation_id,payment_claim_id,amount_krw) VALUES($1,'payment_report','2030-06-17 12:00+09','party_report',$2,'company',$3,$4,100000) RETURNING *,due_date_snapshot::text AS due_date_text",[a.m,f.manager,obligation,claim]));
+ assert.equal(report.due_date_text,'2030-06-15');
  assert.equal((await one("SELECT count(*)::int AS n FROM activity_records WHERE match_id=$1 AND kind='payment_receipt'",[a.m])).n,0);
  await assert.rejects(pool.query("INSERT INTO activity_records(match_id,kind,occurred_at,source,reported_by,reporting_party,payment_obligation_id,amount_krw) VALUES($1,'payment_receipt',now(),'party_report',$2,'company',$3,100000)",[a.m,f.manager,obligation]),/respective party/);
  await pool.query("INSERT INTO activity_records(match_id,kind,occurred_at,source,reported_by,reporting_party,payment_obligation_id,payment_claim_id,amount_krw) VALUES($1,'payment_receipt','2030-06-17 13:00+09','party_report',$2,'worker',$3,$4,100000)",[a.m,f.w,obligation,claim]);
  await pool.query("UPDATE payment_obligations SET due_date='2030-06-20' WHERE id=$1",[obligation]);
  assert.equal((await one('SELECT count(*)::int AS n FROM payment_due_date_history WHERE obligation_id=$1',[obligation])).n,2);
- assert.equal((await one('SELECT due_date_snapshot FROM activity_records WHERE id=$1',[report.id])).due_date_snapshot.toISOString().slice(0,10),'2030-06-15');
+ assert.equal((await one('SELECT due_date_snapshot::text AS due_date_snapshot FROM activity_records WHERE id=$1',[report.id])).due_date_snapshot,'2030-06-15');
  const other=await confirmed();
  await assert.rejects(pool.query("INSERT INTO activity_records(match_id,kind,occurred_at,source,reported_by,reporting_party,payment_obligation_id,amount_krw) VALUES($1,'payment_receipt',now(),'party_report',$2,'worker',$3,100000)",[other.a.m,other.f.w,obligation]),/another match/);
 });

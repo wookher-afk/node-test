@@ -1,0 +1,2 @@
+PASS real PostgreSQL 390: common catalog IDs/parents/form/size/options, region codes, Asia/Seoul overnight HH:mm, range/dates, integer won and same units, equipment-specific years→months. Monthly 3500000 won preserved; no day/month conversion.
+PASS real PostgreSQL 1440: common catalog IDs/parents/form/size/options, region codes, Asia/Seoul overnight HH:mm, range/dates, integer won and same units, equipment-specific years→months. Monthly 3500000 won preserved; no day/month conversion.

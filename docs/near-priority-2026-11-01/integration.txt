@@ -1,0 +1,413 @@
+TAP version 13
+# {"wanted":"017","available":"017","status":"matched","matched":true,"equipmentSpec":"pass"}
+# Subtest: real PostgreSQL equipment spec: registration -> storage -> retrieval -> auto-match
+    # Subtest: company 017 / worker 017 => matched
+    ok 1 - company 017 / worker 017 => matched
+      ---
+      duration_ms: 55.52975
+      type: 'test'
+      ...
+# {"wanted":"020","available":"020","status":"matched","matched":true,"equipmentSpec":"pass"}
+    # Subtest: company 020 / worker 020 => matched
+    ok 2 - company 020 / worker 020 => matched
+      ---
+      duration_ms: 12.920083
+      type: 'test'
+      ...
+# {"wanted":"017","available":"020","status":"not_matched","matched":false,"equipmentSpec":"fail"}
+    # Subtest: company 017 / worker 020 => not_matched
+    ok 3 - company 017 / worker 020 => not_matched
+      ---
+      duration_ms: 12.121042
+      type: 'test'
+      ...
+# {"wanted":"020","available":"017","status":"not_matched","matched":false,"equipmentSpec":"fail"}
+    # Subtest: company 020 / worker 017 => not_matched
+    ok 4 - company 020 / worker 017 => not_matched
+      ---
+      duration_ms: 12.006459
+      type: 'test'
+      ...
+# {"wanted":"017","available":"","status":"not_matched","matched":false,"equipmentSpec":"unknown"}
+    # Subtest: company 017 / worker (empty) => not_matched
+    ok 5 - company 017 / worker (empty) => not_matched
+      ---
+      duration_ms: 11.898833
+      type: 'test'
+      ...
+    # Subtest: worker size omitted => HTTP 400, DB unchanged
+    ok 6 - worker size omitted => HTTP 400, DB unchanged
+      ---
+      duration_ms: 5.042709
+      type: 'test'
+      ...
+    # Subtest: worker size null => HTTP 400, DB unchanged
+    ok 7 - worker size null => HTTP 400, DB unchanged
+      ---
+      duration_ms: 5.6035
+      type: 'test'
+      ...
+    # Subtest: company size omitted => HTTP 400, DB unchanged
+    ok 8 - company size omitted => HTTP 400, DB unchanged
+      ---
+      duration_ms: 4.875667
+      type: 'test'
+      ...
+    # Subtest: company size null => HTTP 400, DB unchanged
+    ok 9 - company size null => HTTP 400, DB unchanged
+      ---
+      duration_ms: 5.627834
+      type: 'test'
+      ...
+    # Subtest: company size "" => HTTP 400, DB unchanged
+    ok 10 - company size "" => HTTP 400, DB unchanged
+      ---
+      duration_ms: 4.726958
+      type: 'test'
+      ...
+    1..10
+ok 1 - real PostgreSQL equipment spec: registration -> storage -> retrieval -> auto-match
+  ---
+  duration_ms: 363.792792
+  type: 'test'
+  ...
+# Subtest: isolated PostgreSQL registration/storage/retrieval/recommendations
+    # Subtest: register A then read stored recommendation
+    ok 1 - register A then read stored recommendation
+      ---
+      duration_ms: 79.082792
+      type: 'test'
+      ...
+    # Subtest: register B then read stored recommendation
+    ok 2 - register B then read stored recommendation
+      ---
+      duration_ms: 46.723625
+      type: 'test'
+      ...
+    # Subtest: register C then read stored recommendation
+    ok 3 - register C then read stored recommendation
+      ---
+      duration_ms: 43.445875
+      type: 'test'
+      ...
+    # Subtest: register D then read stored recommendation
+    ok 4 - register D then read stored recommendation
+      ---
+      duration_ms: 40.967375
+      type: 'test'
+      ...
+    # Subtest: register empty then read stored recommendation
+    ok 5 - register empty then read stored recommendation
+      ---
+      duration_ms: 39.003708
+      type: 'test'
+      ...
+    # Subtest: register disjoint then read stored recommendation
+    ok 6 - register disjoint then read stored recommendation
+      ---
+      duration_ms: 39.360875
+      type: 'test'
+      ...
+# {
+#   "example": [
+#     {
+#       "lineId": "line-1",
+#       "workerAccountId": "350",
+#       "workerVersion": 1,
+#       "eligible": true,
+#       "tier": "full",
+#       "exactMatch": {
+#         "status": "matched",
+#         "matched": true,
+#         "conditionStatus": "pass",
+#         "required": [
+#           "region",
+#           "hours",
+#           "pay"
+#         ],
+#         "checks": {
+#           "requiredSelection": {
+#             "status": "pass",
+#             "reason": "양측 필수조건 합집합 적용"
+#           },
+#           "equipmentSpec": {
+#             "status": "pass",
+#             "reason": "기종·형태·규격 정확 일치"
+#           },
+#           "workAbility": {
+#             "status": "pass",
+#             "reason": "기종·형태·규격·요구 옵션 일치"
+#           },
+#           "experience": {
+#             "status": "pass",
+#             "reason": "최소 경력 0개월"
+#           },
+#           "resourceMode": {
+#             "status": "pass",
+#             "reason": "인력 모집"
+#           },
+#           "pay": {
+#             "status": "pass",
+#             "reason": "같은 단위의 정수 원 비교"
+#           },
+#           "hours": {
+#             "status": "pass",
+#             "reason": "시작·종료 시각 정확 일치"
+#           },
+#           "region": {
+#             "status": "pass",
+#             "reason": "업체 지역 전체를 작업자 희망 지역이 포함"
+#           },
+#           "schedule": {
+#             "status": "pass",
+#             "reason": "업체 기간 전체 포함"
+#           }
+#         }
+#       },
+#       "price": {
+#         "payUnit": "day",
+#         "companyOfferWon": 550000,
+#         "workerRequestedWon": 550000,
+#         "differenceWon": 0,
+#         "absoluteDifferenceWon": 0,
+#         "shortfallWon": 0
+#       },
+#       "schedule": {
+#         "requestedDays": 29,
+#         "coveredDays": 29,
+#         "uncoveredDays": 0,
+#         "coverageRatio": 1,
+#         "requestedPeriods": [
+#           {
+#             "start": "2026-11-02",
+#             "end": "2026-11-30"
+#           }
+#         ],
+#         "coveredPeriods": [
+#           {
+#             "start": "2026-11-02",
+#             "end": "2026-11-30"
+#           }
+#         ],
+#         "uncoveredPeriods": []
+#       },
+#       "differences": [],
+#       "priorityGroup": "priority:0",
+#       "position": 1
+#     },
+#     {
+#       "lineId": "line-1",
+#       "workerAccountId": "351",
+#       "workerVersion": 1,
+#       "eligible": true,
+#       "tier": "near",
+#       "exactMatch": {
+#         "status": "not_matched",
+#         "matched": false,
+#         "conditionStatus": "fail",
+#         "required": [
+#           "region",
+#           "hours",
+#           "pay"
+#         ],
+#         "checks": {
+#           "requiredSelection": {
+#             "status": "pass",
+#             "reason": "양측 필수조건 합집합 적용"
+#           },
+#           "equipmentSpec": {
+#             "status": "pass",
+#             "reason": "기종·형태·규격 정확 일치"
+#           },
+#           "workAbility": {
+#             "status": "pass",
+#             "reason": "기종·형태·규격·요구 옵션 일치"
+#           },
+#           "experience": {
+#             "status": "pass",
+#             "reason": "최소 경력 0개월"
+#           },
+#           "resourceMode": {
+#             "status": "pass",
+#             "reason": "인력 모집"
+#           },
+#           "pay": {
+#             "status": "fail",
+#             "reason": "같은 단위의 정수 원 비교"
+#           },
+#           "hours": {
+#             "status": "pass",
+#             "reason": "시작·종료 시각 정확 일치"
+#           },
+#           "region": {
+#             "status": "pass",
+#             "reason": "업체 지역 전체를 작업자 희망 지역이 포함"
+#           },
+#           "schedule": {
+#             "status": "pass",
+#             "reason": "업체 기간 전체 포함"
+#           }
+#         }
+#       },
+#       "price": {
+#         "payUnit": "day",
+#         "companyOfferWon": 550000,
+#         "workerRequestedWon": 570000,
+#         "differenceWon": 20000,
+#         "absoluteDifferenceWon": 20000,
+#         "shortfallWon": 20000
+#       },
+#       "schedule": {
+#         "requestedDays": 29,
+#         "coveredDays": 29,
+#         "uncoveredDays": 0,
+#         "coverageRatio": 1,
+#         "requestedPeriods": [
+#           {
+#             "start": "2026-11-02",
+#             "end": "2026-11-30"
+#           }
+#         ],
+#         "coveredPeriods": [
+#           {
+#             "start": "2026-11-02",
+#             "end": "2026-11-30"
+#           }
+#         ],
+#         "uncoveredPeriods": []
+#       },
+#       "differences": [
+#         {
+#           "key": "pay",
+#           "status": "fail",
+#           "reason": "같은 단위의 정수 원 비교"
+#         }
+#       ],
+#       "priorityGroup": "priority:1",
+#       "position": 2
+#     },
+#     {
+#       "lineId": "line-1",
+#       "workerAccountId": "352",
+#       "workerVersion": 1,
+#       "eligible": true,
+#       "tier": "near",
+#       "exactMatch": {
+#         "status": "not_matched",
+#         "matched": false,
+#         "conditionStatus": "fail",
+#         "required": [
+#           "region",
+#           "hours",
+#           "pay"
+#         ],
+#         "checks": {
+#           "requiredSelection": {
+#             "status": "pass",
+#             "reason": "양측 필수조건 합집합 적용"
+#           },
+#           "equipmentSpec": {
+#             "status": "pass",
+#             "reason": "기종·형태·규격 정확 일치"
+#           },
+#           "workAbility": {
+#             "status": "pass",
+#             "reason": "기종·형태·규격·요구 옵션 일치"
+#           },
+#           "experience": {
+#             "status": "pass",
+#             "reason": "최소 경력 0개월"
+#           },
+#           "resourceMode": {
+#             "status": "pass",
+#             "reason": "인력 모집"
+#           },
+#           "pay": {
+#             "status": "pass",
+#             "reason": "같은 단위의 정수 원 비교"
+#           },
+#           "hours": {
+#             "status": "pass",
+#             "reason": "시작·종료 시각 정확 일치"
+#           },
+#           "region": {
+#             "status": "pass",
+#             "reason": "업체 지역 전체를 작업자 희망 지역이 포함"
+#           },
+#           "schedule": {
+#             "status": "fail",
+#             "reason": "업체 기간 전체 포함"
+#           }
+#         }
+#       },
+#       "price": {
+#         "payUnit": "day",
+#         "companyOfferWon": 550000,
+#         "workerRequestedWon": 550000,
+#         "differenceWon": 0,
+#         "absoluteDifferenceWon": 0,
+#         "shortfallWon": 0
+#       },
+#       "schedule": {
+#         "requestedDays": 29,
+#         "coveredDays": 16,
+#         "uncoveredDays": 13,
+#         "coverageRatio": 0.5517241379310345,
+#         "requestedPeriods": [
+#           {
+#             "start": "2026-11-02",
+#             "end": "2026-11-30"
+#           }
+#         ],
+#         "coveredPeriods": [
+#           {
+#             "start": "2026-11-02",
+#             "end": "2026-11-17"
+#           }
+#         ],
+#         "uncoveredPeriods": [
+#           {
+#             "start": "2026-11-18",
+#             "end": "2026-11-30"
+#           }
+#         ]
+#       },
+#       "differences": [
+#         {
+#           "key": "schedule",
+#           "status": "fail",
+#           "reason": "업체 기간 전체 포함"
+#         }
+#       ],
+#       "priorityGroup": "priority:2",
+#       "position": 3
+#     }
+#   ]
+# }
+    # Subtest: rank, authorization, read-only storage and unchanged exact match
+    ok 7 - rank, authorization, read-only storage and unchanged exact match
+      ---
+      duration_ms: 21.983917
+      type: 'test'
+      ...
+    # Subtest: explicit company pay and schedule requirements exclude mismatches through API
+    ok 8 - explicit company pay and schedule requirements exclude mismatches through API
+      ---
+      duration_ms: 25.178208
+      type: 'test'
+      ...
+    1..8
+ok 2 - isolated PostgreSQL registration/storage/retrieval/recommendations
+  ---
+  duration_ms: 611.361083
+  type: 'test'
+  ...
+1..2
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1098.869625

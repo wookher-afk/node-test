@@ -1,0 +1,773 @@
+PASS: fresh database installation
+PASS: original SQL smoke + additive migration + existing data preservation + failed-migration rollback
+PASS: 004 preserves existing transactions and backfills only exact lifecycle events
+PASS: 005 reviewed historical attribution, all original rows preserved and late-failure rollback
+PASS: 006 legacy worksites and all transaction data preserved; late failure fully rolls back
+PASS: 007 preserves original IDs, recruitment and transaction data; no historical promise inference; failure rollback
+TAP version 13
+# Subtest: signup, login, worker and company profile persist after re-login
+ok 1 - signup, login, worker and company profile persist after re-login
+  ---
+  duration_ms: 618.185833
+  type: 'test'
+  ...
+# Subtest: owner registers multiple posts, lines and work dates with explicit promises
+ok 2 - owner registers multiple posts, lines and work dates with explicit promises
+  ---
+  duration_ms: 475.687583
+  type: 'test'
+  ...
+# Subtest: manager registers multiple posts, lines and work dates with explicit promises
+ok 3 - manager registers multiple posts, lines and work dates with explicit promises
+  ---
+  duration_ms: 215.435209
+  type: 'test'
+  ...
+# Subtest: same-day, next-day and fixed-date promises are preserved for every work day including leap/year boundaries
+ok 4 - same-day, next-day and fixed-date promises are preserved for every work day including leap/year boundaries
+  ---
+  duration_ms: 208.628334
+  type: 'test'
+  ...
+# Subtest: visibility and resource-mode values are preserved internally without creating external exposure
+ok 5 - visibility and resource-mode values are preserved internally without creating external exposure
+  ---
+  duration_ms: 223.456625
+  type: 'test'
+  ...
+# Subtest: pay, payment, dates and input types are validated without storing partial recruitment data
+ok 6 - pay, payment, dates and input types are validated without storing partial recruitment data
+  ---
+  duration_ms: 455.999875
+  type: 'test'
+  ...
+# Subtest: cross-organization, role spoofing and delegated site permissions do not grant this internal API access
+ok 7 - cross-organization, role spoofing and delegated site permissions do not grant this internal API access
+  ---
+  duration_ms: 285.625584
+  type: 'test'
+  ...
+# Subtest: all internal routes reject absent, expired, unknown and revoked sessions without writes
+ok 8 - all internal routes reject absent, expired, unknown and revoked sessions without writes
+  ---
+  duration_ms: 293.215916
+  type: 'test'
+  ...
+# Subtest: a session expiring behind the real shared lock cannot register a post
+ok 9 - a session expiring behind the real shared lock cannot register a post
+  ---
+  duration_ms: 2201.375125
+  type: 'test'
+  ...
+# Subtest: current manager membership remove wins before a waiting registration
+ok 10 - current manager membership remove wins before a waiting registration
+  ---
+  duration_ms: 216.584459
+  type: 'test'
+  ...
+# Subtest: current manager membership demote wins before a waiting registration
+ok 11 - current manager membership demote wins before a waiting registration
+  ---
+  duration_ms: 186.127
+  type: 'test'
+  ...
+# Subtest: concurrent registrations create distinct complete posts with version one
+ok 12 - concurrent registrations create distinct complete posts with version one
+  ---
+  duration_ms: 191.956291
+  type: 'test'
+  ...
+# Subtest: counts include confirmed and completed matches, exclude pending/cancelled, and expose no worker or payment details
+ok 13 - counts include confirmed and completed matches, exclude pending/cancelled, and expose no worker or payment details
+  ---
+  duration_ms: 396.989375
+  type: 'test'
+  ...
+# Subtest: late payment snapshot failure rolls back posts, all lines, dates, versions and audit events
+ok 14 - late payment snapshot failure rolls back posts, all lines, dates, versions and audit events
+  ---
+  duration_ms: 173.807459
+  type: 'test'
+  ...
+# Subtest: sealed conditions and payment promises remain immutable when site information changes
+ok 15 - sealed conditions and payment promises remain immutable when site information changes
+  ---
+  duration_ms: 230.3425
+  type: 'test'
+  ...
+# Subtest: DB version guards reject missing_lines without replacing a prior promise
+ok 16 - DB version guards reject missing_lines without replacing a prior promise
+  ---
+  duration_ms: 211.258042
+  type: 'test'
+  ...
+# Subtest: DB version guards reject wrong_payment_date without replacing a prior promise
+ok 17 - DB version guards reject wrong_payment_date without replacing a prior promise
+  ---
+  duration_ms: 177.166625
+  type: 'test'
+  ...
+# Subtest: DB version guards reject unsealed_commit without replacing a prior promise
+ok 18 - DB version guards reject unsealed_commit without replacing a prior promise
+  ---
+  duration_ms: 176.007083
+  type: 'test'
+  ...
+# Subtest: legacy recruitment stays readable without fabricating payment terms or an original author
+ok 19 - legacy recruitment stays readable without fabricating payment terms or an original author
+  ---
+  duration_ms: 173.634333
+  type: 'test'
+  ...
+# Subtest: inactive sites keep existing internal posts readable while new registration is pending policy confirmation
+ok 20 - inactive sites keep existing internal posts readable while new registration is pending policy confirmation
+  ---
+  duration_ms: 194.0915
+  type: 'test'
+  ...
+# Subtest: the job role cannot change recruitment after registration or access personal/actual payment data
+ok 21 - the job role cannot change recruitment after registration or access personal/actual payment data
+  ---
+  duration_ms: 188.544458
+  type: 'test'
+  ...
+# Subtest: slow registration body and malformed input do not hold or wait for the shared lock
+ok 22 - slow registration body and malformed input do not hold or wait for the shared lock
+  ---
+  duration_ms: 360.152625
+  type: 'test'
+  ...
+# Subtest: invalid identifiers, nonexistent targets and a transferred snapshot never disclose another company history
+ok 23 - invalid identifiers, nonexistent targets and a transferred snapshot never disclose another company history
+  ---
+  duration_ms: 195.941792
+  type: 'test'
+  ...
+# Subtest: bilateral approval, authorization, atomic reservations, cancellation history and capacity recovery
+ok 24 - bilateral approval, authorization, atomic reservations, cancellation history and capacity recovery
+  ---
+  duration_ms: 181.259667
+  type: 'test'
+  ...
+# Subtest: approvals freeze both contents and dates; new versions require new approvals
+ok 25 - approvals freeze both contents and dates; new versions require new approvals
+  ---
+  duration_ms: 121.6805
+  type: 'test'
+  ...
+# Subtest: direct confirmed insertion, terms reassignment and closed posts cannot bypass guards
+ok 26 - direct confirmed insertion, terms reassignment and closed posts cannot bypass guards
+  ---
+  duration_ms: 53.988084
+  type: 'test'
+  ...
+# Subtest: revoked company authority and ordinary staff cannot approve or cancel
+ok 27 - revoked company authority and ordinary staff cannot approve or cancel
+  ---
+  duration_ms: 44.338666
+  type: 'test'
+  ...
+# Subtest: partial dates policy and missing offered dates are enforced
+ok 28 - partial dates policy and missing offered dates are enforced
+  ---
+  duration_ms: 80.63075
+  type: 'test'
+  ...
+# Subtest: external calendars block confirmation and reservations block conflicting calendar writes
+ok 29 - external calendars block confirmation and reservations block conflicting calendar writes
+  ---
+  duration_ms: 32.547333
+  type: 'test'
+  ...
+# Subtest: equipment and worker are reserved together; conflict rolls back all writes
+ok 30 - equipment and worker are reserved together; conflict rolls back all writes
+  ---
+  duration_ms: 53.157334
+  type: 'test'
+  ...
+# Subtest: two concurrent confirmations for the final slot yield exactly one winner
+ok 31 - two concurrent confirmations for the final slot yield exactly one winner
+  ---
+  duration_ms: 49.064834
+  type: 'test'
+  ...
+# Subtest: concurrent confirmations at different sites cannot double-book a worker
+ok 32 - concurrent confirmations at different sites cannot double-book a worker
+  ---
+  duration_ms: 18.984167
+  type: 'test'
+  ...
+# Subtest: completed work continues to occupy capacity and retains reservations
+ok 33 - completed work continues to occupy capacity and retains reservations
+  ---
+  duration_ms: 11.628208
+  type: 'test'
+  ...
+# Subtest: approved dates cannot be reassigned into a confirmed version
+ok 34 - approved dates cannot be reassigned into a confirmed version
+  ---
+  duration_ms: 19.005959
+  type: 'test'
+  ...
+# Subtest: test database safety guard rejects remote addresses and missing acknowledgement
+ok 35 - test database safety guard rejects remote addresses and missing acknowledgement
+  ---
+  duration_ms: 172.76875
+  type: 'test'
+  ...
+# Subtest: newcomers have no history and no trust score; preferences and impressions do not create trust evidence
+ok 36 - newcomers have no history and no trust score; preferences and impressions do not create trust evidence
+  ---
+  duration_ms: 62.935875
+  type: 'test'
+  ...
+# Subtest: attendance stores report vs independent confirmation; identity, date and duplicate protections
+ok 37 - attendance stores report vs independent confirmation; identity, date and duplicate protections
+  ---
+  duration_ms: 107.696125
+  type: 'test'
+  ...
+# Subtest: disputes and approved corrections retain originals and invalidate superseded evidence
+ok 38 - disputes and approved corrections retain originals and invalidate superseded evidence
+  ---
+  duration_ms: 58.105
+  type: 'test'
+  ...
+# Subtest: payment report, receipt, due-date history and delay inputs are independent facts
+ok 39 - payment report, receipt, due-date history and delay inputs are independent facts
+  ---
+  duration_ms: 66.628375
+  type: 'test'
+  ...
+# Subtest: mutual subjective reviews and willingness can be disputed and revised without affecting factual history
+ok 40 - mutual subjective reviews and willingness can be disputed and revised without affecting factual history
+  ---
+  duration_ms: 44.095542
+  type: 'test'
+  ...
+# Subtest: sealed multi-occupation and region preferences / hiring conditions preserve recommendation context
+ok 41 - sealed multi-occupation and region preferences / hiring conditions preserve recommendation context
+  ---
+  duration_ms: 110.325459
+  type: 'test'
+  ...
+# Subtest: supporting history captures application transitions, condition changes, matching and cancellations
+ok 42 - supporting history captures application transitions, condition changes, matching and cancellations
+  ---
+  duration_ms: 18.129708
+  type: 'test'
+  ...
+# Subtest: rehire links prior completed work without treating absent rehire as negative feedback
+ok 43 - rehire links prior completed work without treating absent rehire as negative feedback
+  ---
+  duration_ms: 11.623458
+  type: 'test'
+  ...
+# Subtest: learning permission is explicit, separately authorized and withdrawable; no default consent
+ok 44 - learning permission is explicit, separately authorized and withdrawable; no default consent
+  ---
+  duration_ms: 22.214792
+  type: 'test'
+  ...
+# Subtest: reconsideration can restore a voided record without erasing the earlier decision
+ok 45 - reconsideration can restore a voided record without erasing the earlier decision
+  ---
+  duration_ms: 20.295458
+  type: 'test'
+  ...
+# Subtest: system evidence cannot spoof the time or actor of its lifecycle source
+ok 46 - system evidence cannot spoof the time or actor of its lifecycle source
+  ---
+  duration_ms: 23.020459
+  type: 'test'
+  ...
+# Subtest: P1 historical ownership, access and rehire survive site_organization change
+ok 47 - P1 historical ownership, access and rehire survive site_organization change
+  ---
+  duration_ms: 100.889708
+  type: 'test'
+  ...
+# Subtest: P1 historical ownership, access and rehire survive post_worksite change
+ok 48 - P1 historical ownership, access and rehire survive post_worksite change
+  ---
+  duration_ms: 81.472541
+  type: 'test'
+  ...
+# Subtest: P1 historical ownership, access and rehire survive line_post change
+ok 49 - P1 historical ownership, access and rehire survive line_post change
+  ---
+  duration_ms: 79.969916
+  type: 'test'
+  ...
+# Subtest: P1 pending approvals and cancellation keep the original company after a site transfer
+ok 50 - P1 pending approvals and cancellation keep the original company after a site transfer
+  ---
+  duration_ms: 73.4005
+  type: 'test'
+  ...
+# Subtest: P2 activity: revoked correction approval cannot be replayed; dismissal retains void
+ok 51 - P2 activity: revoked correction approval cannot be replayed; dismissal retains void
+  ---
+  duration_ms: 82.689459
+  type: 'test'
+  ...
+# Subtest: P2 review: revoked correction approval cannot be replayed; dismissal retains void
+ok 52 - P2 review: revoked correction approval cannot be replayed; dismissal retains void
+  ---
+  duration_ms: 87.586167
+  type: 'test'
+  ...
+# Subtest: P2 activity: concurrent revocation serializes with the other operation
+ok 53 - P2 activity: concurrent revocation serializes with the other operation
+  ---
+  duration_ms: 57.898958
+  type: 'test'
+  ...
+# Subtest: P2 activity: concurrent replacement serializes with the other operation
+ok 54 - P2 activity: concurrent replacement serializes with the other operation
+  ---
+  duration_ms: 26.782042
+  type: 'test'
+  ...
+# Subtest: P2 review: concurrent revocation serializes with the other operation
+ok 55 - P2 review: concurrent revocation serializes with the other operation
+  ---
+  duration_ms: 13.149834
+  type: 'test'
+  ...
+# Subtest: P2 review: concurrent replacement serializes with the other operation
+ok 56 - P2 review: concurrent replacement serializes with the other operation
+  ---
+  duration_ms: 12.41825
+  type: 'test'
+  ...
+# Subtest: P2 stale-snapshot isolation is rejected for record writes
+ok 57 - P2 stale-snapshot isolation is rejected for record writes
+  ---
+  duration_ms: 8.576041
+  type: 'test'
+  ...
+# Subtest: P2 preference created after exposure/cutoff cannot be used by an older recommendation
+ok 58 - P2 preference created after exposure/cutoff cannot be used by an older recommendation
+  ---
+  duration_ms: 10.528292
+  type: 'test'
+  ...
+# Subtest: P2 condition created after exposure/cutoff cannot be used by an older recommendation
+ok 59 - P2 condition created after exposure/cutoff cannot be used by an older recommendation
+  ---
+  duration_ms: 42.004875
+  type: 'test'
+  ...
+# Subtest: P2 snapshot sealed after exposure is also unavailable, even when created earlier
+ok 60 - P2 snapshot sealed after exposure is also unavailable, even when created earlier
+  ---
+  duration_ms: 7.003292
+  type: 'test'
+  ...
+# Subtest: least privilege: PUBLIC cannot execute NODE helpers or create schema objects
+ok 61 - least privilege: PUBLIC cannot execute NODE helpers or create schema objects
+  ---
+  duration_ms: 19.232084
+  type: 'test'
+  ...
+# Subtest: runtime identity is a real login with no administrative flags, membership or object ownership
+ok 62 - runtime identity is a real login with no administrative flags, membership or object ownership
+  ---
+  duration_ms: 247.036458
+  type: 'test'
+  ...
+# Subtest: runtime can save and re-read worker and company data, without access to unused columns
+ok 63 - runtime can save and re-read worker and company data, without access to unused columns
+  ---
+  duration_ms: 6.956541
+  type: 'test'
+  ...
+# Subtest: runtime cannot change schema, create temp objects, assume the owner or bypass restricted functions
+ok 64 - runtime cannot change schema, create temp objects, assume the owner or bypass restricted functions
+  ---
+  duration_ms: 204.80275
+  type: 'test'
+  ...
+# Subtest: runtime cannot read/write matching, payment, trust or moderation data
+ok 65 - runtime cannot read/write matching, payment, trust or moderation data
+  ---
+  duration_ms: 481.378917
+  type: 'test'
+  ...
+# Subtest: runtime cannot grant admin/transporter or extra membership roles through onboarding tables
+ok 66 - runtime cannot grant admin/transporter or extra membership roles through onboarding tables
+  ---
+  duration_ms: 58.983792
+  type: 'test'
+  ...
+# Subtest: object APIs reject top-level null with HTTP 400 and no stored changes
+ok 67 - object APIs reject top-level null with HTTP 400 and no stored changes
+  ---
+  duration_ms: 13.8245
+  type: 'test'
+  ...
+# Subtest: object APIs reject top-level false with HTTP 400 and no stored changes
+ok 68 - object APIs reject top-level false with HTTP 400 and no stored changes
+  ---
+  duration_ms: 10.443334
+  type: 'test'
+  ...
+# Subtest: object APIs reject top-level 0 with HTTP 400 and no stored changes
+ok 69 - object APIs reject top-level 0 with HTTP 400 and no stored changes
+  ---
+  duration_ms: 11.342625
+  type: 'test'
+  ...
+# Subtest: object APIs reject top-level "not-an-object" with HTTP 400 and no stored changes
+ok 70 - object APIs reject top-level "not-an-object" with HTTP 400 and no stored changes
+  ---
+  duration_ms: 10.731167
+  type: 'test'
+  ...
+# Subtest: object APIs reject top-level [] with HTTP 400 and no stored changes
+ok 71 - object APIs reject top-level [] with HTTP 400 and no stored changes
+  ---
+  duration_ms: 9.826125
+  type: 'test'
+  ...
+# Subtest: malformed JSON is HTTP 400 and does not modify the existing profile
+ok 72 - malformed JSON is HTTP 400 and does not modify the existing profile
+  ---
+  duration_ms: 7.425125
+  type: 'test'
+  ...
+# Subtest: /api/register: email rejects non-string inputs without changing stored data
+ok 73 - /api/register: email rejects non-string inputs without changing stored data
+  ---
+  duration_ms: 67.226792
+  type: 'test'
+  ...
+# Subtest: /api/register: password rejects non-string inputs without changing stored data
+ok 74 - /api/register: password rejects non-string inputs without changing stored data
+  ---
+  duration_ms: 70.453333
+  type: 'test'
+  ...
+# Subtest: /api/register: name rejects non-string inputs without changing stored data
+ok 75 - /api/register: name rejects non-string inputs without changing stored data
+  ---
+  duration_ms: 83.783916
+  type: 'test'
+  ...
+# Subtest: /api/login: email rejects non-string inputs without changing stored data
+ok 76 - /api/login: email rejects non-string inputs without changing stored data
+  ---
+  duration_ms: 88.9445
+  type: 'test'
+  ...
+# Subtest: /api/login: password rejects non-string inputs without changing stored data
+ok 77 - /api/login: password rejects non-string inputs without changing stored data
+  ---
+  duration_ms: 89.956667
+  type: 'test'
+  ...
+# Subtest: /api/me/companies: name rejects non-string inputs without changing stored data
+ok 78 - /api/me/companies: name rejects non-string inputs without changing stored data
+  ---
+  duration_ms: 86.264792
+  type: 'test'
+  ...
+# Subtest: normal strings retain normalization, length boundaries and exact password contents
+ok 79 - normal strings retain normalization, length boundaries and exact password contents
+  ---
+  duration_ms: 281.794875
+  type: 'test'
+  ...
+# Subtest: invalid string contents retain existing validation and leave stored data unchanged
+ok 80 - invalid string contents retain existing validation and leave stored data unchanged
+  ---
+  duration_ms: 179.220875
+  type: 'test'
+  ...
+# Subtest: invalid experience values are rejected without silently overwriting 84 months
+ok 81 - invalid experience values are rejected without silently overwriting 84 months
+  ---
+  duration_ms: 44.177375
+  type: 'test'
+  ...
+# Subtest: explicit numeric zero and compatible decimal integer strings still save correctly
+ok 82 - explicit numeric zero and compatible decimal integer strings still save correctly
+  ---
+  duration_ms: 22.945041
+  type: 'test'
+  ...
+# Subtest: unknown caller cannot update worker/company data even when JSON is valid
+ok 83 - unknown caller cannot update worker/company data even when JSON is valid
+  ---
+  duration_ms: 18.123125
+  type: 'test'
+  ...
+# Subtest: company APIs consistently reject missing, invalid, expired and revoked sessions without writes
+ok 84 - company APIs consistently reject missing, invalid, expired and revoked sessions without writes
+  ---
+  duration_ms: 134.86325
+  type: 'test'
+  ...
+# Subtest: own company membership summary remains available for owner only within their memberships
+ok 85 - own company membership summary remains available for owner only within their memberships
+  ---
+  duration_ms: 88.035584
+  type: 'test'
+  ...
+# Subtest: own company membership summary remains available for manager only within their memberships
+ok 86 - own company membership summary remains available for manager only within their memberships
+  ---
+  duration_ms: 87.98025
+  type: 'test'
+  ...
+# Subtest: own company membership summary remains available for staff only within their memberships
+ok 87 - own company membership summary remains available for staff only within their memberships
+  ---
+  duration_ms: 87.915708
+  type: 'test'
+  ...
+# Subtest: an account without memberships can read its empty summary and create its own new company
+ok 88 - an account without memberships can read its empty summary and create its own new company
+  ---
+  duration_ms: 60.225083
+  type: 'test'
+  ...
+# Subtest: membership changes and removal are reflected on the next request without re-login
+ok 89 - membership changes and removal are reflected on the next request without re-login
+  ---
+  duration_ms: 88.838375
+  type: 'test'
+  ...
+# Subtest: company and account identifiers supplied in queries cannot select another membership summary
+ok 90 - company and account identifiers supplied in queries cannot select another membership summary
+  ---
+  duration_ms: 176.560667
+  type: 'test'
+  ...
+# Subtest: new company ownership comes from the session, ignoring forged company, account and role fields
+ok 91 - new company ownership comes from the session, ignoring forged company, account and role fields
+  ---
+  duration_ms: 85.755958
+  type: 'test'
+  ...
+# Subtest: local role launcher refuses remote/production URLs and missing acknowledgement before connecting
+ok 92 - local role launcher refuses remote/production URLs and missing acknowledgement before connecting
+  ---
+  duration_ms: 144.865167
+  type: 'test'
+  ...
+# Subtest: provisioning refuses an already configured schema without creating another role or changing policies
+ok 93 - provisioning refuses an already configured schema without creating another role or changing policies
+  ---
+  duration_ms: 13.967167
+  type: 'test'
+  ...
+# Subtest: worker registration persists through real logout/login, isolates accounts and rejects stale saves
+ok 94 - worker registration persists through real logout/login, isolates accounts and rejects stale saves
+  ---
+  duration_ms: 565.067334
+  type: 'test'
+  ...
+# Subtest: separates ability/ownership, preserves equipment detail, single engine default
+ok 95 - separates ability/ownership, preserves equipment detail, single engine default
+  ---
+  duration_ms: 1.95275
+  type: 'test'
+  ...
+# Subtest: rejects malformed pay, dates, priorities, ownership and duplicate identities
+ok 96 - rejects malformed pay, dates, priorities, ownership and duplicate identities
+  ---
+  duration_ms: 0.896042
+  type: 'test'
+  ...
+# Subtest: allows existing empty size with actual equipment specs and overnight hours
+ok 97 - allows existing empty size with actual equipment specs and overnight hours
+  ---
+  duration_ms: 0.287625
+  type: 'test'
+  ...
+# Subtest: GET scopes lookup to authenticated account, not request payload
+ok 98 - GET scopes lookup to authenticated account, not request payload
+  ---
+  duration_ms: 0.148875
+  type: 'test'
+  ...
+# Subtest: PUT transaction uses session identity and rolls back stale writes
+ok 99 - PUT transaction uses session identity and rolls back stale writes
+  ---
+  duration_ms: 0.286
+  type: 'test'
+  ...
+# Subtest: PUT database failure rolls back and releases
+ok 100 - PUT database failure rolls back and releases
+  ---
+  duration_ms: 0.269
+  type: 'test'
+  ...
+# Subtest: existing version update uses expected version and account identity
+ok 101 - existing version update uses expected version and account identity
+  ---
+  duration_ms: 0.158041
+  type: 'test'
+  ...
+# Subtest: allows optional empty equipment experience and still rejects invalid numbers
+ok 102 - allows optional empty equipment experience and still rejects invalid numbers
+  ---
+  duration_ms: 0.095417
+  type: 'test'
+  ...
+# Subtest: owner can register a worksite with server-owned author and time
+ok 103 - owner can register a worksite with server-owned author and time
+  ---
+  duration_ms: 434.980458
+  type: 'test'
+  ...
+# Subtest: manager can register a worksite with server-owned author and time
+ok 104 - manager can register a worksite with server-owned author and time
+  ---
+  duration_ms: 187.509833
+  type: 'test'
+  ...
+# Subtest: staff, nonmembers and forged company/actor/role inputs cannot register for another organization
+ok 105 - staff, nonmembers and forged company/actor/role inputs cannot register for another organization
+  ---
+  duration_ms: 377.033375
+  type: 'test'
+  ...
+# Subtest: all worksite routes reject missing, unknown, expired and revoked sessions without writes
+ok 106 - all worksite routes reject missing, unknown, expired and revoked sessions without writes
+  ---
+  duration_ms: 925.4655
+  type: 'test'
+  ...
+# Subtest: manager lists organization sites; staff lists only explicitly assigned sites and no personal contacts
+ok 107 - manager lists organization sites; staff lists only explicitly assigned sites and no personal contacts
+  ---
+  duration_ms: 290.034584
+  type: 'test'
+  ...
+# Subtest: multiple assignees, independent work-confirmation flags and explicit revocation preserve history
+ok 108 - multiple assignees, independent work-confirmation flags and explicit revocation preserve history
+  ---
+  duration_ms: 298.58125
+  type: 'test'
+  ...
+# Subtest: membership removal blocks access immediately and rejoining does not revive old worksite grants
+ok 109 - membership removal blocks access immediately and rejoining does not revive old worksite grants
+  ---
+  duration_ms: 255.996125
+  type: 'test'
+  ...
+# Subtest: only current members may be assigned and invalid permission payloads leave no partial changes
+ok 110 - only current members may be assigned and invalid permission payloads leave no partial changes
+  ---
+  duration_ms: 387.538667
+  type: 'test'
+  ...
+# Subtest: edit and deactivation are separate delegated permissions; managers keep management access
+ok 111 - edit and deactivation are separate delegated permissions; managers keep management access
+  ---
+  duration_ms: 261.099583
+  type: 'test'
+  ...
+# Subtest: deactivation preserves existing jobs, matches, payments and historical company attribution
+ok 112 - deactivation preserves existing jobs, matches, payments and historical company attribution
+  ---
+  duration_ms: 290.732625
+  type: 'test'
+  ...
+# Subtest: worksite inputs validate strings, optional fields, region and immutable server fields
+ok 113 - worksite inputs validate strings, optional fields, region and immutable server fields
+  ---
+  duration_ms: 748.232375
+  type: 'test'
+  ...
+# Subtest: missing and malformed worksite/company IDs have consistent errors without data changes
+ok 114 - missing and malformed worksite/company IDs have consistent errors without data changes
+  ---
+  duration_ms: 556.082625
+  type: 'test'
+  ...
+# Subtest: similar names or addresses warn without blocking and never reveal another company
+ok 115 - similar names or addresses warn without blocking and never reveal another company
+  ---
+  duration_ms: 191.211792
+  type: 'test'
+  ...
+# Subtest: optimistic version check admits one concurrent edit and rolls back the losing edit
+ok 116 - optimistic version check admits one concurrent edit and rolls back the losing edit
+  ---
+  duration_ms: 217.318334
+  type: 'test'
+  ...
+# Subtest: an audit write failure rolls back the complete worksite creation
+ok 117 - an audit write failure rolls back the complete worksite creation
+  ---
+  duration_ms: 224.718542
+  type: 'test'
+  ...
+# Subtest: a concurrent membership revocation orders before a waiting edit and prevents the write
+ok 118 - a concurrent membership revocation orders before a waiting edit and prevents the write
+  ---
+  duration_ms: 228.548375
+  type: 'test'
+  ...
+# Subtest: legacy sites remain readable with unknown address/time; explicit editing fills only supplied data
+ok 119 - legacy sites remain readable with unknown address/time; explicit editing fills only supplied data
+  ---
+  duration_ms: 187.490834
+  type: 'test'
+  ...
+# Subtest: audit history is immutable and a transfer revokes grants without altering historical party snapshots
+ok 120 - audit history is immutable and a transfer revokes grants without altering historical party snapshots
+  ---
+  duration_ms: 230.719875
+  type: 'test'
+  ...
+# Subtest: dedicated site role has no onboarding, matching, payment or direct history-write privileges
+ok 121 - dedicated site role has no onboarding, matching, payment or direct history-write privileges
+  ---
+  duration_ms: 137.39575
+  type: 'test'
+  ...
+# Subtest: separate site connection cannot select a different host, database or connection options
+ok 122 - separate site connection cannot select a different host, database or connection options
+  ---
+  duration_ms: 188.112416
+  type: 'test'
+  ...
+# Subtest: BUG-01: slow request bodies on every mutating route do not block another company reads or writes
+ok 123 - BUG-01: slow request bodies on every mutating route do not block another company reads or writes
+  ---
+  duration_ms: 457.864375
+  type: 'test'
+  ...
+# Subtest: BUG-01: basic body errors on every mutating route are rejected before waiting for a DB lock
+ok 124 - BUG-01: basic body errors on every mutating route are rejected before waiting for a DB lock
+  ---
+  duration_ms: 257.01
+  type: 'test'
+  ...
+# Subtest: BUG-02: GET rejects a session that expires while actually waiting for the shared lock
+ok 125 - BUG-02: GET rejects a session that expires while actually waiting for the shared lock
+  ---
+  duration_ms: 2239.496458
+  type: 'test'
+  ...
+# Subtest: BUG-02: PATCH rejects a session that expires while actually waiting for the shared lock
+ok 126 - BUG-02: PATCH rejects a session that expires while actually waiting for the shared lock
+  ---
+  duration_ms: 2252.170458
+  type: 'test'
+  ...
+1..126
+# tests 126
+# suites 0
+# pass 126
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 26247.699417
+PASS: temporary runtime role and policies removed

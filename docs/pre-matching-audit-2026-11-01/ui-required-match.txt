@@ -1,0 +1,2 @@
+PASS 390px: left-side single-line titles, 0-3 limit, fourth disabled/uncheck, group independence/edit, shared worker scope, empty new-profile restore, occupation AND, separate owned/ability arrays, real DB save/edit/logout/relogin, invalid-request rollback, no overflow/errors
+PASS 1440px: left-side single-line titles, 0-3 limit, fourth disabled/uncheck, group independence/edit, shared worker scope, empty new-profile restore, occupation AND, separate owned/ability arrays, real DB save/edit/logout/relogin, invalid-request rollback, no overflow/errors

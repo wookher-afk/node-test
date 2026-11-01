@@ -1,0 +1,222 @@
+[
+  {
+    "tag": "H2",
+    "id": "",
+    "text": "수행 가능한 직종",
+    "x": 261,
+    "y": 202.3125,
+    "width": 918,
+    "height": 30,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "대분류",
+    "x": 261,
+    "y": 315.125,
+    "width": 450,
+    "height": 92,
+    "textWidth": 41.53125
+  },
+  {
+    "tag": "SELECT",
+    "id": "occupationMajor",
+    "text": "",
+    "x": 261,
+    "y": 343.125,
+    "width": 450,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "중분류",
+    "x": 729,
+    "y": 315.125,
+    "width": 450,
+    "height": 92,
+    "textWidth": 41.53125
+  },
+  {
+    "tag": "SELECT",
+    "id": "occupationMiddle",
+    "text": "",
+    "x": 729,
+    "y": 343.125,
+    "width": 450,
+    "height": 46,
+    "textWidth": 0
+  },
+  {
+    "tag": "BUTTON",
+    "id": "selectMiddle",
+    "text": "이 중분류 전체 선택",
+    "x": 261,
+    "y": 407.125,
+    "width": 149.296875,
+    "height": 46,
+    "textWidth": 123.296875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "clearMiddle",
+    "text": "이 중분류 전체 해제",
+    "x": 418.296875,
+    "y": 407.125,
+    "width": 149.296875,
+    "height": 46,
+    "textWidth": 123.296875
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "토공 작업자",
+    "x": 261,
+    "y": 469.125,
+    "width": 300.65625,
+    "height": 52,
+    "textWidth": 0
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "text": "",
+    "x": 278,
+    "y": 485.125,
+    "width": 20,
+    "height": 20,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "지반개량공",
+    "x": 569.65625,
+    "y": 469.125,
+    "width": 300.671875,
+    "height": 52,
+    "textWidth": 0
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "text": "",
+    "x": 586.65625,
+    "y": 485.125,
+    "width": 20,
+    "height": 20,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "흙막이공",
+    "x": 878.328125,
+    "y": 469.125,
+    "width": 300.65625,
+    "height": 52,
+    "textWidth": 0
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "text": "",
+    "x": 895.328125,
+    "y": 485.125,
+    "width": 20,
+    "height": 20,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "흙막이 작업자",
+    "x": 261,
+    "y": 529.125,
+    "width": 300.65625,
+    "height": 52,
+    "textWidth": 0
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "text": "",
+    "x": 278,
+    "y": 545.125,
+    "width": 20,
+    "height": 20,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "파일공",
+    "x": 569.65625,
+    "y": 529.125,
+    "width": 300.671875,
+    "height": 52,
+    "textWidth": 0
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "text": "",
+    "x": 586.65625,
+    "y": 545.125,
+    "width": 20,
+    "height": 20,
+    "textWidth": 0
+  },
+  {
+    "tag": "LABEL",
+    "id": "",
+    "text": "기초공",
+    "x": 878.328125,
+    "y": 529.125,
+    "width": 300.65625,
+    "height": 52,
+    "textWidth": 0
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "text": "",
+    "x": 895.328125,
+    "y": 545.125,
+    "width": 20,
+    "height": 20,
+    "textWidth": 0
+  },
+  {
+    "tag": "H2",
+    "id": "",
+    "text": "선택한 직종",
+    "x": 261,
+    "y": 687.03125,
+    "width": 918,
+    "height": 30,
+    "textWidth": 113.953125
+  },
+  {
+    "tag": "BUTTON",
+    "id": "clearAll",
+    "text": "선택 전체 해제",
+    "x": 261,
+    "y": 736.9375,
+    "width": 117.421875,
+    "height": 46,
+    "textWidth": 91.421875
+  },
+  {
+    "tag": "BUTTON",
+    "id": "save",
+    "text": "작업자 등록 정보 저장",
+    "x": 261,
+    "y": 852.25,
+    "width": 918,
+    "height": 44,
+    "textWidth": 137.125
+  }
+]

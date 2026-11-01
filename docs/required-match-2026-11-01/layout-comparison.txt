@@ -1,0 +1,6 @@
+PASS company 390px: 46 existing elements unchanged (legend width extension only)
+PASS company 1440px: 46 existing elements unchanged (legend width extension only)
+PASS worker 390px: 31 existing elements unchanged (legend width extension only)
+PASS worker 1440px: 31 existing elements unchanged (legend width extension only)
+PASS technical 390px: 22 existing elements unchanged (legend width extension only)
+PASS technical 1440px: 22 existing elements unchanged (legend width extension only)

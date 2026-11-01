@@ -1,0 +1,29 @@
+--- /private/tmp/equipment-count-worker-before.html	2026-11-01 17:04:18
++++ web/worker-registration.html	2026-11-01 17:08:14
+@@ -30,14 +30,22 @@
+ window.addEventListener('message',e=>{if(e.origin===location.origin&&e.source===$('equipment').contentWindow&&e.data?.type==='node-alpha-equipment-ready'){sync();$('conditions').scrollIntoView({behavior:'smooth'});}});
+ $('form').onsubmit=async e=>{e.preventDefault();$('save').disabled=true;try{
+  sync();const document={requiredMatch:required.read(),roles,abilities:records.filter(x=>x.mode==='ability'),ownedEquipment:records.filter(x=>x.mode==='owned'),preferences:{...pref.read(),conditionPriority:priority,equipmentPriority}};
+- const result=await api('PUT',{document,version});version=result.version;$('notice').textContent='서버에 저장했습니다. 다시 로그인해도 복원됩니다.';
++ const result=await api('PUT',{document,version});version=result.version;$('equipment').contentWindow.NODE_ALPHA_ACK(version);$('notice').textContent='서버에 저장했습니다. 다시 로그인해도 복원됩니다.';
+ }catch(e){$('notice').textContent=e.message;}finally{$('save').disabled=false;}};
+ (async()=>{try{
+ 
+  const me=await api('GET',null,'/api/me');accountId=me.account.id;const saved=await api();version=saved.version;const d=saved.document;required.restore(saved.requiredMatch||d?.requiredMatch||[]);
+- // Server is authoritative on entry. Never read or replace the original 03-2 keys.
+- localStorage.setItem('node_alpha_equipment_'+accountId,JSON.stringify({version:2,aRevision:1,roles:d?.roles||[],records:[...(d?.abilities||[]),...(d?.ownedEquipment||[])],draft:null}));
++ // Restore unsent equipment only against the server version it was based on.
++ // Preserve conflicting/invalid originals before replacing the account-scoped cache.
++ const key='node_alpha_equipment_'+accountId,raw=localStorage.getItem(key);let local;
++ try{local=raw===null?null:JSON.parse(raw);}catch{}
++ const usable=local?.version===2&&Array.isArray(local.roles)&&Array.isArray(local.records);
++ const restoreLocal=usable&&(local.serverVersion===version||(local.serverVersion===undefined&&!d&&version===0));
++ if(!restoreLocal){
++  if(raw!==null)localStorage.setItem(key+'_backup_'+crypto.randomUUID(),raw);
++  localStorage.setItem(key,JSON.stringify({version:2,aRevision:1,serverVersion:version,roles:d?.roles||[],records:[...(d?.abilities||[]),...(d?.ownedEquipment||[])],draft:null}));
++ }else if(local.serverVersion===undefined){local.serverVersion=version;localStorage.setItem(key,JSON.stringify(local));}
+  if(d){const p=d.preferences;priority=p.conditionPriority;equipmentPriority=p.equipmentPriority;records=[...d.abilities,...d.ownedEquipment];pref.restore(p);}
+- order('priority',priority,x=>names[x]);order('equipmentPriority',equipmentPriority,equipmentLabel);$('equipment').onload=()=>order('equipmentPriority',equipmentPriority,equipmentLabel);$('equipment').src='/ui/03-2/?alpha='+accountId;$('content').hidden=false;$('notice').textContent=d?'서버에 저장한 등록 정보를 복원했습니다.':'장비와 희망조건을 입력하세요.';
++ order('priority',priority,x=>names[x]);order('equipmentPriority',equipmentPriority,equipmentLabel);$('equipment').onload=()=>sync();$('equipment').src='/ui/03-2/?alpha='+accountId;$('content').hidden=false;$('notice').textContent=restoreLocal&&local.records.length?'브라우저의 장비 목록을 복원했습니다. 변경 내용은 전체 등록 정보 서버 저장을 눌러 저장하세요.':d?'서버에 저장한 등록 정보를 복원했습니다.':'장비와 희망조건을 입력하세요.';
+ }catch(e){$('notice').textContent=e.message;}})();
+ </script></html>

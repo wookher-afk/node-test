@@ -1,0 +1,2 @@
+PASS REAL Chrome 390: stages, parent reset, multiple lines, daily/monthly won, overnight/range/dates, save/edit/reload/relogin, roles, invalid IDs/stale writes
+PASS REAL Chrome 1440: stages, parent reset, multiple lines, daily/monthly won, overnight/range/dates, save/edit/reload/relogin, roles, invalid IDs/stale writes

@@ -1,0 +1,4 @@
+PASS all 31 catalog kinds/forms/candidates at 320px
+PASS progressive/reset/draft/batch/edit/delete/layout 320
+PASS progressive/reset/draft/batch/edit/delete/layout 390
+PASS progressive/reset/draft/batch/edit/delete/layout 1440

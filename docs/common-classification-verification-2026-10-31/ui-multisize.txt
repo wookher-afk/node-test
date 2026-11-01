@@ -1,0 +1,7 @@
+catalog-all-forms PASS
+catalog-batch-save PASS
+legacy-without-catalog-choices PASS
+batch-draft-edit-delete-owned PASS
+approved-single-list-form-custom PASS
+cargo-no-spec-copy-and-no-duplicate PASS
+duplicate-submit-and-existing-data-preserved PASS

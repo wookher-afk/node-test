@@ -1,0 +1,3 @@
+PASS welcome / registration branches / session return / expiry / failure / dual roles / mobile 320
+PASS welcome / registration branches / session return / expiry / failure / dual roles / mobile 390
+PASS welcome / registration branches / session return / expiry / failure / dual roles / mobile 1440

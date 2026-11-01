@@ -1,0 +1,2 @@
+PASS REAL Chrome 390: draft 13/31/179, cross-category selection/removal, group add/edit/delete, AND-per-person persistence/relogin,  stages, parent reset, multiple lines, daily/monthly won, overnight/range/dates, save/edit/reload/relogin, roles, invalid IDs/stale writes
+PASS REAL Chrome 1440: draft 13/31/179, cross-category selection/removal, group add/edit/delete, AND-per-person persistence/relogin,  stages, parent reset, multiple lines, daily/monthly won, overnight/range/dates, save/edit/reload/relogin, roles, invalid IDs/stale writes

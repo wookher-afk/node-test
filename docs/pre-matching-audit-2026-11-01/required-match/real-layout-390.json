@@ -1,0 +1,297 @@
+{
+  "companyLayout": [
+    {
+      "key": "workAbility",
+      "checkbox": {
+        "x": 35,
+        "y": 966.84375,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 965.84375,
+          "width": 59.5625,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "difficulty",
+      "checkbox": {
+        "x": 35,
+        "y": 1436.84375,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 1435.84375,
+          "width": 148.96875,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "experience",
+      "checkbox": {
+        "x": 35,
+        "y": 1515.84375,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 1514.84375,
+          "width": 262.96875,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "region",
+      "checkbox": {
+        "x": 50,
+        "y": 1594.84375,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 70,
+          "y": 1593.84375,
+          "width": 59.3125,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "pay",
+      "checkbox": {
+        "x": 35,
+        "y": 1900.46875,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 1899.46875,
+          "width": 103.015625,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "hours",
+      "checkbox": {
+        "x": 35,
+        "y": 2017.46875,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 2016.46875,
+          "width": 55.375,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "schedule",
+      "checkbox": {
+        "x": 50,
+        "y": 2132.78125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 70,
+          "y": 2131.78125,
+          "width": 55.375,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "paymentTerms",
+      "checkbox": {
+        "x": 35,
+        "y": 2284.78125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 2283.78125,
+          "width": 133.1875,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "paymentMethod",
+      "checkbox": {
+        "x": 35,
+        "y": 2378.78125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 2377.78125,
+          "width": 59.5625,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "taxTerms",
+      "checkbox": {
+        "x": 201,
+        "y": 2378.78125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 221,
+          "y": 2377.78125,
+          "width": 59.5625,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "otherTerms",
+      "checkbox": {
+        "x": 35,
+        "y": 2472.78125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 55,
+          "y": 2471.78125,
+          "width": 167,
+          "height": 18
+        }
+      ]
+    }
+  ],
+  "workerLayout": [
+    {
+      "key": "workAbility",
+      "checkbox": {
+        "x": 22,
+        "y": 185.78125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 42,
+          "y": 176.78125,
+          "width": 319.359375,
+          "height": 28
+        }
+      ]
+    },
+    {
+      "key": "region",
+      "checkbox": {
+        "x": 37,
+        "y": 1118.5,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 57,
+          "y": 1117.5,
+          "width": 59.3125,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "pay",
+      "checkbox": {
+        "x": 22,
+        "y": 1414.125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 42,
+          "y": 1413.125,
+          "width": 134.890625,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "hours",
+      "checkbox": {
+        "x": 22,
+        "y": 1527.125,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 42,
+          "y": 1526.125,
+          "width": 87.234375,
+          "height": 18
+        }
+      ]
+    },
+    {
+      "key": "schedule",
+      "checkbox": {
+        "x": 37,
+        "y": 1642.4375,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 57,
+          "y": 1641.4375,
+          "width": 59.3125,
+          "height": 18
+        }
+      ]
+    }
+  ],
+  "technicalLayout": [
+    {
+      "key": "workAbility",
+      "checkbox": {
+        "x": 27,
+        "y": -250.6875,
+        "width": 14,
+        "height": 14
+      },
+      "titleRects": [
+        {
+          "x": 47,
+          "y": -259.6875,
+          "width": 155.46875,
+          "height": 28
+        }
+      ]
+    }
+  ]
+}

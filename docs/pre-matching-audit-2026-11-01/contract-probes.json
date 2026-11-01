@@ -1,0 +1,250 @@
+[
+  {
+    "id": "worker-kind-\"invalid-kind\"",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-major-\"wrong-parent\"",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-middle-\"wrong-middle\"",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-form-\"invalid-form\"",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-size-\"invalid-size\"",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-optionSelections-[\"invalid-option\"]",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-optionSelections-[\"브레이커\",\"브레이커\"]",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-months-\"11\"",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-months-\"invalid-months\"",
+    "status": "accepted"
+  },
+  {
+    "id": "company-kind-\"invalid-kind\"",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 분류·형태 조합을 확인하세요."
+    }
+  },
+  {
+    "id": "company-major-\"wrong-parent\"",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 분류·형태 조합을 확인하세요."
+    }
+  },
+  {
+    "id": "company-middle-\"wrong-middle\"",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 분류·형태 조합을 확인하세요."
+    }
+  },
+  {
+    "id": "company-form-\"invalid-form\"",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 분류·형태 조합을 확인하세요."
+    }
+  },
+  {
+    "id": "company-size-\"invalid-size\"",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 형태와 현장규격 조합을 확인하세요."
+    }
+  },
+  {
+    "id": "company-optionSelections-[\"invalid-option\"]",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 옵션을 확인하세요."
+    }
+  },
+  {
+    "id": "company-optionSelections-[\"브레이커\",\"브레이커\"]",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 옵션을 확인하세요."
+    }
+  },
+  {
+    "id": "technical-shape-pay",
+    "status": "accepted"
+  },
+  {
+    "id": "technical-source-pay",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "지역·급여·시간·일정은 장비작업자 희망조건을 먼저 등록하세요."
+    }
+  },
+  {
+    "id": "technical-shape-region",
+    "status": "accepted"
+  },
+  {
+    "id": "technical-source-region",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "지역·급여·시간·일정은 장비작업자 희망조건을 먼저 등록하세요."
+    }
+  },
+  {
+    "id": "technical-shape-hours",
+    "status": "accepted"
+  },
+  {
+    "id": "technical-source-hours",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "지역·급여·시간·일정은 장비작업자 희망조건을 먼저 등록하세요."
+    }
+  },
+  {
+    "id": "technical-shape-schedule",
+    "status": "accepted"
+  },
+  {
+    "id": "technical-source-schedule",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "지역·급여·시간·일정은 장비작업자 희망조건을 먼저 등록하세요."
+    }
+  },
+  {
+    "id": "technical-shape-workAbility",
+    "status": "accepted"
+  },
+  {
+    "id": "technical-source-workAbility",
+    "status": "accepted"
+  },
+  {
+    "id": "technical-extra-preferences-experience",
+    "status": "accepted-but-omitted",
+    "returnedKeys": [
+      "workerType",
+      "occupationCatalogVersion",
+      "occupationIds"
+    ]
+  },
+  {
+    "id": "company-required-difficulty",
+    "status": "accepted"
+  },
+  {
+    "id": "company-required-paymentTerms",
+    "status": "accepted"
+  },
+  {
+    "id": "company-required-paymentMethod",
+    "status": "accepted"
+  },
+  {
+    "id": "company-required-taxTerms",
+    "status": "accepted"
+  },
+  {
+    "id": "company-required-otherTerms",
+    "status": "accepted"
+  },
+  {
+    "id": "company-required-experience",
+    "status": "accepted"
+  },
+  {
+    "id": "zero-groups",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "모집항목은 1~50개 등록하세요."
+    }
+  },
+  {
+    "id": "duplicate-line-id",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "모집항목 식별자를 확인하세요."
+    }
+  },
+  {
+    "id": "two-independent-groups",
+    "status": "accepted"
+  },
+  {
+    "id": "empty-abilities",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "운전 가능한 장비를 하나 이상 등록하세요."
+    }
+  },
+  {
+    "id": "blank-experience",
+    "status": "accepted"
+  },
+  {
+    "id": "legacy-region-name",
+    "status": "accepted"
+  },
+  {
+    "id": "worker-no-catalog-version",
+    "status": "accepted"
+  },
+  {
+    "id": "duplicate-record-id",
+    "status": "rejected",
+    "error": {
+      "status": 400,
+      "message": "장비 종류·형태·규격·경력을 확인하세요."
+    }
+  },
+  {
+    "id": "company-required-omission",
+    "status": "accepted"
+  },
+  {
+    "id": "policy-only",
+    "status": "declared",
+    "policy": {
+      "version": 1,
+      "maxSelected": 3,
+      "workerScope": "account_profile",
+      "companyScope": "recruitment_group",
+      "occupationRule": "all_per_person",
+      "workAbilityCountsAs": 1,
+      "requiredSides": "both",
+      "legalRequirements": "independent_mandatory_gate",
+      "engineImplemented": false
+    }
+  }
+]

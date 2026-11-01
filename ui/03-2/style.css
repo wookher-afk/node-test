@@ -31,3 +31,28 @@ html.large-text{font-size:20px}
 .large-text input,.large-text select,.large-text button{min-height:48px}
 @media(max-width:640px){.large-text .grid{grid-template-columns:1fr}.large-text section{padding:14px}.large-text header{padding:18px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Keep guidance and recovery tools available on demand. */
+.notice,.equipment-guidance,section > p:not([id]),#addEquipmentActions > p,
+#choiceEvidence,#boomStored,#optionsHint,#equipmentPrimaryHint,footer{display:none}
+#changeNotice:empty{display:none}
+#editor[data-stage="major"] label:has(> #middle),
+#editor:is([data-stage="major"],[data-stage="middle"]) label:has(> #kind),
+#editor:is([data-stage="major"],[data-stage="middle"],[data-stage="kind"]) label:has(> #form),
+#editor:not([data-stage="spec"]) :is(#sizeField,#customLabel,#equipmentPrimary,#cargoSteps,#equipmentFields,#specDetails,#sourceDetails),
+#editor:is([data-stage="major"],[data-stage="middle"],[data-stage="kind"]) :is(label:has(> #formDetail),label:has(> #alias),label:has(> #evidence),#actualNameLabel,#ownership,#experience),
+#editor:not([data-options="true"]) #optionsStage{display:none}
+#optionalDetails > details:has(#previousValues){display:none}
+#optionalDetails > details:has(#previousValues:not(:empty)){display:block}
+#optionsStage{margin:16px 0}
+input,select{min-width:0}iframe{box-sizing:border-box}
+
+/* One native disclosure keeps optional controls mounted and their values intact. */
+#optionalDetails{border:1px solid #d3dce8;border-radius:10px;padding:0 16px;margin:20px 0}
+#optionalDetails > summary{min-height:48px;padding:12px 0}
+#optionalDetails .notice{display:block}
+#optionalDetails #choiceEvidence:not(:empty){display:block}
+#optionalDetails details:has(#previousValues:empty){display:none}
+#optionalDetails #cargoOptional{grid-template-columns:repeat(2,minmax(0,1fr))}
+#editor:not([data-stage="spec"]) #cargoOptional{display:none}
+@media(max-width:640px){#optionalDetails{padding:0 12px}#optionalDetails #cargoOptional{grid-template-columns:1fr}}

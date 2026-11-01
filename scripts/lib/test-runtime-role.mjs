@@ -28,11 +28,13 @@ export async function provisionTestRuntime(pool) {
   await client.query(`GRANT SELECT(id,email,password_hash,display_name), INSERT(email,password_hash,display_name) ON accounts TO ${quotedRole}`);
   await client.query(`GRANT SELECT(account_id,role), INSERT(account_id,role) ON account_roles TO ${quotedRole}`);
   await client.query(`GRANT SELECT(account_id,experience_months), INSERT(account_id,experience_months), UPDATE(experience_months) ON worker_profiles TO ${quotedRole}`);
-  await client.query(`GRANT SELECT(id,name), INSERT(name) ON organizations TO ${quotedRole}`);
+  await client.query(`GRANT SELECT(id,name), INSERT(name), UPDATE(name) ON organizations TO ${quotedRole}`);
   await client.query(`GRANT SELECT(organization_id,account_id,role), INSERT(organization_id,account_id,role) ON organization_memberships TO ${quotedRole}`);
   await client.query(`GRANT SELECT(account_id,token_hash,expires_at), INSERT(account_id,token_hash,expires_at), DELETE ON account_sessions TO ${quotedRole}`);
   // GENERATED ALWAYS AS IDENTITY inserts require table privileges, not direct
   // sequence USAGE. Do not grant nextval/currval access to the runtime.
+  if((await client.query("SELECT to_regclass('public.worker_alpha_registrations') AS name")).rows[0].name)await client.query(`GRANT SELECT,INSERT,UPDATE ON worker_alpha_registrations TO ${quotedRole}`);
+  if((await client.query("SELECT to_regclass('public.company_alpha_registrations') AS name")).rows[0].name)await client.query(`GRANT SELECT,INSERT,UPDATE ON company_alpha_registrations TO ${quotedRole}`);
   await client.query('ALTER TABLE account_roles ENABLE ROW LEVEL SECURITY');
   await client.query('ALTER TABLE organization_memberships ENABLE ROW LEVEL SECURITY');
   await client.query(`CREATE POLICY "${role}_read" ON account_roles FOR SELECT TO ${quotedRole} USING(true)`);
