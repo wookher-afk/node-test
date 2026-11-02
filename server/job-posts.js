@@ -1,3 +1,5 @@
+import {createHash} from 'node:crypto';
+import {alphaJobPostInput} from './alpha-job-post-input.js';
 import {identifier,companyRole,manager,transaction} from './worksites.js';
 
 const fail=(status,message)=>{throw Object.assign(new Error(message),{status});};
@@ -14,13 +16,13 @@ function nextDay(value){
  const d=new Date(value+'T00:00:00.000Z');d.setUTCDate(d.getUTCDate()+1);
  const result=d.toISOString().slice(0,10);return date(result);
 }
-function input(value){
+export function jobPostInput(value){
  object(value,['visibility','lines']);
  const visibility=value.visibility===undefined?'public':value.visibility;
  if(!['public','targeted','private'].includes(visibility))fail(400,'공개 범위를 확인하세요.');
  if(!Array.isArray(value.lines)||!value.lines.length)fail(400,'모집 항목이 하나 이상 필요합니다.');
  return {visibility,lines:value.lines.map(line=>{
-  object(line,['occupation_id','resource_mode','allow_partial','pay','payment','dates']);
+  object(line,['occupation_id','resource_mode','allow_partial','pay','payment','dates','alpha_conditions']);
   const occupation=identifier(line.occupation_id);
   if(!['worker','equipment_and_worker','equipment'].includes(line.resource_mode)||typeof line.allow_partial!=='boolean')fail(400,'모집 유형과 부분 일정 허용 여부를 확인하세요.');
   object(line.pay,['unit','amount_krw']);
@@ -40,7 +42,7 @@ function input(value){
    return {work_date:workDate,capacity:d.capacity,payment_due_date:mode==='same_day'?workDate:mode==='next_day'?nextDay(workDate):due};
   }).sort((a,b)=>a.work_date.localeCompare(b.work_date));
   return {occupation_id:occupation,resource_mode:line.resource_mode,allow_partial:line.allow_partial,
-   pay:{unit:'day',amount_krw:line.pay.amount_krw},payment:{mode,due_date:due},dates};
+   pay:{unit:'day',amount_krw:line.pay.amount_krw},payment:{mode,due_date:due},dates,...(line.alpha_conditions?{alpha_conditions:line.alpha_conditions}:{})};
  })};
 }
 async function managedSite(client,siteId,user){
@@ -51,10 +53,10 @@ async function managedSite(client,siteId,user){
 }
 async function readPost(client,postId,site){
  const post=(await client.query('SELECT id,worksite_id,visibility,status,created_at,version,created_by,updated_by,updated_at FROM job_posts WHERE id=$1',[postId])).rows[0];
- const revision=(await client.query('SELECT id,organization_id,worksite_snapshot,recorded_at FROM job_post_versions WHERE job_post_id=$1 AND version=$2 AND sealed_at IS NOT NULL',[postId,post.version])).rows[0];
+ const revision=(await client.query('SELECT id,organization_id,worksite_snapshot,recorded_at,alpha_source FROM job_post_versions WHERE job_post_id=$1 AND version=$2 AND sealed_at IS NOT NULL',[postId,post.version])).rows[0];
  if(revision&&revision.organization_id!==site.organization_id)fail(409,'현장 소속이 변경된 공고는 기존 귀속 검토가 필요합니다.');
  const lines=(await client.query(`SELECT l.id,l.occupation_id,l.resource_mode,l.daily_pay_krw,l.allow_partial,
-  v.payment_mode,v.specified_due_date::text FROM job_lines l LEFT JOIN job_post_version_lines v
+  v.payment_mode,v.specified_due_date::text,v.alpha_conditions FROM job_lines l LEFT JOIN job_post_version_lines v
   ON v.job_line_id=l.id AND v.post_version_id=$2 WHERE l.job_post_id=$1 ORDER BY l.id`,[postId,revision?.id??null])).rows;
  const dates=(await client.query(`SELECT d.job_line_id,d.work_date::text,d.capacity,v.payment_due_date::text,
   (SELECT count(*)::int FROM matches m JOIN match_terms t ON t.id=m.terms_id JOIN match_dates md ON md.terms_id=t.id
@@ -62,16 +64,33 @@ async function readPost(client,postId,site){
   FROM job_line_dates d JOIN job_lines l ON l.id=d.job_line_id LEFT JOIN job_post_version_dates v
   ON v.job_line_id=d.job_line_id AND v.work_date=d.work_date AND v.post_version_id=$2
   WHERE l.job_post_id=$1 ORDER BY d.job_line_id,d.work_date`,[postId,revision?.id??null])).rows;
- return {...post,worksite_snapshot:revision?.worksite_snapshot??null,promise_version_id:revision?.id??null,
-  lines:lines.map(l=>({id:l.id,occupation_id:l.occupation_id,resource_mode:l.resource_mode,allow_partial:l.allow_partial,
+ return {...post,worksite_snapshot:revision?.worksite_snapshot??null,promise_version_id:revision?.id??null,alpha_registration_version:revision?.alpha_source?.registration_version??null,
+  lines:lines.map(l=>({id:l.id,occupation_id:l.occupation_id,resource_mode:l.resource_mode,allow_partial:l.allow_partial,...(l.alpha_conditions?{alpha_conditions:l.alpha_conditions}:{}),
    pay:{unit:'day',amount_krw:l.daily_pay_krw},payment:l.payment_mode?{mode:l.payment_mode,due_date:l.specified_due_date?String(l.specified_due_date):null}:null,
    dates:dates.filter(d=>d.job_line_id===l.id).map(d=>({work_date:d.work_date,capacity:d.capacity,confirmed_count:d.confirmed_count,
     remaining_count:Math.max(0,d.capacity-d.confirmed_count),payment_due_date:d.payment_due_date}))}))};
 }
 export async function jobPostRequest({pool,req,path,body}){
+ const options=/^\/api\/worksites\/([^/]+)\/job-post-options$/.exec(path);
+ if(options&&req.method==='GET')return transaction(pool,req,async(client,user)=>{
+  await managedSite(client,identifier(options[1]),user);
+  return {status:200,data:{occupations:(await client.query('SELECT id,name FROM occupations ORDER BY name,id')).rows}};
+ });
  const bySite=/^\/api\/worksites\/([^/]+)\/job-posts$/.exec(path),byId=/^\/api\/job-posts\/([^/]+)$/.exec(path);
  if(!(bySite&&['GET','POST'].includes(req.method))&&!(byId&&req.method==='GET'))return null;
- const id=identifier((bySite??byId)[1]),b=req.method==='POST'?input(await body(req)):null;
+ const id=identifier((bySite??byId)[1]);
+ const raw=req.method==='POST'?await body(req):null;
+ const alpha=raw&&Object.hasOwn(raw,'alpha')?raw.alpha:null;
+ let b;
+ if(raw){
+  if(alpha){
+   object(raw,['alpha','visibility']);object(alpha,['organization_id','version','choices']);identifier(alpha.organization_id);
+   if(!Number.isSafeInteger(alpha.version)||alpha.version<1)fail(400,'Alpha 저장 버전을 확인하세요.');
+  }else{
+   if(Object.hasOwn(raw,'alpha')||(Array.isArray(raw.lines)&&raw.lines.some(l=>l&&Object.hasOwn(l,'alpha_conditions'))))fail(400,'Alpha 조건은 저장된 업체 등록정보에서만 가져옵니다.');
+   b=jobPostInput(raw);
+  }
+ }
  return transaction(pool,req,async(client,user)=>{
   let siteId=id;
   if(byId){const post=(await client.query('SELECT worksite_id FROM job_posts WHERE id=$1',[id])).rows[0];if(!post)fail(404,'대상을 찾을 수 없습니다.');siteId=post.worksite_id;}
@@ -83,16 +102,31 @@ export async function jobPostRequest({pool,req,path,body}){
    return {status:200,data:{job_posts:result}};
   }
   if(!site.is_active)fail(409,'비활성 현장의 신규 공고 등록 기준은 확인이 필요합니다. 기존 공고 조회는 유지됩니다.');
+  let alphaSource=null,requestHash=null;
+  if(alpha){
+   if(alpha.organization_id!==site.organization_id)fail(403,'선택한 현장이 Alpha 업체 소속이 아닙니다.');
+   const registration=(await client.query('SELECT document,version FROM company_alpha_registrations WHERE organization_id=$1',[site.organization_id])).rows[0];
+   if(!registration||registration.version!==alpha.version)fail(409,'Alpha 등록정보가 변경되었습니다. 다시 저장·조회하세요.');
+   if(registration.document.worksite.name!==site.name||registration.document.worksite.address!==site.address)fail(422,'선택한 기존 현장의 이름·주소가 Alpha 현장과 일치하지 않습니다. 현장을 확인하세요.');
+   b=jobPostInput(alphaJobPostInput(registration.document,alpha.choices,raw.visibility));
+   requestHash=createHash('sha256').update(JSON.stringify({siteId:id,version:alpha.version,input:b})).digest('hex');
+   const previous=(await client.query('SELECT id,worksite_id,alpha_request_hash FROM job_posts WHERE alpha_organization_id=$1 AND alpha_registration_version=$2',[site.organization_id,alpha.version])).rows[0];
+   if(previous){
+    if(previous.worksite_id!==id||previous.alpha_request_hash!==requestHash)fail(409,'이 Alpha 버전은 이미 다른 조건으로 공고 등록되었습니다. 기존 공고를 확인하세요.');
+    return {status:200,data:{job_post:await readPost(client,previous.id,site),replayed:true}};
+   }
+   alphaSource={registration_version:alpha.version,request_hash:requestHash,document:registration.document};
+  }
   for(const line of b.lines)if(!(await client.query('SELECT id FROM occupations WHERE id=$1',[line.occupation_id])).rowCount)fail(400,'등록된 직종 식별자가 아닙니다.');
-  const post=(await client.query(`INSERT INTO job_posts(worksite_id,visibility,created_by,created_at,updated_by,updated_at)
-   VALUES($1,$2,$3,clock_timestamp(),$3,clock_timestamp()) RETURNING id`,[id,b.visibility,user.id])).rows[0];
-  const revision=(await client.query(`INSERT INTO job_post_versions(job_post_id,version,organization_id,worksite_id,worksite_snapshot,visibility,recorded_by)
-   VALUES($1,1,$2,$3,$4,$5,$6) RETURNING id`,[post.id,site.organization_id,id,JSON.stringify(site),b.visibility,user.id])).rows[0];
+  const post=(await client.query(`INSERT INTO job_posts(worksite_id,visibility,created_by,created_at,updated_by,updated_at,alpha_organization_id,alpha_registration_version,alpha_request_hash)
+   VALUES($1,$2,$3,clock_timestamp(),$3,clock_timestamp(),$4,$5,$6) RETURNING id`,[id,b.visibility,user.id,alpha?site.organization_id:null,alpha?.version??null,requestHash])).rows[0];
+  const revision=(await client.query(`INSERT INTO job_post_versions(job_post_id,version,organization_id,worksite_id,worksite_snapshot,visibility,recorded_by,alpha_source)
+   VALUES($1,1,$2,$3,$4,$5,$6,$7) RETURNING id`,[post.id,site.organization_id,id,JSON.stringify(site),b.visibility,user.id,alphaSource?JSON.stringify(alphaSource):null])).rows[0];
   for(const line of b.lines){
-   const saved=(await client.query(`INSERT INTO job_lines(job_post_id,occupation_id,resource_mode,daily_pay_krw,allow_partial)
-    VALUES($1,$2,$3,$4,$5) RETURNING id`,[post.id,line.occupation_id,line.resource_mode,line.pay.amount_krw,line.allow_partial])).rows[0];
-   await client.query(`INSERT INTO job_post_version_lines(post_version_id,job_line_id,occupation_id,resource_mode,allow_partial,pay_unit,amount_krw,payment_mode,specified_due_date)
-    VALUES($1,$2,$3,$4,$5,'day',$6,$7,$8)`,[revision.id,saved.id,line.occupation_id,line.resource_mode,line.allow_partial,line.pay.amount_krw,line.payment.mode,line.payment.due_date]);
+   const saved=(await client.query(`INSERT INTO job_lines(job_post_id,occupation_id,resource_mode,daily_pay_krw,allow_partial,alpha_conditions)
+    VALUES($1,$2,$3,$4,$5,$6) RETURNING id`,[post.id,line.occupation_id,line.resource_mode,line.pay.amount_krw,line.allow_partial,line.alpha_conditions?JSON.stringify(line.alpha_conditions):null])).rows[0];
+   await client.query(`INSERT INTO job_post_version_lines(post_version_id,job_line_id,occupation_id,resource_mode,allow_partial,pay_unit,amount_krw,payment_mode,specified_due_date,alpha_conditions)
+    VALUES($1,$2,$3,$4,$5,'day',$6,$7,$8,$9)`,[revision.id,saved.id,line.occupation_id,line.resource_mode,line.allow_partial,line.pay.amount_krw,line.payment.mode,line.payment.due_date,line.alpha_conditions?JSON.stringify(line.alpha_conditions):null]);
    for(const d of line.dates){
     await client.query('INSERT INTO job_line_dates(job_line_id,work_date,capacity) VALUES($1,$2,$3)',[saved.id,d.work_date,d.capacity]);
     await client.query(`INSERT INTO job_post_version_dates(post_version_id,job_line_id,work_date,capacity,payment_due_date)

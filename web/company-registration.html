@@ -17,6 +17,14 @@
 <label>급여 지급일·지급조건<input id="paymentTerms" required maxlength="300" placeholder="예: 매월 10일 지급 / 작업 종료 당일"></label>
 <div class="pair"><label>지급 방식<select id="paymentMethod"><option>협의</option><option>계좌이체</option><option>현금</option></select></label><label>거래 조건<select id="taxTerms"><option>협의</option><option>세금계산서 발행</option><option>원천징수</option></select></label></div><label>기타 지급·계약 조건 (선택)<input id="otherTerms" maxlength="1000"></label>
 <button id="addLine" type="button">모집항목 추가</button><button id="cancelLine" type="button" hidden>수정 취소</button></fieldset>
-<button id="save" type="submit">업체 등록 정보 저장</button></section>
+<button id="save" type="submit">업체 등록 정보 저장</button>
+<fieldset><legend>저장한 모집조건으로 정식 공고 등록</legend>
+<button id="prepareJobPost" type="button">기존 현장 불러오기</button>
+<div id="jobPostPanel" hidden>
+<label>기존 현장<select id="jobPostSite"><option value="">현장을 선택하세요</option></select></label>
+<label>공개 범위<select id="jobPostVisibility"><option value="">선택하세요</option><option value="public">공개</option><option value="targeted">대상 지정</option><option value="private">비공개</option></select></label>
+<div id="jobPostChoices"></div>
+<button id="publishJobPost" type="button">확인한 조건으로 공고 등록</button>
+</div><output id="jobPostResult" aria-live="polite"></output></fieldset></section>
 <div class="actions"><button id="previous" type="button">이전</button><button id="next" type="button">다음</button></div></form></div></main>
-<script src="/ui/03-2/catalog.js"></script><script type="module" src="/ui/03-2/company-registration.js"></script></html>
+<script type="module" src="/ui/03-2/alpha-job-post.js"></script><script src="/ui/03-2/catalog.js"></script><script type="module" src="/ui/03-2/company-registration.js"></script></html>

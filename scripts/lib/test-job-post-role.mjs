@@ -18,14 +18,15 @@ export async function provisionJobPostRuntime(pool){
   await client.query(`GRANT SELECT(organization_id,account_id,role) ON organization_memberships TO ${quoted}`);
   await client.query(`CREATE POLICY "${role}_read" ON organization_memberships FOR SELECT TO ${quoted} USING(true)`);
   await client.query(`GRANT SELECT ON worksites,job_posts,job_lines,job_line_dates,job_post_versions,job_post_version_lines,job_post_version_dates TO ${quoted}`);
-  await client.query(`GRANT SELECT(id) ON occupations TO ${quoted}`);
+  await client.query(`GRANT SELECT(id,name) ON occupations TO ${quoted}`);
+  await client.query(`GRANT SELECT ON company_alpha_registrations TO ${quoted}`);
   await client.query(`GRANT SELECT(id,terms_id,status) ON matches TO ${quoted}`);
   await client.query(`GRANT SELECT(id,job_line_id) ON match_terms TO ${quoted}`);
   await client.query(`GRANT SELECT(terms_id,work_date) ON match_dates TO ${quoted}`);
-  await client.query(`GRANT INSERT(worksite_id,visibility,created_by,created_at,updated_by,updated_at) ON job_posts TO ${quoted}`);
-  await client.query(`GRANT INSERT(job_post_id,occupation_id,resource_mode,daily_pay_krw,allow_partial) ON job_lines TO ${quoted}`);
+  await client.query(`GRANT INSERT(worksite_id,visibility,created_by,created_at,updated_by,updated_at,alpha_organization_id,alpha_registration_version,alpha_request_hash) ON job_posts TO ${quoted}`);
+  await client.query(`GRANT INSERT(job_post_id,occupation_id,resource_mode,daily_pay_krw,allow_partial,alpha_conditions) ON job_lines TO ${quoted}`);
   await client.query(`GRANT INSERT(job_line_id,work_date,capacity) ON job_line_dates TO ${quoted}`);
-  await client.query(`GRANT INSERT(job_post_id,version,organization_id,worksite_id,worksite_snapshot,visibility,recorded_by),UPDATE(sealed_at) ON job_post_versions TO ${quoted}`);
+  await client.query(`GRANT INSERT(job_post_id,version,organization_id,worksite_id,worksite_snapshot,visibility,recorded_by,alpha_source),UPDATE(sealed_at) ON job_post_versions TO ${quoted}`);
   await client.query(`GRANT INSERT ON job_post_version_lines,job_post_version_dates TO ${quoted}`);
   await client.query('COMMIT');
  }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}

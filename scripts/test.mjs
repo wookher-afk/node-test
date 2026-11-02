@@ -11,7 +11,7 @@ import {fixture,match,approve,confirm,cancel} from '../tests/helpers/matching.js
 try {
  // Also verify a completely fresh install, without pre-existing account rows.
  await pool.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public');
- for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql','006_worksite_management.sql','007_internal_job_posts.sql','008_worker_alpha_registration.sql','009_company_alpha_registration.sql']) {
+ for(const name of ['001_foundation.sql','002_accounts.sql','003_unified_matching.sql','004_work_records_and_matching_data.sql','005_review_integrity_fixes.sql','006_worksite_management.sql','007_internal_job_posts.sql','008_worker_alpha_registration.sql','009_company_alpha_registration.sql','010_alpha_job_posts.sql']) {
    await pool.query(await readFile('database/'+name,'utf8'));
  }
  assert.equal((await pool.query("SELECT count(*)::int AS n FROM accounts")).rows[0].n,0);
@@ -221,6 +221,7 @@ try{await assert.rejects(failedEighth.query(eighth.replace('COMMIT;','SELECT 1/0
 assert.equal((await pool.query("SELECT to_regclass('public.worker_alpha_registrations') AS name")).rows[0].name,null);
 await pool.query(eighth);
 await pool.query(await readFile('database/009_company_alpha_registration.sql','utf8'));
+await pool.query(await readFile('database/010_alpha_job_posts.sql','utf8'));
 } catch(error) {await pool.end();throw error;}
 // Only migration/fixture setup uses the administrator. Every HTTP server below
 // connects using the restricted role, while direct DB regression fixtures retain
